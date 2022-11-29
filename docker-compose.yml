@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    command: uvicorn server:app --host 0.0.0.0 --port 8015
+    expose:
+      - 8015  
+    depends_on:
+      - db      
+    env_file:
+      - ./db/.env.dev
+
+  db:
+    image: postgres:15.1-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+      - ./db/scripts:/docker-entrypoint-initdb.d
+    env_file:
+      - ./db/.env.dev
+    ports:
+      - 5432:5432
+
+  nginx:
+      build: ./nginx
+      ports:
+        - 8015:8015
+      depends_on:
+        - back
+
+volumes:
+  db_data:
