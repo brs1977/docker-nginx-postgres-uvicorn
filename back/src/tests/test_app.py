@@ -12,4 +12,4 @@ def test_ping():
 
 def test_users():
     response = client.post("/users")
-    assert response.status_code == 307
+    assert response.status_code == 422
