@@ -14,19 +14,19 @@ def test_create_user(test_app, monkeypatch):
 
     monkeypatch.setattr(crud, "post", mock_post)
 
-    response = test_app.post("/users/", data=json.dumps(test_request_payload),)
+    response = test_app.post("/users/", content=json.dumps(test_request_payload),)
 
     assert response.status_code == 201
     assert response.json() == test_response_payload
 
 
 def test_create_user_invalid_json(test_app):
-    response = test_app.post("/users/", data=json.dumps({"name": "Пользователь 1"}))
+    response = test_app.post("/users/", content=json.dumps({"name": "Пользователь 1"}))
     print(response)
     print(response.status_code)
     assert response.status_code == 422
 
-    response = test_app.post("/users/", data=json.dumps({"name": "1"}))
+    response = test_app.post("/users/", content=json.dumps({"name": "1"}))
     assert response.status_code == 422
 
 
@@ -86,7 +86,7 @@ def test_update_user(test_app, monkeypatch):
 
     monkeypatch.setattr(crud, "put", mock_put)
 
-    response = test_app.put("/users/1/", data=json.dumps(test_update_data))
+    response = test_app.put("/users/1/", content=json.dumps(test_update_data))
     assert response.status_code == 200
     assert response.json() == test_update_data
 
