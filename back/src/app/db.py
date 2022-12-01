@@ -23,7 +23,7 @@ db = create_engine(db_url)
 
 metadata = MetaData()
 users = Table(
-    "user",
+    "users",
     metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String(32)),
