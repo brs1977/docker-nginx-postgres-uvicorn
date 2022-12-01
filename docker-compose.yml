@@ -5,7 +5,9 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: uvicorn server:app --host 0.0.0.0 --port 8015
+    command: uvicorn server:app --host 0.0.0.0 --port 8015 --reload --workers 2
+    volumes:
+      - ./back/src/:/app/
     expose:
       - 8015  
     depends_on:
