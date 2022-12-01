@@ -19,19 +19,18 @@ export function server_api(port:number):API {
             $url.search = new URLSearchParams(params).toString()
         const options:RequestInit = {
             method: 'GET',
-            mode: 'same-origin',
+            //mode: 'same-origin',
             //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'omit', // include, *same-origin, omit
+            // credentials: 'omit', // include, *same-origin, omit
             headers: {
                'Content-Type': 'application/json',
-               "Sec-Fetch-Dest": "empty",
-               "Sec-Fetch-Mode": "no-cors",
-               "Sec-Fetch-Site": "same-site"
+            //    "Sec-Fetch-Dest": "empty",
+            //    "Sec-Fetch-Mode": "no-cors",
+            //    "Sec-Fetch-Site": "same-site"
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },            
         }
         const res = await fetch(`${url}${action}`,options)
-        console.log(res)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
         }
@@ -43,7 +42,7 @@ export function server_api(port:number):API {
     async function post<T>(action:string,params?:any):Promise<T> {
         const options:RequestInit = {
             method: 'POST',
-            //mode: 'no-cors',
+            mode: 'cors',
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             //credentials: 'omit', // include, *same-origin, omit
             headers: {
@@ -53,7 +52,6 @@ export function server_api(port:number):API {
             body: JSON.stringify(params || {})
         }
         const res = await fetch(`${url}${action}`,options)
-        console.log(res)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
         }
@@ -62,8 +60,7 @@ export function server_api(port:number):API {
     }
 
     async function users():Promise<Users> {
-        const users = await get<Users>('users2')
-        console.log('users',users)
+        const users = await get<Users>('users/')
         return users
     }
 

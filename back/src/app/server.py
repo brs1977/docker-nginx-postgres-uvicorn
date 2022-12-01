@@ -8,9 +8,7 @@ from app.db import database
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:8015",
-    "http://back:8015",
+    "*"
 ]
 
 app.add_middleware(
