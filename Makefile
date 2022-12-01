@@ -10,3 +10,7 @@ prune:
 	sudo docker system prune
 it:
 	sudo docker run -it docker-db-uvicorn_back sh
+tests:
+	sudo docker exec docker-db-uvicorn_back_1 pytest .
+logs:
+	sudo docker logs docker-db-uvicorn_back_1

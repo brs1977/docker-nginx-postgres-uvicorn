@@ -2,3 +2,7 @@ uvicorn==0.20.0
 fastapi==0.69.0
 sqlalchemy==1.4.44
 psycopg2-binary==2.9.5
+
+# dev 
+pytest==6.2.3
+requests==2.25.1

@@ -1,13 +1,12 @@
 from fastapi import FastAPI
-import model
+from app import model 
 
 app = FastAPI()
 
 
 @app.get("/")
 async def db_test():
-    result = model.databases()  
-    return {"тест": str(result)}  
+    return model.databases()
 
 @app.get("/users")
 async def db_users():
