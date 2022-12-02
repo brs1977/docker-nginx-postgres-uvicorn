@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "dev.docker": "vite --host --config docker.dev.config.js",
+    "dev.docker": "vite --config docker.dev.config.js",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

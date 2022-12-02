@@ -29,11 +29,12 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile
-    command: npm run dev
+    command: npm run dev.docker
     volumes:
       - ./front/src/:/front/src
-    expose:
+    ports:
       - 5173  
+      - 8021
     depends_on:
       - back     
 
@@ -41,6 +42,7 @@ services:
       build: ./nginx
       ports:
         - 8015:8015
+        - 8021:8021
       depends_on:
         - front
 

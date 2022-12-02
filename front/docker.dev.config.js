@@ -1,26 +1,17 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-    build: {
-        emptyOutDir: true,
-    },
-    // plugins: [
-    // ],
     server: {
-        host: '0.0.0.0',
-    },
-
-/*    
-    server: {
+        host: true,
+        watch: {
+          usePolling: true
+        },
         hmr: {
-            protocol: 'ws',
-            host: 'localhost',
-            port: 8015,
-        }
+           port: 8021,
+        },
     },
-*/    
-  plugins: [
-  {
+    plugins: [
+    {
       name: "client-host",
       transform(code, id) {
         console.log('transform',id)
