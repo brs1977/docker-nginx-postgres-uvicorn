@@ -6,7 +6,7 @@ import { app } from './common/app'
 
 
 const root = document.querySelector<HTMLDivElement>('#app')!
-const api = server_api(8015)
+const api = server_api('api/v1',8015)
 app({api,root})
 
 

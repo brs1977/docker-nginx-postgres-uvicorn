@@ -25,12 +25,24 @@ services:
     ports:
       - 5432:5432
 
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    command: npm run dev
+    volumes:
+      - ./front/src/:/front/src
+    expose:
+      - 5173  
+    depends_on:
+      - back     
+
   nginx:
       build: ./nginx
       ports:
         - 8015:8015
       depends_on:
-        - back
+        - front
 
 volumes:
   db_data:
