@@ -29,7 +29,7 @@ async def shutdown():
     await database.disconnect()
 
 
-@app.get("/")
+@app.get("/test")
 async def db_test():
     return model.databases()
 
