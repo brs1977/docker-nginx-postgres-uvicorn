@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import users
@@ -38,4 +38,8 @@ async def db_test():
 #     return model.users()  
 
 
-app.include_router(users.router, prefix="/users", tags=["users"])    
+
+api_router = APIRouter()
+api_router.include_router(users.router, prefix="/users", tags=["users"])    
+
+app.include_router(api_router, prefix='/api/v1')
