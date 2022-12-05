@@ -34,7 +34,7 @@ services:
       - ./front/src/:/front/src
     ports:
       - 5173  
-      - 8021
+      - 8021      
     depends_on:
       - back     
 

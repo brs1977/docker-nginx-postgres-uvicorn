@@ -6,5 +6,5 @@ from app.server import app
 
 @pytest.fixture(scope="module")
 def test_app():
-    client = TestClient(app)
-    yield client  
+    with TestClient(app) as client:   # context manager will invoke startup event 
+        yield client
