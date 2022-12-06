@@ -2,7 +2,6 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import users
-from app import model 
 from app.db import database
 from app.config import settings
 
@@ -26,16 +25,6 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
-
-
-@app.get("/test")
-async def db_test():
-    return model.databases()
-
-# @app.get("/users")
-# async def db_users():
-#     return model.users()  
-
 
 
 api_router = APIRouter()

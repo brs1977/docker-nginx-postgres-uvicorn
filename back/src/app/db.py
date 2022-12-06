@@ -11,7 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
-db = create_engine(settings.DATABASE_URL)
+# db = create_engine(settings.DATABASE_URL)
 
 metadata = MetaData()
 users = Table(
