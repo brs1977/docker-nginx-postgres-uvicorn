@@ -1,5 +1,5 @@
-import os
 from databases import Database
+from app.config import settings
 from sqlalchemy import (
     Column,
     DateTime,
@@ -11,15 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
-db_name = os.getenv('POSTGRES_DB')
-db_user = os.getenv('POSTGRES_USER')
-db_pass = os.getenv('POSTGRES_PASSWORD')
-db_host = 'db'
-db_port = '5432'
-
-# Connecto to the database
-db_url = 'postgresql://{}:{}@{}:{}/{}'.format(db_user, db_pass, db_host, db_port, db_name)
-db = create_engine(db_url)
+db = create_engine(settings.DATABASE_URL)
 
 metadata = MetaData()
 users = Table(
@@ -30,4 +22,4 @@ users = Table(
 )
 
 # databases query builder
-database = Database(db_url)
+database = Database(settings.DATABASE_URL)
