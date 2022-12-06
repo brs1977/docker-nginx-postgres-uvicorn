@@ -4,12 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import users
 from app import model 
 from app.db import database
+from app.config import settings
 
-app = FastAPI()
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
-origins = [
-    "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
