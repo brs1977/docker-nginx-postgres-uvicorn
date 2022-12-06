@@ -5,6 +5,8 @@ fastapi==0.87.0
 sqlalchemy==1.4.41
 psycopg2-binary==2.9.5
 
+# migration
+alembic==1.8.1
 
 # dev 
 pytest==7.2.0
