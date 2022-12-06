@@ -26,4 +26,4 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-app.include_router(api_router, prefix='/api/v1')
+app.include_router(api_router, prefix=settings.PROJECT_API_VERSION)

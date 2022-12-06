@@ -2,7 +2,8 @@ import os
 
 class Settings:
     PROJECT_NAME:str = "Users"
-    PROJECT_VERSION: str = "1.0.0"
+    PROJECT_VERSION:str = "1.0.0"
+    PROJECT_API_VERSION:str = '/api/v1'
 
     DB_NAME:str = os.getenv('POSTGRES_DB')
     DB_USER:str = os.getenv('POSTGRES_USER')

@@ -1,6 +1,7 @@
 from starlette.testclient import TestClient
 
 from app.server import app
+from app.config import settings
 
 client = TestClient(app)
 
@@ -11,5 +12,5 @@ client = TestClient(app)
 #     assert response.json() == [{"datname":"postgres"},{"datname":"db_dev"},{"datname":"template1"},{"datname":"template0"}]
 
 def test_users():
-    response = client.post("/api/v1/users")
+    response = client.post(settings.PROJECT_API_VERSION+"/users")
     assert response.status_code == 422 
