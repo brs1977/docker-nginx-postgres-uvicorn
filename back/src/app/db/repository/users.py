@@ -1,5 +1,6 @@
-from app.api.models import UserSchema
-from app.db import users, database
+from app.schemas.users import UserSchema
+from app.db.session import database
+from app.db.models import users
 
 
 async def post(payload: UserSchema):

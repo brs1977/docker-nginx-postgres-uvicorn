@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from app.api import crud
+from app.db.repository import users as crud
 
 
 def test_create_user(test_app, monkeypatch):

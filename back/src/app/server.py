@@ -1,8 +1,8 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import users
-from app.db import database
+from app.api.v1.route import api_router
+from app.db.session import database
 from app.config import settings
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
@@ -25,9 +25,5 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
-
-
-api_router = APIRouter()
-api_router.include_router(users.router, prefix="/users", tags=["users"])    
 
 app.include_router(api_router, prefix='/api/v1')
