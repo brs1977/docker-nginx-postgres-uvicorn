@@ -20,6 +20,7 @@ black:
 	docker-compose run back black /app/app
 flake8:
 	docker-compose run back flake8 /app/app
+pre-commit: black flake8 mypy tests 
 alembic-init:
 	docker-compose run back alembic revision --autogenerate -m "Initial"
 alembic-upgrage:
