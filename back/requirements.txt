@@ -5,6 +5,7 @@ fastapi==0.87.0
 sqlalchemy==1.4.41
 psycopg2-binary==2.9.5
 
+flake8==6.0.0
 # check typing 
 mypy==0.991
 # formatter

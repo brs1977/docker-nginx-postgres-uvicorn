@@ -1,9 +1,9 @@
 start:
-	sudo docker-compose up --build -d
+	docker-compose up --build -d
 down:
-	sudo docker-compose down -v	
+	docker-compose down -v	
 stop:
-	sudo docker-compose stop
+	docker-compose stop
 rmi-none:
 	sudo docker rmi $$(sudo docker images -f "dangling=true" -q)
 prune:
@@ -18,7 +18,9 @@ mypy:
 	docker-compose run back mypy /app/app
 black:
 	docker-compose run back black /app/app
+flake8:
+	docker-compose run back flake8 /app/app
 alembic-init:
 	docker-compose run back alembic revision --autogenerate -m "Initial"
 alembic-upgrage:
-	sudo docker-compose run back alembic upgrade head
+	docker-compose run back alembic upgrade head
