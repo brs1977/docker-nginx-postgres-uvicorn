@@ -5,6 +5,9 @@ fastapi==0.87.0
 sqlalchemy==1.4.41
 psycopg2-binary==2.9.5
 
+# check typing 
+mypy==0.991
+
 # migration
 alembic==1.8.1
 

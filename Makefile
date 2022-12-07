@@ -14,6 +14,8 @@ tests:
 	sudo docker exec --env-file db/.env.dev docker-db-uvicorn_back_1 pytest .
 logs:
 	sudo docker logs docker-db-uvicorn_back_1
+mypy:
+	docker-compose run back mypy /app/app
 alembic-init:
 	docker-compose run back alembic revision --autogenerate -m "Initial"
 alembic-upgrage:
