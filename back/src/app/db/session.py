@@ -1,6 +1,6 @@
 from databases import Database
 from app.config import settings
-from sqlalchemy import (MetaData, create_engine)
+from sqlalchemy import MetaData, create_engine
 
 # db = create_engine(settings.DATABASE_URL)
 

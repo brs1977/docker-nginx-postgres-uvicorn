@@ -16,6 +16,8 @@ logs:
 	sudo docker logs docker-db-uvicorn_back_1
 mypy:
 	docker-compose run back mypy /app/app
+black:
+	docker-compose run back black /app/app
 alembic-init:
 	docker-compose run back alembic revision --autogenerate -m "Initial"
 alembic-upgrage:

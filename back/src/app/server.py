@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.on_event("startup")
 async def startup():
     await database.connect()
@@ -25,5 +26,6 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
+
 
 app.include_router(api_router, prefix=settings.PROJECT_API_VERSION)

@@ -20,9 +20,10 @@ async def create_user(payload: UserSchema):
     return response_object
 
 
-
 @router.get("/{id}/", response_model=UserDB)
-async def read_user(id: int = Path(..., gt=0),):
+async def read_user(
+    id: int = Path(..., gt=0),
+):
     user = await users.get(id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -35,7 +36,10 @@ async def read_all_users():
 
 
 @router.put("/{id}/", response_model=UserDB)
-async def update_user(payload: UserSchema, id: int = Path(..., gt=0),):
+async def update_user(
+    payload: UserSchema,
+    id: int = Path(..., gt=0),
+):
     user = await users.get(id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -57,4 +61,4 @@ async def delete_user(id: int = Path(..., gt=0)):
 
     await users.delete(id)
 
-    return user    
+    return user
