@@ -14,6 +14,7 @@ services:
       - db      
     env_file:
       - ./db/.env.dev
+    restart: unless-stopped
 
   db:
     image: postgres:15.1-alpine
@@ -24,6 +25,7 @@ services:
       - ./db/.env.dev
     ports:
       - 5432:5432
+    restart: unless-stopped
 
   front:
     build:
@@ -36,15 +38,17 @@ services:
       - 5173  
       - 8021      
     depends_on:
-      - back     
+      - back    
+    restart: unless-stopped 
 
   nginx:
-      build: ./nginx
-      ports:
-        - 8015:8015
-        - 8021:8021
-      depends_on:
-        - front
+    build: ./nginx
+    ports:
+      - 8015:8015
+      - 8021:8021
+    depends_on:
+      - front
+    restart: unless-stopped
 
 volumes:
   db_data:

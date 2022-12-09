@@ -21,6 +21,12 @@ black:
 flake8:
 	docker-compose run back flake8 /app/app
 pre-commit: black flake8 mypy tests 
+prometheus:
+	sudo docker service create --replicas 1 --name my-prometheus \
+    	--mount type=bind,source=/home/www/projects/docker/prometheus/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
+    	--publish published=9090,target=9090,protocol=tcp \
+    	prom/prometheus
+
 alembic-init:
 	docker-compose run back alembic revision --autogenerate -m "Initial"
 alembic-upgrage:
