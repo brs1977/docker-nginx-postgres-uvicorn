@@ -27,7 +27,8 @@ prometheus:
     	--publish published=9090,target=9090,protocol=tcp \
     	prom/prometheus
 
-alembic-init:
-	docker-compose run back alembic revision --autogenerate -m "Initial"
-alembic-upgrage:
+alembic-upgrade:
 	docker-compose run back alembic upgrade head
+
+alembic-revision:
+	docker-compose run back alembic revision --autogenerate -m "comment"

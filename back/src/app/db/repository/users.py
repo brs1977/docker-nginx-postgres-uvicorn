@@ -1,6 +1,6 @@
 from app.schemas.users import UserSchema
 from app.db.session import database
-from app.db.models.users import users
+from app.db.models import users
 
 
 async def post(payload: UserSchema):
