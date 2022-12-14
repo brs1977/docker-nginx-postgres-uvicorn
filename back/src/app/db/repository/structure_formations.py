@@ -16,7 +16,7 @@ async def get(id: int):
 async def get_all():
     cte = (
         structure_formations.select()
-        .where(structure_formations.c.pid == None) # noqa: E711
+        .where(structure_formations.c.pid == None)  # noqa: E711
         .cte("cte", recursive=True)
     )
     union = cte.union_all(
