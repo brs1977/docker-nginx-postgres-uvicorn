@@ -10,6 +10,8 @@ services:
       - ./back/src/:/app/
     expose:
       - 8020  
+    # ports:
+    #   - 8020:8020
     depends_on:
       - db      
     env_file:
@@ -45,6 +47,7 @@ services:
     build: ./nginx
     ports:
       - 8015:8015
+      - 8020:8020
       - 8021:8021
     depends_on:
       - front
