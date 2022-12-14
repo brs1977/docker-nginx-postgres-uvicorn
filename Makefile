@@ -11,7 +11,8 @@ prune:
 it:
 	sudo docker run -it docker-db-uvicorn_back sh
 tests:
-	sudo docker exec --env-file db/.env.dev docker-db-uvicorn_back_1 pytest -q .
+	docker-compose run back pytest -q .
+	# sudo docker exec --env-file db/.env.dev docker-db-uvicorn_back_1 pytest -q .
 logs:
 	sudo docker logs docker-db-uvicorn_back_1
 mypy:
@@ -20,6 +21,8 @@ black:
 	docker-compose run back black /app/app
 flake8:
 	docker-compose run back flake8 /app/app
+chown:	
+	sudo chown -R www:www *
 pre-commit: black flake8 mypy tests 
 prometheus:
 	sudo docker service create --replicas 1 --name my-prometheus \

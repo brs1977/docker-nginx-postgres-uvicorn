@@ -89,8 +89,8 @@ def test_update_user(test_app, api_url, monkeypatch):
     'id, payload, status_code',
     [
         [1, {}, 422],
-        # [999, {'name': 'foo'}, 404],
-        # [1, {'name': '1'}, 404],
+        [999, {'name': 'foo'}, 422],
+        [1, {'name': '1'}, 422],
         [0, {'name': 'foo'}, 422],
     ],
 )
