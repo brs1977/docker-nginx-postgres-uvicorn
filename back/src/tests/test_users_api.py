@@ -89,10 +89,9 @@ def test_update_user(test_app, api_url, monkeypatch):
     'id, payload, status_code',
     [
         [1, {}, 422],
-        [999, {'name': 'foo'}, 422],
-        [1, {'name': '1'}, 422],
-        [0, {'name': 'foo'}, 422],
-    ],
+        [999, {"name": "foo"}, 404],
+        [0, {"name": "foo"}, 422],
+    ]
 )
 def test_update_user_invalid(test_app, api_url, monkeypatch, id, payload, status_code):
     async def mock_get(id):
@@ -100,7 +99,7 @@ def test_update_user_invalid(test_app, api_url, monkeypatch, id, payload, status
 
     monkeypatch.setattr(users, 'get', mock_get)
 
-    response = test_app.put(api_url('users/{id}/'), content=json.dumps(payload),)
+    response = test_app.put(api_url(f'users/{id}/'), content=json.dumps(payload),)
     assert response.status_code == status_code
 
 
