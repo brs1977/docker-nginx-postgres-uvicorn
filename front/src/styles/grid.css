@@ -1,0 +1,39 @@
+.grid {
+    width: 400px;
+}
+.grid__table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+.grid__table th,.grid__table td {
+    border: 1px solid;
+}
+.grid__table th,.grid__table td {
+    padding: 0.25rem;
+}
+.grid__header {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+.grid__title {
+    flex-grow: 1;
+}
+.grid__number,.grid__string,.grid__text {
+    width:100%;
+    appearance: none;
+    border:0;
+    outline: 0;
+    margin:0;
+    padding:0;
+    background-color: transparent;
+}
+.grid__text {
+    height: 1rem;
+    resize: none;
+    overflow: hidden;
+}
+.grid__row--active {
+    background-color: #eee;
+}

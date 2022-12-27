@@ -39,7 +39,8 @@ function child_to_node(child:Child) {
 export function h(tag:string,props?:Props|Child,...children:Children) {
     const [tagName,...classNames] = tag.split('.')
     const el = document.createElement(tagName)
-    el.className = classNames.join(' ')
+    if (classNames.length)
+        el.className = classNames.join(' ')
     if (is_props(props)) {
         set_prop(el,'id',props.id)
         if (props.className)
@@ -57,6 +58,10 @@ export function fragment(...children:Children) {
     const nodes = children.map(child_to_node)
     frag.append(...nodes)
     return frag
+}
+
+export function on(el:HTMLElement,event:string,listener:EventListener) {
+    el.addEventListener(event,listener)
 }
 
 export function emit<T>(el:HTMLElement|null,event:string,detail?:T) {
