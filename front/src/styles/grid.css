@@ -5,12 +5,14 @@
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    word-break: break-all;
 }
 .grid__table th,.grid__table td {
     border: 1px solid;
 }
 .grid__table th,.grid__table td {
     padding: 0.25rem;
+    user-select: none;
 }
 .grid__header {
     display: flex;

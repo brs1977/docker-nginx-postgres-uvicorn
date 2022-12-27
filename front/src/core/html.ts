@@ -26,9 +26,22 @@ export function td(props:TDProps|Child,...children:Children) {
     return el
 }
 
+export type LabelProps = Props & {
+    htmlFor?: string
+}
+
+export function label(props?:LabelProps|Child,...children:Children) {
+    const el =  h('label',props,...children) as HTMLLabelElement
+    if (is_props(props))
+        set_prop(el,'htmlFor',props.htmlFor)
+    return el
+}
+
 export type InputProps = Props & {
     type?: string,
     accept?: string,
+    value?: string,
+    autofocus?: boolean,
 }
 
 export function input(props?:InputProps|Child,...children:Children) {
@@ -36,13 +49,17 @@ export function input(props?:InputProps|Child,...children:Children) {
     if (is_props(props)) {
         set_prop(el,'type',props.type)
         set_prop(el,'accept',props.accept)
+        set_prop(el,'value',props.value)
+        set_prop(el,'autofocus',props.autofocus)
     }
     return el
 }
 
 export type TextAreaProps = Props & {
     rows?: number,
-    oninput?: EventListener
+    oninput?: EventListener,
+    value?: string,
+    autofocus?: boolean,
 }
 
 export function textarea(props?:TextAreaProps|Child,...children:Children) {
@@ -50,6 +67,40 @@ export function textarea(props?:TextAreaProps|Child,...children:Children) {
     if (is_props(props)) {
         set_prop(el,'rows',props.rows)
         set_prop(el,'oninput',props.oninput)
+        set_prop(el,'value',props.value)
+        set_prop(el,'autofocus',props.autofocus)
     }
     return el
+}
+
+export type FormProps = Props & {
+    onsubmit?: EventListener
+}
+
+export function form(props?:FormProps|Child,...children:Children) {
+    const el = h('form',props,...children) as HTMLFormElement
+    if (is_props(props)) {
+        set_prop(el,'onsubmit',props.onsubmit)
+    }
+    
+    return el
+}
+
+let FIELD_ID = 0
+
+export function field_id() {
+    return `field-${++FIELD_ID}`
+}
+
+export function modal(child:HTMLElement) {
+    function close() {
+        el.remove()
+    }
+    const el = h('div.modal',
+        h('div.modal__inner',child)
+    )
+    document.body.appendChild(el)
+    return {
+        close
+    }
 }

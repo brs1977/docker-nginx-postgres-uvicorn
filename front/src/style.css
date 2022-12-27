@@ -1,4 +1,6 @@
 @import url('styles/grid.css');
+@import url('styles/modal.css');
+@import url('styles/form.css');
 * {
   /* Change your font family */
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;;

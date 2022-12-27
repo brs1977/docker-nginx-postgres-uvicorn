@@ -2,7 +2,7 @@ import { API } from "../api/api"
 import { emit, on } from "../core/dom"
 import { input } from "../core/html"
 import { FailError } from "../core/utils"
-import { grid, grid_model_local } from "./grid"
+import { grid, grid_model_local } from "./grid2"
 import { toast } from './toast'
 //import { users } from "./users"
 
