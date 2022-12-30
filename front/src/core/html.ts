@@ -2,14 +2,14 @@ import { Child, Children, h, is_props, Props, set_prop } from "./dom";
 
 export type ButtonProps = Props & {
     type?: 'button' | 'submit' | 'reset',
-    onclick?: EventListener
+    //onclick?: EventListener
 }
 
 export function button(props:ButtonProps|Child,...children:Children) {
     const el = h('button',props,...children) as HTMLButtonElement
     if (is_props(props)) {
         set_prop(el,'type',props.type)
-        set_prop(el,'onclick',props.onclick)
+        //set_prop(el,'onclick',props.onclick)
     }
     return el
 }
@@ -103,4 +103,18 @@ export function modal(child:HTMLElement) {
     return {
         close
     }
+}
+
+export type LinkProps = Props & {
+    href?: string,
+    //onclick?: EventListener
+}
+
+export function link(props?:LinkProps | Child,...children: Children) {
+    const el = h('a',props,...children) as HTMLLinkElement
+    if (is_props(props)) {
+        set_prop(el,'href',props.href)
+        //set_prop(el,'onclick',props.onclick)
+    }
+    return el
 }

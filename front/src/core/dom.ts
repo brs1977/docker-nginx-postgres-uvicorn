@@ -1,6 +1,7 @@
 export type Props = {
     id?: string,
-    className?: string
+    className?: string,
+    onclick?: EventListener,
 }
 
 export type Child = string | Node
@@ -44,7 +45,8 @@ export function h(tag:string,props?:Props|Child,...children:Children) {
     if (is_props(props)) {
         set_prop(el,'id',props.id)
         if (props.className)
-            el.classList.add(props.className)
+            el.className += ' ' + props.className
+        set_prop(el,'onclick',props.onclick)
     }
     if (is_child(props))
         children.unshift(props)
@@ -60,7 +62,7 @@ export function fragment(...children:Children) {
     return frag
 }
 
-export function on(el:HTMLElement,event:string,listener:EventListener) {
+export function on(el:HTMLElement|Window|Document,event:string,listener:EventListener) {
     el.addEventListener(event,listener)
 }
 
