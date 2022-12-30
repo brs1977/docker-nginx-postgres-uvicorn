@@ -2,6 +2,7 @@ export type Props = {
     id?: string,
     className?: string,
     onclick?: EventListener,
+    onmouseout?: EventListener,
 }
 
 export type Child = string | Node
@@ -45,8 +46,9 @@ export function h(tag:string,props?:Props|Child,...children:Children) {
     if (is_props(props)) {
         set_prop(el,'id',props.id)
         if (props.className)
-            el.className += ' ' + props.className
+            el.className += (el.className ? ' ' : '') + props.className
         set_prop(el,'onclick',props.onclick)
+        set_prop(el,'onmouseout',props.onmouseout)
     }
     if (is_child(props))
         children.unshift(props)

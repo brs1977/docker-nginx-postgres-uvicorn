@@ -1,76 +1,67 @@
-import { fragment, h } from "../core/dom";
-import { link } from "../core/html";
-
-export function header() {
-    let is_active = false
-    //let $up: HTMLLinkElement
-    let $down: HTMLLinkElement
-    function onclick(e:Event) {
-        e.preventDefault()
-        e.stopPropagation()
-        is_active = !is_active
-        $el.classList.toggle('header--active',is_active)
-        //$up.classList.toggle('expand-link--active',!is_active)
-        $down.classList.toggle('expand-link--active',is_active)
-    }
-    const $el = h('header.header',{onclick},
-        h('header.header__title','Заголовок'),
-        //$up = link({className:'header__link  expand-link expand-link--up expand-link--active',onclick}),
-        $down = link({className:'header__link expand-link expand-link--down',onclick}),
-    )
-    return $el
-}
-
-export function footer() {
-    let is_active = false
-    let $up: HTMLLinkElement
-    //let $down: HTMLLinkElement
-    function onclick(e:Event) {
-        e.preventDefault()
-        e.stopPropagation()
-        is_active = !is_active
-        $el.classList.toggle('footer--active',is_active)
-        $up.classList.toggle('expand-link--active',is_active)
-        //$down.classList.toggle('expand-link--active',!is_active)
-    }
-    const $el = h('footer.footer',{onclick},
-        h('footer.footer__title','Подвал'),
-        $up = link({className:'footer__link  expand-link expand-link--up',onclick}),
-        //$down = link({className:'footer__link expand-link expand-link--down expand-link--active',onclick}),
-    )
-    return $el
-}
-
-export function sidebar() {
-    let is_active = false
-    // let $left: HTMLLinkElement
-    let $right: HTMLLinkElement
-    function onclick(e:Event) {
-        e.preventDefault()
-        e.stopPropagation()
-        is_active = !is_active
-        $el.classList.toggle('sidebar--active',is_active)
-        // $left.classList.toggle('expand-link--active',!is_active)
-        $right.classList.toggle('expand-link--active',is_active)
-    }
-    const $el = h('aside.sidebar',{onclick},
-        h('sidebar.sidebar__title','Меню'),
-        // $left = link({className:'sidebar__link  expand-link expand-link--left expand-link--active',onclick}),
-        $right = link({className:'sidebar__link expand-link expand-link--right',onclick}),
-    )
-    return $el
-}
-
 export function main() {
-    return fragment(
-        header(),
-        sidebar(),
-        h('main.main'),
-        footer()
-    )
-    // return h('main.main',
+    const range = document.createRange()
+    const fragment = range.createContextualFragment(`
+        <div class="page">
+                <div class="header">
+                    <a href="#" id="sidebar-open" class="icon icon--hamburger"></a>
+                    <div class="header__title">Заголовок</div>
+                </div>
+                <div class="caption">
+                    <div class="caption__title">Шапка</div>
+                    <a href="#" id="caption-close" class="icon icon--close"></a>
+                </div>
+                <main class="main">
+                    <aside id="sidebar" class="sidebar">
+                        <div class="sidebar__header">
+                            <div class="sidebar__title">Боковая панель</div>
+                            <a href="#" id="sidebar-close" class="icon icon--close"></a>
+                        </div>
+                        <div class="sidebar__content"></div>
+                        <div class="sidebar__footer">
+                            <label>
+                                Шапка
+                                <input id="caption-checkbox" type="checkbox" checked>
+                            </label>
+                            <label>
+                                Подвал
+                                <input id="footer-checkbox" type="checkbox" checked>
+                            </label>
+                        </div>
+                    </aside>
+                    <div class="workspace">Рабочая область</div>
+                </main>
+                <footer id="footer" class="footer">
+                    <div class="footer__title">Подвал</div>
+                </footer>
+            </div>`)    // return h('main.main',
     //     header(),
     //     // sidebar(),
     //     // footer()
     // )
+    const sidebar = fragment.querySelector('#sidebar')!
+    const caption = fragment.querySelector('.caption')!
+    const captionCheckbox = fragment.querySelector('#caption-checkbox')! as HTMLInputElement
+    const footerCheckbox = fragment.querySelector('#footer-checkbox')! as HTMLInputElement
+    const footer = fragment.querySelector('footer')!
+    fragment.querySelector('#caption-close')?.addEventListener('click', (e) => {
+        e.preventDefault()
+        caption.classList.add('caption--hide')
+        captionCheckbox.checked = false
+    })  
+    sidebar.querySelector('#sidebar-close')!.addEventListener('click', (e) => {
+        e.preventDefault()
+        sidebar.classList.add('sidebar--hide')
+    })
+    fragment.getElementById('sidebar-open')!.addEventListener('click',(e) => {
+        e.preventDefault()
+        const hide = sidebar.classList.contains('sidebar--hide')                
+        sidebar.classList.toggle('sidebar--hide',!hide)
+    })
+    captionCheckbox.addEventListener('click', () => {
+        caption.classList.toggle('caption--hide',!captionCheckbox.checked)
+    })
+    footerCheckbox.addEventListener('click',() => {
+        footer.classList.toggle('footer--hide',!footerCheckbox.checked)
+    })
+    return fragment;
 }
