@@ -2,66 +2,86 @@ export function main() {
     const range = document.createRange()
     const fragment = range.createContextualFragment(`
         <div class="page">
-                <div class="header">
-                    <a href="#" id="sidebar-open" class="icon icon--hamburger"></a>
-                    <div class="header__title">Заголовок</div>
+            <div class="page__header header">
+                <a href="#" class="icon icon--hamburger"></a>
+                <div class="header__title">Заголовок</div>
+            </div>
+            <div class="page__caption caption">
+                <div class="caption__title">Шапка</div>
+                <a href="#" class="icon icon--close"></a>
+            </div>
+            <aside class="page__sidebar sidebar">
+                <div class="sidebar__header">
+                    <div class="sidebar__title">Боковая панель</div>
+                    <a href="#" id="sidebar-close" class="icon icon--close"></a>
                 </div>
-                <div class="caption">
-                    <div class="caption__title">Шапка</div>
-                    <a href="#" id="caption-close" class="icon icon--close"></a>
+                <div class="sidebar__content"></div>
+                <div class="sidebar__footer">
+                    <label>
+                        Шапка
+                        <input type="checkbox" value="yes">
+                    </label>
+                    <label>
+                        Подвал
+                        <input type="checkbox" value="yes">
+                    </label>
                 </div>
-                <main class="main">
-                    <aside id="sidebar" class="sidebar">
-                        <div class="sidebar__header">
-                            <div class="sidebar__title">Боковая панель</div>
-                            <a href="#" id="sidebar-close" class="icon icon--close"></a>
-                        </div>
-                        <div class="sidebar__content"></div>
-                        <div class="sidebar__footer">
-                            <label>
-                                Шапка
-                                <input id="caption-checkbox" type="checkbox" checked>
-                            </label>
-                            <label>
-                                Подвал
-                                <input id="footer-checkbox" type="checkbox" checked>
-                            </label>
-                        </div>
-                    </aside>
-                    <div class="workspace">Рабочая область</div>
-                </main>
-                <footer id="footer" class="footer">
-                    <div class="footer__title">Подвал</div>
-                </footer>
-            </div>`)    // return h('main.main',
+            </aside>
+            <main class="page__workspace workspace">Рабочая область</main>
+            <footer class="page__footer footer">
+                <div class="footer__title">Подвал</div>
+            </footer>
+        </div>
+    `)    // return h('main.main',
     //     header(),
     //     // sidebar(),
     //     // footer()
     // )
-    const sidebar = fragment.querySelector('#sidebar')!
-    const caption = fragment.querySelector('.caption')!
-    const captionCheckbox = fragment.querySelector('#caption-checkbox')! as HTMLInputElement
-    const footerCheckbox = fragment.querySelector('#footer-checkbox')! as HTMLInputElement
-    const footer = fragment.querySelector('footer')!
-    fragment.querySelector('#caption-close')?.addEventListener('click', (e) => {
+    const page = fragment.querySelector('.page')! as HTMLElement
+    const header = page.querySelector('.page__header')! as HTMLElement
+    const caption = page.querySelector('.page__caption')!  as HTMLElement
+    const sidebar = page.querySelector('.page__sidebar')!  as HTMLElement
+    const workspace = page.querySelector('.page__workspace')!  as HTMLElement
+    const checkbox = Array.from(page.querySelectorAll('input[type=checkbox]')).map(cb => cb as HTMLInputElement)
+    const footer = page.querySelector('.page__footer')! as HTMLElement
+    page.addEventListener('mousemove', (e: MouseEvent) => {
+        if (e.clientY > header.offsetHeight && e.clientY < header.offsetHeight + 20)
+            caption.classList.add('page__caption--show')
+        if (e.clientY > workspace.offsetTop && !checkbox[0].checked) 
+            caption.classList.remove('page__caption--show')
+        if (e.clientY > page.offsetHeight - 20) 
+            footer.classList.add('page__footer--show')
+        if (e.clientY < footer.offsetTop && !checkbox[1].checked) 
+            footer.classList.remove('page__footer--show')
+        if (e.clientX < 20 && e.clientY > caption.offsetTop + caption.offsetHeight) 
+            sidebar.classList.add('page__sidebar--show')
+        if (e.clientX > sidebar.offsetWidth + 10)
+            sidebar.classList.remove('page__sidebar--show')
+    })
+    header.querySelector('.icon--hamburger')!.addEventListener('click',() => {
+        const checked = sidebar.classList.contains('page__sidebar--show')
+        sidebar.classList.toggle('page__sidebar--show',!checked)
+    })
+    caption.querySelector('.icon--close')!.addEventListener('click',e => {
         e.preventDefault()
-        caption.classList.add('caption--hide')
-        captionCheckbox.checked = false
-    })  
-    sidebar.querySelector('#sidebar-close')!.addEventListener('click', (e) => {
-        e.preventDefault()
-        sidebar.classList.add('sidebar--hide')
+        caption.classList.remove('page__caption--show')
+        checkbox[0].checked = false
     })
-    fragment.getElementById('sidebar-open')!.addEventListener('click',(e) => {
-        e.preventDefault()
-        const hide = sidebar.classList.contains('sidebar--hide')                
-        sidebar.classList.toggle('sidebar--hide',!hide)
+    sidebar.querySelector('.icon--close')!.addEventListener('click',() => {
+        const checked = sidebar.classList.contains('page__sidebar--show')
+        sidebar.classList.toggle('page__sidebar--show',!checked)
     })
-    captionCheckbox.addEventListener('click', () => {
-        caption.classList.toggle('caption--hide',!captionCheckbox.checked)
+    checkbox.forEach(cb => {
+        cb.addEventListener('change',()=> {
+            if (cb === checkbox[0]) {
+                caption.classList.toggle('page__caption--show',cb.checked)
+            }
+            else if (cb === checkbox[1]) {
+                footer.classList.toggle('page__footer--show',cb.checked)
+            }
+        })
     })
-    footerCheckbox.addEventListener('click',() => {
-        footer.classList.toggle('footer--hide',!footerCheckbox.checked)
-    })
+    checkbox[0].checked = false
+    checkbox[0].checked = false
     return fragment;
 }
