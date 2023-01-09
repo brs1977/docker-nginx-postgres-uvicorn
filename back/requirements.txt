@@ -7,6 +7,7 @@ psycopg2-binary==2.9.5
 pydantic[email]
 pyjwt==2.6.0
 passlib[bcrypt]==1.7.4
+types-passlib
 python-dotenv==0.21.0
 python-multipart==0.0.5
 loguru==0.6.0

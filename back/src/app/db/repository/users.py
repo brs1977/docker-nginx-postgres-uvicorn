@@ -1,6 +1,12 @@
 from app.schemas.users import UserSchema
 from app.db.session import database
 from app.db.models import users_table
+from typing import Optional
+
+
+async def get_by_username(username: Optional[str]):
+    query = users_table.select().where(username == users_table.c.username)
+    return await database.fetch_one(query=query)
 
 
 async def post(payload: UserSchema):
@@ -10,6 +16,7 @@ async def post(payload: UserSchema):
         fio=payload.fio,
         email=payload.email,
         role_id=payload.role_id,
+        is_active=payload.is_active,
     )
     return await database.execute(query=query)
 

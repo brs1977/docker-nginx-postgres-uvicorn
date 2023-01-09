@@ -16,6 +16,7 @@ services:
       - db      
     env_file:
       - ./db/.env.dev
+      - ./back/.env.dev
     restart: unless-stopped
 
   db:

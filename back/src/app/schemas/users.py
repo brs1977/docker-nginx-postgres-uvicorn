@@ -23,7 +23,7 @@ class Token(AppModel):
 
 
 class TokenData(AppModel):
-    username: str | None = None
+    username: Optional[str] = None
 
 
 class UserBase(AppModel):
@@ -46,6 +46,7 @@ class UserSchema(AppModel):
     username: str
     password: str
     fio: str
+    is_active: bool
 
 
 class UserDB(UserSchema):
