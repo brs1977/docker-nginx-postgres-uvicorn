@@ -1,22 +1,40 @@
 from app.db.session import metadata
-import datetime
+import sqlalchemy
 from sqlalchemy import (
     Column,
-    DateTime,
     Integer,
     String,
+    Boolean,
+    ForeignKey,
     Table,
 )
 
-users = Table(
+users_table = sqlalchemy.Table(
     "users",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", String(32)),
-    Column("created_at", DateTime, default=datetime.datetime.utcnow),
+    Column("email", String(40), unique=True, index=True, nullable=False),
+    Column("username", String(32), unique=True, index=True, nullable=False),
+    Column("fio", String(100), nullable=False),
+    Column("password", String(256), nullable=False),
+    Column(
+        "is_active",
+        Boolean(),
+        server_default=sqlalchemy.sql.expression.true(),
+        nullable=False,
+    ),
+    Column("role_id", Integer, ForeignKey("roles.id")),
 )
 
-structure_formations = Table(
+roles_table = sqlalchemy.Table(
+    "roles",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(32), unique=True, nullable=False),
+)
+
+
+structure_formations_table = Table(
     "structure_formations",
     metadata,
     Column("id", Integer, primary_key=True),

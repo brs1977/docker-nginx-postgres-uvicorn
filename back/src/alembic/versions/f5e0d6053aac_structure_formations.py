@@ -8,7 +8,7 @@ Create Date: 2022-12-14 05:22:12.018070
 """
 from alembic import op
 import sqlalchemy as sa
-from app.db.models import structure_formations
+from app.db.models import structure_formations_table
 
 
 # revision identifiers, used by Alembic.
@@ -19,13 +19,13 @@ depends_on = None
 
 def insert_structure_formations(name: str, pid: int = None) -> int:
     conn = op.get_bind()
-    query = structure_formations.insert().values(name=name, pid=pid).returning(structure_formations.c.id)
+    query = structure_formations_table.insert().values(name=name, pid=pid).returning(structure_formations_table.c.id)
     res = conn.execute(query).fetchall()
     return res[0][0]    
 
 def insert_data():
     root_id = insert_structure_formations('Авиация ВС РФ')
-    op.bulk_insert(structure_formations,
+    op.bulk_insert(structure_formations_table,
         [
             {'name':'ВМФ', 'pid': root_id},
             {'name':'ВКС', 'pid': root_id},            
@@ -36,7 +36,7 @@ def insert_data():
     id = insert_structure_formations('ОСК ЗВО', root_id)
     id = insert_structure_formations('6 А ВВС и ПВО', id)
 
-    op.bulk_insert(structure_formations,
+    op.bulk_insert(structure_formations_table,
         [
             {'name':'NNN сад', 'pid': id},
             {'name':'NN браа', 'pid': id},            

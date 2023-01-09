@@ -7,7 +7,7 @@ Create Date: 2022-12-06 18:37:52.536781
 """
 from alembic import op
 import sqlalchemy as sa
-from app.db.models import users
+from app.db.models import users_table
 
 # revision identifiers, used by Alembic.
 revision = '45a47e5af6f2'
@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.add_column('users', sa.Column('created_at', sa.DateTime(), nullable=True))
     # ### end Alembic commands ###
 
-    op.bulk_insert(users,
+    op.bulk_insert(users_table,
         [
             {'name':'Пользователь 1'},
             {'name':'Пользователь 2'},
