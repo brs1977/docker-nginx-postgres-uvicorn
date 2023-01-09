@@ -20,19 +20,19 @@
     transition: opacity 0.2s, top 0.2s, visibility 0.2s;
   }
   
-  .toast--visible {
+  .toast-visible {
     top: 20px;
     opacity: 1;
     visibility: visible;
   }
   
-  .toast--success {
+  .toast-success {
     background: #00c02b;
     border-color: #009d23;
     color: #ffffff;
   }
   
-  .toast--error {
+  .toast-error {
     background: #d50000;
     border-color: #ba0000;
     color: #ffffff;

@@ -1,16 +1,21 @@
+import { events } from "../core/events";
 import { fail } from "../core/utils";
-import { API, Users } from "./api";
+import { API, Users, User } from "./api";
 
-export function get_url(pathname:string,port:number) {
-    const url = new URL(location.toString())
+export function get_url(pathname:string,port:number,server_url?:string) {
+    const url = new URL(server_url ?? location.toString())
     url.pathname = pathname
     url.port = '' + port
     return url.toString()
 }
 
-export function server_api(base:string,port:number):API {
+export function server_api(url:string):API {
     
-    const url = get_url(base,port)
+    //const url = get_url(base,port,server_url)
+
+    const ev = events()
+
+    let access_token: string | undefined = undefined
 
 
     async function get<T>(action:string,params?:any):Promise<T> {
@@ -28,6 +33,7 @@ export function server_api(base:string,port:number):API {
             //    "Sec-Fetch-Mode": "no-cors",
             //    "Sec-Fetch-Site": "same-site"
               // 'Content-Type': 'application/x-www-form-urlencoded',
+              ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
             },            
         }
         const res = await fetch($url,options)
@@ -39,7 +45,7 @@ export function server_api(base:string,port:number):API {
     }
 
 
-    // async function post<T>(action:string,params?:any):Promise<T> {
+    // async function post<T>(action:string,props?:FetchProps):Promise<T> {
     //     const options:RequestInit = {
     //         method: 'POST',
     //         mode: 'cors',
@@ -64,7 +70,43 @@ export function server_api(base:string,port:number):API {
         return users
     }
 
+    async function login(username:string,password:string) {
+        // const body = new FormData()
+        // body.append('username',username)
+        // body.append('password',password)
+        const options:RequestInit = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },            
+            body: new URLSearchParams({username,password})
+        }
+        const res = await fetch(`${url}/login`,options)
+        if (!res.ok) {
+            fail(`${res.status} ${res.statusText}`)
+        }
+        const json = await res.json()
+        if (typeof(json) !== 'object' && json.access_token === undefined)
+            fail('invalid response')
+        access_token = json.access_token
+        ev.emit('login')
+    }
+
+    async function me(): Promise<User> {
+        return get<User>('users/me')
+    }
+
+    async function logout():Promise<void> {
+        access_token = undefined
+        ev.emit('logout')
+    }
+
+
     return {
-        users
+        users,
+        login,
+        logout,
+        me,
+        on: ev.on
     }
 }

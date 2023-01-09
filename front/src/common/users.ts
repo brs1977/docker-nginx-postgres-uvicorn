@@ -16,7 +16,7 @@ export function users({api}:UsersParams) {
             const rows = users.map(user => {
                 return h('tr',
                     h('td','' + user.id),
-                    h('td',user.name)
+                    h('td',user.username)
                 )
             })
             el.querySelector('tbody')!.replaceChildren(...rows)

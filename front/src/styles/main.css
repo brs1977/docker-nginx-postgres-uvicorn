@@ -1,135 +1,63 @@
-.page {
-    height: 100vh;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto 1fr auto;
-    /* padding: 1rem; */
-    grid-template-areas: 
-        "header header"
-        "caption caption"
-        "sidebar workspace"
-        "footer footer";
-}
-.page > * {
-    background-color: #eee;
-    margin: 0.5rem;
-}
-.page__header {
-    grid-area: header;
-    margin-bottom: 0;
-}
-.header {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    padding: 1rem;
-    align-items: center;
-    z-index: 1;
-}
-.header__title {
-    flex-grow: 1;
-}
-.page__caption {
-    grid-area: caption;
-    transition: all 0.5s ease-out;
-    margin-bottom: 0;
-    position: absolute;
-    max-height: 0;
-    max-width: 0;
-    opacity: 0;
-}
-.page__caption--show {
-    position: relative;
-    max-height: unset;
-    max-width: unset;
-    opacity: 1;
-}
-.caption {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-}
-.caption__title {
-    flex-grow: 1;
-}
-.page__sidebar {
-    grid-area: sidebar;
-    transition: all 0.5s ease-out;
-    /* margin-bottom: 0; */
-    position: absolute;
-    max-height: 0;
-    max-width: 0;
-    opacity: 0;
-    margin-right: 0;
-    overflow: hidden;
-}
-.page__sidebar--show {
-    position: relative;
-    max-height: unset;
-    max-width: unset;
-    opacity: 1;
-}
-.sidebar {
+.login {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
     gap: 1rem;
-}
-.sidebar__header {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-}
-.sidebar__title {
-    flex-grow: 1;
-}
-.sidebar__content {
-    flex-grow: 1;
-}
-.sidebar__footer {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    padding: 1rem;
-}
-.page__workspace {
-    grid-area: workspace;
-}
-.workspace {
-    padding: 1rem;
-}
-.page__footer {
-    grid-area: footer;
-    transition: all 0.5s ease-out;
-    margin-top: 0;
-    position: absolute;
-    max-height: 0;
-    max-width: 0;
-    opacity: 0;
-}
-.page__footer--show {
-    margin-bottom: 0.5rem;
-    position: relative;
-    max-height: unset;
-    max-width: unset;
-    opacity: 1;
-}
-.footer {
-    display: flex;
-    flex-direction: row;
-    padding: 1rem;
-}
-.icon {
-    width: 16px;
-    height: 16px;
-}
-.icon--hamburger {
-   background-image: url("data:image/svg+xml,%3Csvg fill='%23000000' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 24.75 24.75' xml:space='preserve'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cg%3E%3Cpath d='M0,3.875c0-1.104,0.896-2,2-2h20.75c1.104,0,2,0.896,2,2s-0.896,2-2,2H2C0.896,5.875,0,4.979,0,3.875z M22.75,10.375H2 c-1.104,0-2,0.896-2,2c0,1.104,0.896,2,2,2h20.75c1.104,0,2-0.896,2-2C24.75,11.271,23.855,10.375,22.75,10.375z M22.75,18.875H2 c-1.104,0-2,0.896-2,2s0.896,2,2,2h20.75c1.104,0,2-0.896,2-2S23.855,18.875,22.75,18.875z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-.icon--close {
-    background-image: url("data:image/svg+xml,%3Csvg fill='%23000000' height='16px' width='16px' version='1.1' id='XMLID_314_' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 24 24' xml:space='preserve'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cg id='close'%3E%3Cg%3E%3Cpolygon points='20.3,21.7 12,13.4 3.7,21.7 2.3,20.3 10.6,12 2.3,3.7 3.7,2.3 12,10.6 20.3,2.3 21.7,3.7 13.4,12 21.7,20.3 '%3E%3C/polygon%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+.login-header {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.login-forgot {
+    flex-shrink: 0;
+}
+
+.login-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.login-button {
+    align-self: flex-end;
+    padding: 0.25rem 1rem;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+}
+
+.login-title {
+    text-transform: uppercase;
+}
+
+.logon {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.logon-header {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.logon-title {
+    flex-grow: 1;
+}
+.logon-data {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+}
+.logon-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    justify-content: space-around;
+}
+.login-hide,.logon-hide {
+    display: none;
 }

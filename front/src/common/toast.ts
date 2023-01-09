@@ -21,7 +21,7 @@ export function toast() {
   function hide() {
       if (hideTimeout)
           clearTimeout(hideTimeout)
-      el.classList.remove("toast--visible")
+      el.classList.remove("toast-visible")
       document.removeEventListener('click', hide)
   }
 
@@ -30,7 +30,7 @@ export function toast() {
           clearTimeout(hideTimeout)
 
       el.textContent = message
-      el.className = "toast toast--error toast--visible"
+      el.className = "toast toast-error toast-visible"
 
       // if (state) {
       //     el.classList.add(`toast--${state}`)

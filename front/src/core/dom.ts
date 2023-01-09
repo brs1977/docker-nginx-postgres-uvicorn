@@ -72,3 +72,15 @@ export function emit<T>(el:HTMLElement|null,event:string,detail?:T) {
     if (el)
         el.dispatchEvent(new CustomEvent<T>(event,{detail}))
 }
+
+type CleanupItem = {
+    el: HTMLElement,
+    callback: Function
+}
+
+const CLEANUPS = new Array<CleanupItem>()
+
+export function cleanup(el:HTMLElement,callback:Function) {
+    CLEANUPS.push({el,callback})
+}
+

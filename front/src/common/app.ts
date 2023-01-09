@@ -2,8 +2,8 @@ import { API } from "../api/api"
 import { emit } from "../core/dom"
 // import { input } from "../core/html"
 import { FailError } from "../core/utils"
+import { main_page } from "../pages/main_page"
 // import { grid, grid_model_local } from "./grid2"
-import { main } from "./main"
 import { toast } from './toast'
 //import { users } from "./users"
 
@@ -12,7 +12,7 @@ export type AppParams = {
     api: API
 }
 
-export function app({root}:AppParams) {
+export function app({root,api}:AppParams) {
 
     const $toast = toast()
  
@@ -48,7 +48,7 @@ export function app({root}:AppParams) {
 
     // root.appendChild($grid)
 
-    const $main = main()
-    root.appendChild($main)
+    const el = main_page({api})
+    root.appendChild(el)
 
 }

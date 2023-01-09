@@ -38,6 +38,8 @@ export function label(props?:LabelProps|Child,...children:Children) {
 }
 
 export type InputProps = Props & {
+    name?: string,
+    checked?: boolean
     type?: string,
     accept?: string,
     value?: string,
@@ -48,9 +50,11 @@ export function input(props?:InputProps|Child,...children:Children) {
     const el = h('input',props,...children) as HTMLInputElement
     if (is_props(props)) {
         set_prop(el,'type',props.type)
+        set_prop(el,'name',props.name)
         set_prop(el,'accept',props.accept)
         set_prop(el,'value',props.value)
         set_prop(el,'autofocus',props.autofocus)
+        set_prop(el,'checked',props.checked)
     }
     return el
 }

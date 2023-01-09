@@ -1,0 +1,121 @@
+.page {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-header {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.page-header-title {
+    flex-grow: 1;
+}
+
+.page-caption {
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+    max-height: 0;
+}
+
+.page-caption-inner {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.page-caption-title {
+    flex-grow: 1;
+}
+
+.page-caption-show {
+    transition: max-height 0.25s ease-in;
+    max-height: 100px;
+}
+
+.page-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.page-sidebar {
+    width: 0;
+    overflow: hidden;
+    transition: all 0.25s ease-in;
+}
+
+.page-sidebar-show {
+    width: 320px;
+}
+
+.page-sidebar-inner {
+    padding: 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.page-sidebar-header {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.page-sidebar-content {
+    flex-grow: 1;
+}
+
+.page-sidebar-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.page-sidebar-title {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+}
+
+.page-sidebar-checkbox {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+}
+
+.page-workspace {
+    width: 100%;
+}
+
+.page-workspace-inner {
+    padding: 1rem;
+    height: 100%;
+}
+
+.page-footer {
+    overflow: hidden;
+    transition: all 0.25s ease-in;
+    max-height: 0;
+}
+
+.page-footer-show {
+    max-height: 100px;
+}
+
+.page-footer-inner {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
