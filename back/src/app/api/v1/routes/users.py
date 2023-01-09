@@ -15,7 +15,11 @@ async def create_user(payload: UserSchema):
 
     response_object = {
         "id": id,
-        "name": payload.name,
+        "username": payload.username,
+        "role_id": payload.role_id,
+        "password": payload.password,
+        "email": payload.email,
+        "fio": payload.fio,
     }
     return response_object
 
@@ -48,7 +52,7 @@ async def update_user(
 
     response_object = {
         "id": id,
-        "name": payload.name,
+        "username": payload.username,
     }
     return response_object
 

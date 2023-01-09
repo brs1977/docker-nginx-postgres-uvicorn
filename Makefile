@@ -11,7 +11,7 @@ prune:
 it:
 	sudo docker run -it docker-db-uvicorn_back sh
 tests:
-	docker-compose run back pytest -q .
+	docker-compose run back pytest -q -s .
 	# sudo docker exec --env-file db/.env.dev docker-db-uvicorn_back_1 pytest -q .
 logs:
 	sudo docker logs docker-db-uvicorn_back_1
