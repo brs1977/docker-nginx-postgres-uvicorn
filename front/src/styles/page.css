@@ -49,10 +49,12 @@
     width: 0;
     overflow: hidden;
     transition: all 0.25s ease-in;
+    border-top: 3px solid #000;
 }
 
 .page-sidebar-show {
     width: 320px;
+    border-right: 3px solid #000;
 }
 
 .page-sidebar-inner {
@@ -96,6 +98,7 @@
 
 .page-workspace {
     width: 100%;
+    border-top: 3px solid #000;
 }
 
 .page-workspace-inner {

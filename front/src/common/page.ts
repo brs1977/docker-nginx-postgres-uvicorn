@@ -16,7 +16,7 @@ export function page(props?:PageProps) {
     let sidebar_toggle: HTMLElement
     let caption: HTMLElement
     let sidebar: HTMLElement
-    let sidebar_close: HTMLElement
+    //let sidebar_close: HTMLElement
     let caption_checkbox: HTMLInputElement
     let footer_checkbox: HTMLInputElement
     let footer: HTMLElement
@@ -44,7 +44,7 @@ export function page(props?:PageProps) {
                                 footer_checkbox = input({name:'footer',type:'checkbox',checked:true})
                             ),
                         ),
-                        sidebar_close = link({href:'#',className:'icon icon-close'}),
+                        //sidebar_close = link({href:'#',className:'icon icon-close'}),
                     ),
                     h('div.page-sidebar-content'),
                     h('div.page-sidebar-footer'),
@@ -63,10 +63,10 @@ export function page(props?:PageProps) {
         e.preventDefault()
         sidebar.classList.toggle('page-sidebar-show')
     })
-    sidebar_close.addEventListener('click',(e) => {
-        e.preventDefault()
-        sidebar.classList.remove('page-sidebar-show')
-    })
+    // sidebar_close.addEventListener('click',(e) => {
+    //     e.preventDefault()
+    //     sidebar.classList.remove('page-sidebar-show')
+    // })
     caption_checkbox.addEventListener('change',() => {
         caption.classList.toggle('page-caption-show',caption_checkbox.checked)
     })
