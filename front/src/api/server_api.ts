@@ -36,6 +36,7 @@ export function server_api(url:string):API {
               ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
             },            
         }
+        console.log(options)
         const res = await fetch($url,options)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
@@ -81,7 +82,7 @@ export function server_api(url:string):API {
             },            
             body: new URLSearchParams({username,password})
         }
-        const res = await fetch(`${url}/login`,options)
+        const res = await fetch(`${url}/users/login`,options)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
         }
@@ -93,7 +94,7 @@ export function server_api(url:string):API {
     }
 
     async function me(): Promise<User> {
-        return get<User>('users/me')
+        return get<User>('users/me/')
     }
 
     async function logout():Promise<void> {
