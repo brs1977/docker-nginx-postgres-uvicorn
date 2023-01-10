@@ -110,6 +110,7 @@
     overflow: hidden;
     transition: all 0.25s ease-in;
     max-height: 0;
+    border-top: 3px solid #000;
 }
 
 .page-footer-show {
