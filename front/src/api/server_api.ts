@@ -13,7 +13,7 @@ export function server_api(url:string):API {
     
     //const url = get_url(base,port,server_url)
 
-    const ev = events()
+    const {on,emit} = events()
 
     let access_token: string | undefined = undefined
 
@@ -90,7 +90,7 @@ export function server_api(url:string):API {
         if (typeof(json) !== 'object' && json.access_token === undefined)
             fail('invalid response')
         access_token = json.access_token
-        ev.emit('login')
+        emit('login')
     }
 
     async function me(): Promise<User> {
@@ -99,7 +99,7 @@ export function server_api(url:string):API {
 
     async function logout():Promise<void> {
         access_token = undefined
-        ev.emit('logout')
+        emit('logout')
     }
 
 
@@ -108,6 +108,6 @@ export function server_api(url:string):API {
         login,
         logout,
         me,
-        on: ev.on
+        on
     }
 }
