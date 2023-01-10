@@ -35,7 +35,14 @@ async def put(id: int, payload: UserSchema):
     query = (
         users_table.update()
         .where(id == users_table.c.id)
-        .values(username=payload.username)
+        .values(
+            username=payload.username,
+            password=payload.password,
+            fio=payload.fio,
+            email=payload.email,
+            role_id=payload.role_id,
+            is_active=payload.is_active,
+        )
         .returning(users_table.c.id)
     )
     return await database.execute(query=query)

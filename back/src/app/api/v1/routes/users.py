@@ -3,21 +3,21 @@ from fastapi import Path, APIRouter, status, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from app.db.repository import users
 from app.schemas.users import UserDB, UserSchema, Token
-from app.api.v1.security import get_hashed_password
 from loguru import logger
-from app.api.v1.security import (
-    get_current_active_user,
-    get_access_token_expires,
-    authenticate_user,
-    create_access_token,
-)
+from app.api.v1 import security
+
+#     get_current_active_user,
+#     get_access_token_expires,
+#     authenticate_user,
+#     create_access_token,
+# )
 
 router = APIRouter()
 
 
 @router.post("/", response_model=UserDB, status_code=201)
 async def create_user(payload: UserSchema):
-    payload.password = get_hashed_password(payload.password)
+    payload.password = security.get_hashed_password(payload.password)
     id = await users.post(payload)
     response_object = {
         "id": id,
@@ -60,6 +60,11 @@ async def update_user(
     response_object = {
         "id": id,
         "username": payload.username,
+        "role_id": payload.role_id,
+        "password": payload.password,
+        "email": payload.email,
+        "fio": payload.fio,
+        "is_active": payload.is_active,
     }
     return response_object
 
@@ -76,21 +81,23 @@ async def delete_user(id: int = Path(..., gt=0)):
 
 
 @router.get("/me/", response_model=UserDB)
-async def read_users_me(current_user: UserDB = Depends(get_current_active_user)):
+async def read_users_me(
+    current_user: UserDB = Depends(security.get_current_active_user),
+):
     return current_user
 
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await authenticate_user(form_data.username, form_data.password)
+    user = await security.authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = get_access_token_expires()
-    access_token = create_access_token(
+    access_token_expires = security.get_access_token_expires()
+    access_token = security.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     logger.debug({"access_token": access_token, "token_type": "bearer"})
