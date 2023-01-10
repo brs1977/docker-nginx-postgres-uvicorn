@@ -1,18 +1,32 @@
 import pytest
 import asyncio
-# from app.schemas.users import UserCreate
+from app.schemas.users import UserSchema
 # from app.utils.users import create_user, create_user_token
 
 
 # def test_login(test_app):
-#     request_data = {"username": "vader@deathstar.com", "password": "rainbow"}
+#     request_data = {"username": "adm", "password": "adm", "grant_type": "password"}
     
-#     response = test_app.post("/auth", data=request_data)
+#     response = test_app.post("/api/v1/users/login", data=request_data)
 #     assert response.status_code == 200
 #     assert response.json()["token_type"] == "bearer"
-#     assert response.json()["expires"] is not None
 #     assert response.json()["access_token"] is not None
 
+
+# POST /api/v1/users/login HTTP/1.1
+# Accept: application/json, text/plain, */*
+# Accept-Encoding: gzip, deflate
+# Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
+# Authorization: Basic Og==
+# Connection: keep-alive
+# Content-Length: 45
+# Content-Type: application/x-www-form-urlencoded
+# Cookie: grafana_session=50aef4fc69487e3d2a3a76c52c2bdeac
+# Host: 129.200.0.116:8020
+# Origin: http://129.200.0.116:8020
+# Referer: http://129.200.0.116:8020/docs
+# User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+# X-Requested-With: XMLHttpRequest
 
 # def test_login_with_invalid_password(test_app):
 #     request_data = {"username": "vader@deathstar.com", "password": "unicorn"}
