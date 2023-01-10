@@ -80,7 +80,7 @@ async def delete_user(id: int = Path(..., gt=0)):
     return user
 
 
-@router.get("/me/", response_model=UserDB)
+@router.get("/me", response_model=UserDB)
 async def read_users_me(
     current_user: UserDB = Depends(security.get_current_active_user),
 ):
