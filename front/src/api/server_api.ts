@@ -94,7 +94,7 @@ export function server_api(url:string):API {
     }
 
     async function me(): Promise<User> {
-        return get<User>('users/me/')
+        return get<User>('users/me')
     }
 
     async function logout():Promise<void> {
