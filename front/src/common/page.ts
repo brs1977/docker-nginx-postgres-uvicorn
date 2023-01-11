@@ -55,7 +55,12 @@ export function page(props?:PageProps) {
             )
         ),
         footer = h('div.page-footer page-footer-show',
-            h('div.page-footer-inner','Подвал')
+            h('div.page-footer-inner',
+                h('div.page-footer-item','Подвал'),
+                h('div.page-footer-item','Подвал'),
+                h('div.page-footer-item','Подвал'),
+                h('div.page-footer-item','Подвал')
+            )
         )
     )
 

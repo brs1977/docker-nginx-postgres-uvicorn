@@ -121,5 +121,12 @@
     padding: 1rem;
     display: flex;
     flex-direction: row;
+    gap: 1rem;
+}
+.page-footer-item {
+    border: 1px solid blue;
+    flex-grow: 1;
+    padding: 1rem;
+
 }
 
