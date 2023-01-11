@@ -122,3 +122,15 @@ export function link(props?:LinkProps | Child,...children: Children) {
     }
     return el
 }
+
+export type ImgProps = Props & {
+    src?: string
+}
+
+export function img(props?:ImgProps | Child,...children: Children) {
+    const el = h('img',props,...children) as HTMLImageElement
+    if (is_props(props)) {
+        set_prop(el,'src',props.src)
+    }
+    return el
+}
