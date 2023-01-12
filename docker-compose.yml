@@ -46,6 +46,8 @@ services:
 
   nginx:
     build: ./nginx
+    volumes:
+      - ./nginx/static:/var/www/static
     ports:
       - 8015:8015
       - 8020:8020
