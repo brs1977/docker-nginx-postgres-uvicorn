@@ -9,8 +9,11 @@
     * {
         box-sizing: border-box;;
     }
+    :root {
+        --font-size: 14px;
+    }
     html {
-        font-size: 14px;
+        font-size: var(--font-size);
     }        
     body {
         margin: 0;
@@ -76,19 +79,22 @@
     }
     .caption-menu-item {
         border: 1px solid #ccc;
-        border-right-color: transparent;
+        /* border-right-color: transparent; */
         padding: 0.5rem 1rem;
         font-size: 1.1rem;
     }
-    .caption-menu-item-active {
-        border-bottom-color: transparent;
-    }
-    .caption-menu-item-last {
-        flex-grow: 1;
-        border-left: 1px solid #ccc;
+    .caption-menu-space {
+        width: 1rem;
         border-bottom: 1px solid #ccc;
     }
-    .caption-menu-item-first {
+    .caption-menu-active {
+        border-bottom-color: transparent;
+    }
+    .caption-menu-last {
+        flex-grow: 1;
+        border-bottom: 1px solid #ccc;
+    }
+    .caption-menu-first {
         border-bottom: 1px solid #ccc;
         width: 2rem;
     }
@@ -267,11 +273,13 @@
         <div class="page-caption page-caption-show">
             <div class="caption">
                 <div class="caption-menu">
-                    <div class="caption-menu-item-first"></div>
-                    <div class="caption-menu-item caption-menu-item-active">Меню 1</div>
+                    <div class="caption-menu-first"></div>
+                    <div class="caption-menu-item caption-menu-active">Меню 1</div>
+                    <div class="caption-menu-space"></div>
                     <div class="caption-menu-item">Меню 2</div>
+                    <div class="caption-menu-space"></div>
                     <div class="caption-menu-item">Меню 3</div>
-                    <div class="caption-menu-item-last"></div>
+                    <div class="caption-menu-last"></div>
                 </div>
                 <div class="caption-items">
                     <div class="caption-item caption-item-org">
@@ -317,6 +325,49 @@
                     </div>
                     <div class="workspace-data"> 
                         Рабочая область
+                        <div>
+                        <label>font 16<input id="x" type="checkbox"></label>
+                        </div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
                     </div>
                 </div>
             </div>
@@ -366,6 +417,12 @@
         })
         caption_checkbox.checked = true
         footer_checkbox.checked = true
+        document.getElementById('x').addEventListener('change', (e) => {
+            console.log('change')
+            const font_size = (e.target.checked) ? '16px' : '14px'
+            console.log('change',font_size)
+            document.documentElement.style.setProperty('--font-size', font_size);
+        })
     </script>
 </body>
 </html>
