@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+    * {
+        box-sizing: border-box;;
+    }
+    html {
+        font-size: 14px;
+    }        
     body {
         margin: 0;
         padding: 0;
     }
     .page {
-        margin: 0;
+        margin: 0 3rem;
         padding: 0;
         height: 100vh;
         display: flex;
@@ -19,26 +25,33 @@
     }
     .page-header {
         flex-shrink: 0;
-        max-height: 24px;
-        min-height: 24px;
         overflow: hidden;
     }
     .header {
         display: flex;
         flex-direction: row;
         /* gap: 1rem; */
-        /* padding: 1rem; */
+        padding: 0 1rem;
         align-items: center;
     }
     .header-hamburger {
         flex-shrink: 0;
-        width: 16px;
-        height: 16px;
+        width: 2rem;
+        height: 2rem;
         /* background-image: url("data:image/svg+xml,%3Csvg fill='%23000000' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 24.75 24.75' xml:space='preserve'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cg%3E%3Cpath d='M0,3.875c0-1.104,0.896-2,2-2h20.75c1.104,0,2,0.896,2,2s-0.896,2-2,2H2C0.896,5.875,0,4.979,0,3.875z M22.75,10.375H2 c-1.104,0-2,0.896-2,2c0,1.104,0.896,2,2,2h20.75c1.104,0,2-0.896,2-2C24.75,11.271,23.855,10.375,22.75,10.375z M22.75,18.875H2 c-1.104,0-2,0.896-2,2s0.896,2,2,2h20.75c1.104,0,2-0.896,2-2S23.855,18.875,22.75,18.875z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
         cursor: pointer;
     }
     .header-title {
         flex-grow: 1;
+        text-align: center;
+        font-size: 1.1rem;
+        padding: 1.5rem 0;
+    }
+    .header-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background-color: #ccc;
     }
     .page-caption {
         flex-shrink: 0;
@@ -57,22 +70,46 @@
         /* padding: 0 1rem 1rem 1rem; */
     }
     .caption-menu {
-        border: 1px solid blue;
+        /* border: 1px solid blue; */
         display: flex;
         flex-direction: row;
+    }
+    .caption-menu-item {
+        border: 1px solid #ccc;
+        border-right-color: transparent;
+        padding: 0.5rem 1rem;
+        font-size: 1.1rem;
+    }
+    .caption-menu-item-active {
+        border-bottom-color: transparent;
+    }
+    .caption-menu-item-last {
+        flex-grow: 1;
+        border-left: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+    .caption-menu-item-first {
+        border-bottom: 1px solid #ccc;
+        width: 2rem;
     }
     .caption-items {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: flex-end;
+    }
+    .caption-item-title {
+        text-decoration: underline;
     }
     .caption-item {
-        border:1px solid blue;
+        font-size: 0.9rem;
     }
-    .caption-menu-item {
-        border:1px solid blue;
+    .caption-item-org {
+        align-self: flex-end;
     }
-
+    .caption-item-nav {
+        padding: 0.5rem 1rem;
+    }
     .page-main {
         flex-grow: 1;
         display: flex;
@@ -91,7 +128,7 @@
         width: 0;
     }
     .sidebar {
-        /* padding: 1rem; */
+        padding: 0 1rem 1rem 1rem;
         display: flex;
         flex-direction: column;
         position: absolute;
@@ -99,7 +136,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        overflow: auto;
+        overflow: hidden;
         /* gap: 1rem; */
     }
     .sidebar-header {
@@ -108,18 +145,37 @@
         align-items: center;
         /* gap: 0.25rem; */
         flex-wrap: nowrap;
+        align-items: flex-start;
+        width: 100%;
     }
     .sidebar-checkbox {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+        align-items: center;
+    }
+    .sidebar-checkbox-footer {
+        margin-left: auto;
+    }
+    .sidebar-checkbox-label {
+        padding: 0.5rem 1rem;
+    }
+    .sidebar-checkbox-input {
+        width: 1.25rem;
+        height: 1.25rem;
     }
     .sidebar-close {
         flex-shrink: 0;
         width: 16px;
         height: 16px;
         cursor: pointer;
-        margin-left: auto;
+        margin-left: 2rem;
+    }
+    .sidebar-items {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
     .page-sidebar-show {
         max-width: 320px;
@@ -132,13 +188,39 @@
         position: relative;
     }
     .workspace {
-        /* padding: 1rem; */
+        padding: 0 1rem;
         position:absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        overflow: auto;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .workspace-title {
+        font-size: 1.1rem;
+    }
+    .workspace-tabs {
+        display: flex;
+        flex-direction: row;
+    }
+    .workspace-tab {
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-right-color: transparent;
+    }
+    .workspace-tab-active {
+        border-bottom-color: transparent;
+    }
+    .workspace-tab-expand {
+        flex-grow: 1;
+        border-left: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+    .workspace-data {
+        border-left: 1px solid #ccc; 
+        flex-grow: 1;
     }
     .page-footer {
         flex-shrink: 0;
@@ -175,18 +257,31 @@
             <div class="header">
                 <img class="header-hamburger" src="hamburger.svg"></img>
                 <span class="header-title">Заголовок</span>
+                <span class="header-icon"></span>
+                <span class="header-icon"></span>
+                <span class="header-icon"></span>
+                <span class="header-icon"></span>
+                <span class="header-icon"></span>
             </div>
         </div>
         <div class="page-caption page-caption-show">
             <div class="caption">
                 <div class="caption-menu">
-                    <div class="caption-menu-item">Меню 1</div>
+                    <div class="caption-menu-item-first"></div>
+                    <div class="caption-menu-item caption-menu-item-active">Меню 1</div>
                     <div class="caption-menu-item">Меню 2</div>
                     <div class="caption-menu-item">Меню 3</div>
+                    <div class="caption-menu-item-last"></div>
                 </div>
                 <div class="caption-items">
-                    <div class="caption-item">Подразделение</div>
-                    <div class="caption-item">Хлебные крошки</div>
+                    <div class="caption-item caption-item-org">
+                        <span class="caption-item-title">Локализация:</span>
+                        объект оргструктуры не выбран
+                    </div>
+                    <div class="caption-item caption-item-nav">
+                        <span class="caption-item-title">Страница:</span>
+                        Ввод / Администрирование / Настройка / Справочники
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,133 +290,34 @@
                 <div class="sidebar">
                     <div class="sidebar-header">
                         <label class="sidebar-checkbox">
-                            <span>Шапка</span>
-                            <input name="caption" type="checkbox">
+                            <span class="sidebar-checkbox-label">Шапка</span>
+                            <input class="sidebar-checkbox-input" name="caption" type="checkbox">
                         </label>
-                        <label class="sidebar-checkbox">
-                            <span>Подвал</span>
-                            <input name="footer" type="checkbox">
+                        <label class="sidebar-checkbox sidebar-checkbox-footer">
+                            <span class="sidebar-checkbox-label">Подвал</span>
+                            <input class="sidebar-checkbox-input" name="footer" type="checkbox">
                         </label>
                         <img class="sidebar-close" src="close.svg"></img>
                     </div>
-                    <div>
+                    <div class="sidebar-items">
                         <div class="block" style="height:96px">логин</div>
                         <div class="block" style="height:72px">помошь</div>
                         <div class="block" style="height:284px">панели</div>
-                        1<br>
-                        2<br>
-                        3<br>
-                        4<br>                    
-                        5<br>                    
-                        7<br>                    
-                        8<br>                    
-                        9<br>                    
-                        10<br>                    
-                        11<br>
-                        12<br>
-                        13<br>
-                        14<br>                    
-                        15<br>                    
-                        17<br>                    
-                        18<br>                    
-                        19<br>                    
-                        20<br>                    
-                        21<br>
-                        22<br>
-                        23<br>
-                        24<br>                    
-                        25<br>                    
-                        27<br>                    
-                        28<br>                    
-                        29<br>                    
-                        30<br>                    
-                        1<br>
-                        2<br>
-                        3<br>
-                        4<br>                    
-                        5<br>                    
-                        7<br>                    
-                        8<br>                    
-                        9<br>                    
-                        10<br>                    
-                        11<br>
-                        12<br>
-                        13<br>
-                        14<br>                    
-                        15<br>                    
-                        17<br>                    
-                        18<br>                    
-                        19<br>                    
-                        20<br>                    
-                        21<br>
-                        22<br>
-                        23<br>
-                        24<br>                    
-                        25<br>                    
-                        27<br>                    
-                        28<br>                    
-                        29<br>                    
-                        30<br>                    
                     </div>
                 </div>
             </div>
             <div class="page-workspace">
                 <div class="workspace">
-                    Рабочая область<br>
-                    1<br>
-                    2<br>
-                    3<br>
-                    4<br>                    
-                    5<br>                    
-                    7<br>                    
-                    8<br>                    
-                    9<br>                    
-                    10<br>                    
-                    11<br>
-                    12<br>
-                    13<br>
-                    14<br>                    
-                    15<br>                    
-                    17<br>                    
-                    18<br>                    
-                    19<br>                    
-                    20<br>                    
-                    21<br>
-                    22<br>
-                    23<br>
-                    24<br>                    
-                    25<br>                    
-                    27<br>                    
-                    28<br>                    
-                    29<br>                    
-                    30<br>                    
-                    1<br>
-                    2<br>
-                    3<br>
-                    4<br>                    
-                    5<br>                    
-                    7<br>                    
-                    8<br>                    
-                    9<br>                    
-                    10<br>                    
-                    11<br>
-                    12<br>
-                    13<br>
-                    14<br>                    
-                    15<br>                    
-                    17<br>                    
-                    18<br>                    
-                    19<br>                    
-                    20<br>                    
-                    21<br>
-                    22<br>
-                    23<br>
-                    24<br>                    
-                    25<br>                    
-                    27<br>                    
-                    28<br>                    
-                    29<br>                    
-                    30<br>                    
+                    <div class="workspace-title">Конкретный заголовок рабочей области данной конкретной страницы</div>
+                    <div class="workspace-tabs">
+                        <div class="workspace-tab workspace-tab-active">Вставка 1</div>
+                        <div class="workspace-tab">Вставка 2</div>
+                        <div class="workspace-tab">Вставка 3</div>
+                        <div class="workspace-tab-expand"></div>
+                    </div>
+                    <div class="workspace-data"> 
+                        Рабочая область
+                    </div>
                 </div>
             </div>
         </div>            
