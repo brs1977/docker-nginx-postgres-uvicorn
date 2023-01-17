@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import List
 import yaml
 
 
@@ -10,14 +11,20 @@ def get_menu(config_doc):
     df_graph["dn"] = df_graph.ndn.map(ndn_map).fillna(gag)
     df_graph["parent"] = df_graph.kod // 100
 
+    df_graph = df_graph.loc[:, ["kod", "parent", "name", "typ", "dost"]]
+    df_graph["has_child"] = df_graph.kod.apply(lambda x: int(df_graph.parent.isin([x]).any()))
+    df_graph["breadcrumbs"] = df_graph.kod.apply(breadcrumbs, df_graph=df_graph)
+
     return (
-        df_graph[df_graph.typ.isin([1])].loc[:, ["kod", "parent", "name", "typ"]].to_dict("records")
+        df_graph[df_graph.typ.isin([1, 2])]
+        .loc[:, ["kod", "parent", "name", "typ", "has_child", "breadcrumbs"]]
+        .to_dict("records")
     )
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
     #     loc[:,['kod','parent','name','typ']].to_dict('records')
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
-    #     loc[:, ["kod", "parent", "name", "dn", "typ", "dost"]].to_dict(
-    #     "records"
+    #     loc[:, ['kod', 'parent', 'name', 'dn', 'typ', 'dost']].to_dict(
+    #     'records'
     # )
 
 
@@ -37,7 +44,7 @@ def extract_bp_para_map(config_doc, name):
     }
 
 
-def raw_graph_table(graph: list[str]) -> pd.DataFrame:
+def raw_graph_table(graph: List[str]) -> pd.DataFrame:
     """
     •	Код компонента (kod);
     •	Имя компонента (name)
@@ -119,3 +126,14 @@ def get_bp_niz(config_doc):
         knop = knop_list(bp_para_map, bp_group_map, page_doc["knop"], gag)
         res.append({"kod": page, "help": help, "group": knop, "filtr": filtr})
     return res
+
+
+def breadcrumbs(kod, df_graph):
+    res = []
+    while True:
+        row = df_graph[df_graph.kod == kod]
+        if row.empty:
+            break
+        kod = int(row.parent)
+        res.append(row.name.iloc[0])
+    return " / ".join(res[::-1])
