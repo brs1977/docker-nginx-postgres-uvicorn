@@ -13,8 +13,8 @@ export type PageProps = {
     workspace?: Node,
 }
 
-export function page() {
-    const page = make_fragment(
+export function page(_?:PageProps) {
+    const f = make_fragment(
         /*html*/
         `  <div class="page">
         <div class="page-header">
@@ -37,7 +37,34 @@ export function page() {
 
                     <div class="caption-menu-item caption-menu-active">Главная</div>
                     <div class="caption-menu-item">Ввод</div>
-                    <div class="caption-menu-item">Аналитика</div>
+                    <div class="caption-menu-item dropdown" tabindex="1">
+                            <i class="dropdown-content" tabindex="1"></i>
+                            <a class="dropdown-button">Аналитика</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a class="dropdown-link" href="#">Мониторинг</a>
+                                    <ul class="dropdown-submenu">
+                                        <li><a class="dropdown-link" href="#">Готовность аэродромов</a></li>
+                                        <li><a class="dropdown-link" href="#">Прогнозируемые метеоусловия на аэродромах</a></li>
+                                        <li><a class="dropdown-link" href="#">План проведения летных смен</a></li>
+                                        <li><a class="dropdown-link" href="#">Результаты летных смен</a></li>
+                                        <li><a class="dropdown-link" href="#">Нарушения и ошибочные действия в ходе проведения летной смены</a></li>
+                                        <li><a class="dropdown-link" href="#">Итоги летной деятельности</a></li>
+                                        <li><a class="dropdown-link" href="#">Авиационные события</a></li>
+                                        <li><a class="dropdown-link" href="#">Потери ВС</a></li>
+                                        <li><a class="dropdown-link" href="#">Квалификация и уровень подготовки командиров экипажей</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="dropdown-link" href="#">Анализ</a></li>
+                                <li>
+                                    <a class="dropdown-link" href="#">Прогнозирование</a>
+                                    <ul class="dropdown-submenu">
+                                        <li><a class="dropdown-link" href="#">Прогноз динамики</a></li>
+                                        <li><a class="dropdown-link" href="#">Данные</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                    </div>
                     <div class="caption-menu-item">Данные</div>
                     <div class="caption-menu-item">ОФАС</div>
                     <div class="caption-menu-item">Документы</div>
@@ -106,7 +133,7 @@ export function page() {
         </div>
     </div>`
     )
-
+    const page = f.querySelector<HTMLElement>('.page')!
     const hamburger = page.querySelector<HTMLElement>('.header-hamburger')!
     const caption = page.querySelector<HTMLElement>('.page-caption')!
     const sidebar = page.querySelector<HTMLElement>('.page-sidebar')!
