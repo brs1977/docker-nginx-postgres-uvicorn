@@ -55,8 +55,8 @@ export function page(_?:PageProps) {
                                         <li><a class="dropdown-link" href="#">Квалификация и уровень подготовки командиров экипажей</a></li>
                                     </ul>
                                 </li>
-                                <li><a class="dropdown-link" href="#">Анализ</a></li>
-                                <li>
+                                <li class="dropdown-item"><a class="dropdown-link" href="#">Анализ</a></li>
+                                <li class="dropdown-item">
                                     <a class="dropdown-link" href="#">Прогнозирование</a>
                                     <ul class="dropdown-submenu">
                                         <li><a class="dropdown-link" href="#">Прогноз динамики</a></li>

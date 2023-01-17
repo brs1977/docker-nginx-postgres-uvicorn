@@ -89,6 +89,10 @@
     top: 0;
 }
 
+.dropdown-item {
+    position: relative;
+}
+
 .dropdown-item:hover > .dropdown-submenu {
     outline: none;
     transform: translate(-4px,-4px);
