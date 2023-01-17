@@ -1,10 +1,11 @@
 import { API } from "../api/api"
-import { emit } from "../core/dom"
+// import { emit } from "../core/dom"
 // import { input } from "../core/html"
-import { FailError } from "../core/utils"
-import { main_page } from "../pages/main_page"
+// import { FailError } from "../core/utils"
+// import { main_page } from "../pages/main_page"
+import { page } from "./page"
 // import { grid, grid_model_local } from "./grid2"
-import { toast } from './toast'
+// import { toast } from './toast'
 //import { users } from "./users"
 
 export type AppParams = {
@@ -12,14 +13,14 @@ export type AppParams = {
     api: API
 }
 
-export function app({root,api}:AppParams) {
+export function app({root}:AppParams) {
 
-    const $toast = toast()
+    // const $toast = toast()
  
     window.addEventListener('unhandledrejection', e => {
         console.log(e)
-        const message = (e.reason instanceof FailError) ? e.reason.message : `Ошибка: ${e.reason.message}`
-        emit($toast,'show',message)
+        // const message = (e.reason instanceof FailError) ? e.reason.message : `Ошибка: ${e.reason.message}`
+        // emit($toast,'show',message)
     })
 
     // const $users = users({api})
@@ -48,7 +49,7 @@ export function app({root,api}:AppParams) {
 
     // root.appendChild($grid)
 
-    const el = main_page({api})
+    const el = page()
     root.appendChild(el)
 
 }

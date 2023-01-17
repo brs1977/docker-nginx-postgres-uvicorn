@@ -134,3 +134,8 @@ export function img(props?:ImgProps | Child,...children: Children) {
     }
     return el
 }
+
+export function make_fragment(html:string) {
+    const r = document.createRange()
+    return r.createContextualFragment(html)
+}
