@@ -10,10 +10,15 @@ def get_menu(config_doc):
     df_graph["dn"] = df_graph.ndn.map(ndn_map).fillna(gag)
     df_graph["parent"] = df_graph.kod // 100
 
-    # return df_graph[df_graph.typ.isin([1,2])].loc[:,['kod','parent','name']].to_dict('records')
-    return df_graph.loc[:, ["kod", "parent", "name", "dn", "typ", "dost"]].to_dict(
-        "records"
+    return (
+        df_graph[df_graph.typ.isin([1])].loc[:, ["kod", "parent", "name", "typ"]].to_dict("records")
     )
+    # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
+    #     loc[:,['kod','parent','name','typ']].to_dict('records')
+    # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
+    #     loc[:, ["kod", "parent", "name", "dn", "typ", "dost"]].to_dict(
+    #     "records"
+    # )
 
 
 def read_config(filename: str = "data/config.yml"):
@@ -53,9 +58,7 @@ def raw_graph_table(graph: list[str]) -> pd.DataFrame:
     df = pd.DataFrame([row.split(";") for row in graph])
     df = df.applymap(str.strip)
 
-    df.columns = pd.Index(
-        ["kod", "name", "typ", "dost", "ndn", "tdn", "c7", "c8", "c9"]
-    )
+    df.columns = pd.Index(["kod", "name", "typ", "dost", "ndn", "tdn", "c7", "c8", "c9"])
     df = df.astype(
         {
             "kod": "int",
@@ -84,9 +87,7 @@ def knop_list(knop_map, group_map, knop_list, gag):
         if not group_map[group_id] in groups.keys():
             groups[group_map[group_id]] = []
 
-        groups[group_map[group_id]].append(
-            {"kod": row[1], "name": row[2][0], "img": row[2][1]}
-        )
+        groups[group_map[group_id]].append({"kod": row[1], "name": row[2][0], "img": row[2][1]})
 
     return groups
 

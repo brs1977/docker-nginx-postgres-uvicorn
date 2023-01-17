@@ -4,16 +4,12 @@ from app.db.models import structure_formations_table
 
 
 async def post(payload: StructureFormationsSchema):
-    query = structure_formations_table.insert().values(
-        name=payload.name, pid=payload.pid
-    )
+    query = structure_formations_table.insert().values(name=payload.name, pid=payload.pid)
     return await database.execute(query=query)
 
 
 async def get(id: int):
-    query = structure_formations_table.select().where(
-        id == structure_formations_table.c.id
-    )
+    query = structure_formations_table.select().where(id == structure_formations_table.c.id)
     return await database.fetch_one(query=query)
 
 
@@ -24,9 +20,7 @@ async def get_all():
         .cte("cte", recursive=True)
     )
     union = cte.union_all(
-        structure_formations_table.select().join(
-            cte, structure_formations_table.c.pid == cte.c.id
-        )
+        structure_formations_table.select().join(cte, structure_formations_table.c.pid == cte.c.id)
     ).select()
 
     return await database.fetch_all(query=union)
@@ -43,7 +37,5 @@ async def put(id: int, payload: StructureFormationsSchema):
 
 
 async def delete(id: int):
-    query = structure_formations_table.delete().where(
-        id == structure_formations_table.c.id
-    )
+    query = structure_formations_table.delete().where(id == structure_formations_table.c.id)
     return await database.execute(query=query)

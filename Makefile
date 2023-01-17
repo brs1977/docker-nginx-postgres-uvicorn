@@ -18,7 +18,7 @@ logs:
 mypy:
 	docker-compose run back mypy /app/app
 black:
-	docker-compose run back black /app/app
+	docker-compose run back black --line-length 100 /app/app/
 flake8:
 	docker-compose run back flake8 /app/app
 chown:	
