@@ -6,15 +6,72 @@ import nastr from '../img/nastr.png'
 import help2 from '../img/help2.png'
 import shild from '../img/shild.png'
 import close from '../img/close.svg'
-import { make_fragment } from '../core/html'
+import { make_element, make_fragment } from '../core/html'
 import { show_alert } from '../core/alert'
+import { API, is_alert_action, is_page_action, MenuItem } from '../api/api'
+import { on } from '../core/dom'
 
 export type PageProps = {
+    api: API,
     sidebar?: Node,
     workspace?: Node,
 }
 
-export function page(_?:PageProps) {
+export function page({api}:PageProps) {
+    const sort_menu = (a:MenuItem,b:MenuItem) => a.kod - b.kod
+    const setup_actions = (el:HTMLLinkElement,item:MenuItem) =>  {
+        if (is_alert_action(item.action)) {
+            const {title,text} = item.action
+            on(el,'click',(e) => {
+                e.preventDefault()
+                show_alert({
+                    title,
+                    text
+                })
+            })
+        } else if (is_page_action(item.action)) {
+            el.href = `/${item.kod}`
+        }
+    }
+    async function load() {
+        const menu = await api.menu()
+        const nodes = menu
+        .filter(item => item.parent === 0)
+        .sort(sort_menu)
+        .map((item,index) => {
+            let el:HTMLElement
+            const children = menu.filter(child => child.parent === item.kod)
+            .sort(sort_menu)
+            .map(child => {
+                const el = make_element(/*html*/`
+                    <li class="dropdown-item">
+                        <a class="dropdown-link" href="#">${child.name}</a>
+                    </li>
+                `)
+                setup_actions(el.querySelector<HTMLLinkElement>('.dropdown-link')!,child)
+                return el
+            })
+            if (!children.length) {
+                el = make_element(/*html*/`
+                    <a href="#" class="caption-menu-item caption-menu-active">${item.name}</a>
+                `)
+                setup_actions(el as HTMLLinkElement,item)
+            }
+            else {
+                el = make_element(/*html*/`
+                    <div class="caption-menu-item dropdown" tabindex="1">
+                        <i class="dropdown-content" tabindex="1"></i>
+                        <a class="dropdown-button">${item.name}</a>
+                        <ul class="dropdown-menu"></ul>
+                    </div>  
+                `)
+                el.querySelector<HTMLElement>('.dropdown-menu')!.append(...children)
+            }
+            el.classList.toggle('caption-menu-active',index === 0)
+            return el
+        })
+        caption.querySelector('.caption-menu')!.replaceChildren(...nodes)
+    }
     const f = make_fragment(
         /*html*/
         `  <div class="page">
@@ -35,7 +92,7 @@ export function page(_?:PageProps) {
         <div class="page-caption page-caption-show">
             <div class="caption">
                 <div class="caption-menu">
-
+                    <!--
                     <div class="caption-menu-item caption-menu-active">Главная</div>
                     <div class="caption-menu-item">Ввод</div>
                     <div class="caption-menu-item dropdown" tabindex="1">
@@ -70,6 +127,7 @@ export function page(_?:PageProps) {
                     <div class="caption-menu-item">ОФАС</div>
                     <div class="caption-menu-item">Документы</div>
                     <div class="caption-menu-item" id="alert-btn">Сообщение</div>
+                    -->
                 </div>
                 <div class="caption-items">
                     <div class="caption-item caption-item-org">
@@ -157,13 +215,10 @@ export function page(_?:PageProps) {
     })
     caption_checkbox.checked = true
     footer_checkbox.checked = true
-    page.querySelector<HTMLElement>('#alert-btn')!.addEventListener('click',() => {
-        show_alert({
-            title: 'Заголовок сообщения',
-            message: 'Текст сообщения, второй вариант сообщения (требующий реакции) - низу кнопки "Да" и "Нет"',
-            buttons: true
-        })
-    })
+    
+    load()
+
     return page
 
 }
+

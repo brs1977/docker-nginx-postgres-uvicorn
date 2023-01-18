@@ -5,7 +5,7 @@ import close_img from '../img/close.svg'
 
 export type AlertProps = {
     title: string,
-    message: string,
+    text: string,
     buttons?: boolean
 }
 
@@ -15,7 +15,7 @@ export async function show_alert(props:AlertProps) {
             <img class="alert-icon" src="${atten}">
             <div class="alert-data">
                 <div class="alert-title">${props.title}</div>
-                <div class="alert-message">${props.message}</div>
+                <div class="alert-message">${props.text}</div>
                 <div class="alert-buttons">
                     <button class="alert-button" name="yes">Да</button>
                     <button class="alert-button" name="no">Нет</button>

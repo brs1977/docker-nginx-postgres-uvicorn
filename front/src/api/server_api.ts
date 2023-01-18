@@ -1,6 +1,6 @@
 import { events } from "../core/events";
 import { fail } from "../core/utils";
-import { API, Users, User } from "./api";
+import { API, Users, User, Menu } from "./api";
 
 export function get_url(pathname:string,port:number,server_url?:string) {
     const url = new URL(server_url ?? location.toString())
@@ -36,7 +36,7 @@ export function server_api(url:string):API {
               ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
             },            
         }
-        console.log(options)
+        // console.log(options)
         const res = await fetch($url,options)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
@@ -102,12 +102,17 @@ export function server_api(url:string):API {
         emit('logout')
     }
 
+    async function menu(): Promise<Menu> {
+        return get<Menu>('config/menu')
+    }
+
 
     return {
         users,
         login,
         logout,
         me,
-        on
+        on,
+        menu
     }
 }

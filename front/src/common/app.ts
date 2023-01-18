@@ -13,7 +13,7 @@ export type AppParams = {
     api: API
 }
 
-export function app({root}:AppParams) {
+export function app({root,api}:AppParams) {
 
     // const $toast = toast()
  
@@ -49,7 +49,7 @@ export function app({root}:AppParams) {
 
     // root.appendChild($grid)
 
-    const el = page()
+    const el = page({api})
     root.appendChild(el)
 
 }

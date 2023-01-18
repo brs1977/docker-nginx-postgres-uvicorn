@@ -140,3 +140,11 @@ export function make_fragment(html:string) {
     return r.createContextualFragment(html)
 }
 
+export function make_element<T extends HTMLElement>(html:string) {
+    const r = document.createRange()
+    const f = r.createContextualFragment(html)
+    return f.firstElementChild as T
+}
+
+
+
