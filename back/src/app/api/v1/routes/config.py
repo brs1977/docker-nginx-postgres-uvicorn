@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException
-from app.api.v1.config.utils import read_config, get_menu, get_bp_niz
+from fastapi import APIRouter, HTTPException, Path
+from app.api.v1.config.utils import read_config, get_menu, get_bp_niz, get_page
 from loguru import logger
 
 router = APIRouter()
@@ -22,3 +22,8 @@ async def bp_niz():
         return get_bp_niz(config)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/page/{id}/", status_code=201)
+async def page(id: int = Path(..., gt=0)):
+    return get_page(config, id)

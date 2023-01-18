@@ -1,6 +1,24 @@
+from fastapi import HTTPException
 import pandas as pd
 from typing import List
 import yaml
+
+
+def get_page(config, id):
+    if id == 1:  # Главная
+        return {"type": "alert", "title": "Ошибка структуры", "text": "Не задана рабочая область"}
+    elif id == 201:  # Администрирование
+        return {
+            "type": "tabs",
+            "tabs": [
+                {"kod": 20101, "name": "Режим", "text": "Пункт Режим"},
+                {"kod": 20102, "name": "Настройки", "text": "Пункт Настройки"},
+            ],
+        }
+    elif id == 303:  # Прогнозирование
+        return {"type": "page", "kod": 30301, "text": "Пункт Прогноз динамики"}
+    else:
+        raise HTTPException(status_code=404, detail=f"Page {id} not found")
 
 
 def get_menu(config_doc):
@@ -16,8 +34,8 @@ def get_menu(config_doc):
     df_graph["breadcrumbs"] = df_graph.kod.apply(breadcrumbs, df_graph=df_graph)
 
     return (
-        df_graph[df_graph.typ.isin([1, 2])]
-        .loc[:, ["kod", "parent", "name", "typ", "has_child", "breadcrumbs"]]
+        df_graph[df_graph.typ.isin([1, 2])].loc[:, ["kod", "parent", "name", "has_child"]]
+        # .loc[:, ["kod", "parent", "name", "typ", "has_child", "breadcrumbs"]]
         .to_dict("records")
     )
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \

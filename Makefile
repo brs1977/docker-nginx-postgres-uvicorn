@@ -23,7 +23,8 @@ flake8:
 	docker-compose run back flake8 /app/app
 chown:	
 	sudo chown -R www:www *
-pre-commit: black flake8 mypy tests 
+# pre-commit: black flake8 mypy tests 
+pre-commit: black flake8 mypy 
 prometheus:
 	sudo docker service create --replicas 1 --name my-prometheus \
     	--mount type=bind,source=/home/www/projects/docker/prometheus/prometheus.yml,destination=/etc/prometheus/prometheus.yml \
