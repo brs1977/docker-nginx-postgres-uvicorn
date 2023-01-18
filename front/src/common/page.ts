@@ -33,6 +33,10 @@ function setup_actions(api:API,el:HTMLLinkElement,item:MenuItem) {
         on(el,'click',async (e) => {
             e.preventDefault()
             const workspace = make_page(item.kod)
+            const cur = el.closest('.caption-menu-item')
+            el.closest('.page')?.querySelectorAll<HTMLElement>('.caption-menu-item').forEach(it => {
+                it.classList.toggle('caption-menu-active',it == cur)
+            })
             el.closest('.page')?.querySelector<HTMLElement>('.workspace')?.replaceChildren(workspace)
         })
         //page({api,root,workspace,is_caption:$caption_checkbox.checked,is_footer:$footer_checkbox.checked})
@@ -45,7 +49,7 @@ export function page({api}:PageProps) {
         const nodes = menu
         .filter(item => item.parent === 0)
         .sort(sort_menu)
-        .map((item,index) => {
+        .map(item => {
             let el:HTMLElement
             const children = menu.filter(child => child.parent === item.kod)
             .sort(sort_menu)
@@ -60,7 +64,7 @@ export function page({api}:PageProps) {
             })
             if (!children.length) {
                 el = make_element(/*html*/`
-                    <a href="#" class="caption-menu-item caption-menu-active">${item.name}</a>
+                    <a href="#" class="caption-menu-item">${item.name}</a>
                 `)
                 setup_actions(api,el as HTMLLinkElement,item)
             }
@@ -74,7 +78,6 @@ export function page({api}:PageProps) {
                 `)
                 el.querySelector<HTMLElement>('.dropdown-menu')!.append(...children)
             }
-            el.classList.toggle('caption-menu-active',index === 0)
             return el
         })
         $caption.querySelector('.caption-menu')!.replaceChildren(...nodes)
