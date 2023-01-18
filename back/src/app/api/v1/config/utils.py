@@ -4,8 +4,8 @@ from typing import List
 import yaml
 
 
-def get_page(config, id):
-    return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{id}'}} 
+def get_menu_page(config, kod):
+    return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{kod}'}} 
     # if id == 1:  # Главная
     #     return {'action':{'type':'alert','title':'Ошибка структуры','text':'Не задана рабочая область'}} 
     # elif id == 201:  # Администрирование
