@@ -33,7 +33,7 @@ function setup_actions(api:API,el:HTMLLinkElement,item:MenuItem) {
         on(el,'click',async (e) => {
             e.preventDefault()
             const workspace = make_page(item.kod)
-            el.closest('.page')?.querySelector<HTMLElement>('.page-workspace')?.replaceChildren(workspace)
+            el.closest('.page')?.querySelector<HTMLElement>('.workspace')?.replaceChildren(workspace)
         })
         //page({api,root,workspace,is_caption:$caption_checkbox.checked,is_footer:$footer_checkbox.checked})
     }
@@ -171,12 +171,10 @@ export function page({api}:PageProps) {
                 </div>
             </div>
             <div class="page-workspace">
-                <!-- 
-                <div class="div-work">
+                <div class="div-work pic-m1">
                 </div>
                 <div class="workspace">
                 </div>
-                -->
             </div>
         </div>            
         <div class="page-footer page-footer-show">
