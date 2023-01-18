@@ -10,6 +10,7 @@ import { make_element, make_fragment } from '../core/html'
 import { show_alert } from '../core/alert'
 import { API, is_alert_action, is_page_action, MenuItem } from '../api/api'
 import { on } from '../core/dom'
+import { make_page } from './pages'
 
 export type PageProps = {
     api: API
@@ -31,9 +32,7 @@ function setup_actions(api:API,el:HTMLLinkElement,item:MenuItem) {
         console.log('page',item.kod)
         on(el,'click',async (e) => {
             e.preventDefault()
-            const html = await api.page(item.kod)
-            console.log(html)
-            const workspace = make_fragment(html)
+            const workspace = make_page(item.kod)
             el.closest('.page')?.querySelector<HTMLElement>('.page-workspace')?.replaceChildren(workspace)
         })
         //page({api,root,workspace,is_caption:$caption_checkbox.checked,is_footer:$footer_checkbox.checked})
