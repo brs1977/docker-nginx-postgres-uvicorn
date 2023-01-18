@@ -1,11 +1,9 @@
 import { fail } from "../../core/utils";
-import { page_input } from "./page_input";
 import { page_main } from "./page_main";
 import { page_test } from "./page_test";
 
 const PAGES: Record<number,Function> =  {
     1: page_main,
-    2: page_input,
     10: page_test
 }
 
