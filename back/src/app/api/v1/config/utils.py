@@ -11,6 +11,7 @@ def get_menu_page(config_doc, kod):
         return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{kod}'}} 
     else:
         return get_template(config_doc, kod)        
+        
     # if id == 1:  # Главная
     #     return {'action':{'type':'alert','title':'Ошибка структуры','text':'Не задана рабочая область'}} 
     # elif id == 201:  # Администрирование
@@ -62,8 +63,11 @@ def get_menu(config_doc):
     for menu in menus:
         if menu['has_child'] == 0:
             menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
-        elif menu['kod'] == 10:
+        if menu['kod'] == 1:
             menu['action'] = {'type': 'page'}
+        if menu['kod'] == 10:
+            menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
+
         # elif menu['has_child'] == 1:
         #     menu['action'] = {'type': 'page'}
         # del menu['has_child']
