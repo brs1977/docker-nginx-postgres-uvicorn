@@ -32,10 +32,14 @@ def get_menu(config_doc):
 
     df_graph = df_graph.loc[:, ['kod', 'parent', 'name', 'typ', 'dost']]
     df_graph['has_child'] = df_graph.kod.apply(lambda x: int(df_graph.parent.isin([x]).any()))
-    df_graph['breadcrumbs'] = df_graph.kod.apply(breadcrumbs, df_graph=df_graph)
+    # df_graph['breadcrumbs'] = df_graph.kod.apply(breadcrumbs, df_graph=df_graph)
+
+    # action = alert|page
+    df_graph['action'] = df_graph.has_child.map({0:'alert', 1:'page'})
+
 
     return (
-        df_graph[df_graph.typ.isin([1, 2])].loc[:, ['kod', 'parent', 'name', 'has_child']]
+        df_graph[df_graph.typ.isin([1, 2])].loc[:, ['kod', 'parent', 'name', 'action']]
         # .loc[:, ['kod', 'parent', 'name', 'typ', 'has_child', 'breadcrumbs']]
         .to_dict('records')
     )
