@@ -34,15 +34,19 @@ def get_menu(config_doc):
     df_graph['has_child'] = df_graph.kod.apply(lambda x: int(df_graph.parent.isin([x]).any()))
     # df_graph['breadcrumbs'] = df_graph.kod.apply(breadcrumbs, df_graph=df_graph)
 
-    # action = alert|page
-    df_graph['action'] = df_graph.has_child.map({0:'alert', 1:'page'})
+    # action: {typ: 'alert',title,text} или action: {type:'page'}
+    # df_graph['action'] = df_graph.has_child.map({0:'alert', 1:'page'})
 
+    menus = df_graph[df_graph.typ.isin([1, 2])].loc[:, ['kod', 'parent', 'name', 'has_child']].to_dict('records')
 
-    return (
-        df_graph[df_graph.typ.isin([1, 2])].loc[:, ['kod', 'parent', 'name', 'action']]
-        # .loc[:, ['kod', 'parent', 'name', 'typ', 'has_child', 'breadcrumbs']]
-        .to_dict('records')
-    )
+    for menu in menus:
+        if menu['has_child'] == 0:
+            menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
+        elif menu['has_child'] == 1:
+            menu['action'] = {'type': 'page'}
+        del menu['has_child']
+
+    return menus
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
     #     loc[:,['kod','parent','name','typ']].to_dict('records')
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
