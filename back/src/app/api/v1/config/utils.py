@@ -1,11 +1,16 @@
 from fastapi import HTTPException
+from loguru import logger
+from string import Template
 import pandas as pd
 from typing import List
 import yaml
 
 
-def get_menu_page(config, kod):
-    return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{kod}'}} 
+def get_menu_page(config_doc, kod):
+    if kod==1:
+        return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{kod}'}} 
+    else:
+        return get_template(config_doc, kod)
     # if id == 1:  # Главная
     #     return {'action':{'type':'alert','title':'Ошибка структуры','text':'Не задана рабочая область'}} 
     # elif id == 201:  # Администрирование
@@ -21,6 +26,19 @@ def get_menu_page(config, kod):
     # else:
     #     raise HTTPException(status_code=404, detail=f'Page {id} not found')
 
+
+def get_template(config_doc, kod):
+    lines = read_template('data/main_template.html')
+    template = Template(''.join(lines))
+    dct = config_doc['page-main']
+    logger.debug(dct)
+    return template.substitute(dct)
+
+def read_template(filename):
+    with open(filename) as f:
+        return f.readlines()
+
+    
 
 def get_menu(config_doc):
     ndn_map = extract_map(config_doc, 'dzgl')
@@ -42,8 +60,8 @@ def get_menu(config_doc):
     for menu in menus:
         if menu['has_child'] == 0:
             menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
-        elif menu['has_child'] == 1:
-            menu['action'] = {'type': 'page'}
+        # elif menu['has_child'] == 1:
+        #     menu['action'] = {'type': 'page'}
         # del menu['has_child']
 
     return menus
