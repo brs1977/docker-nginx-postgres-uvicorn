@@ -25,7 +25,7 @@ export function server_api(url:string):API {
         const options:RequestInit = {
             method: 'GET',
             //mode: 'same-origin',
-            //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             // credentials: 'omit', // include, *same-origin, omit
             headers: {
                'Content-Type': 'application/json',
@@ -45,21 +45,22 @@ export function server_api(url:string):API {
         return json
     }
 
-    async function page(kod:number) {
-        const $url = new URL(`${url}/config/menu/${kod}/`)
-        const options:RequestInit = {
-            method: 'GET',
-            headers: {
-              ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
-            },            
-        }
-        const res = await fetch($url,options)
-        if (!res.ok) {
-            fail(`${res.status} ${res.statusText}`)
-        }
-        const text = await res.text()
-        return text
-    }
+    // async function page(kod:number) {
+    //     const $url = new URL(`${url}/config/menu/${kod}/`)
+    //     const options:RequestInit = {
+    //         method: 'GET',
+    //         cache: 'no-cache',
+    //         headers: {
+    //           ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
+    //         },            
+    //     }
+    //     const res = await fetch($url,options)
+    //     if (!res.ok) {
+    //         fail(`${res.status} ${res.statusText}`)
+    //     }
+    //     const text = await res.text()
+    //     return text
+    // }
 
     // async function post<T>(action:string,props?:FetchProps):Promise<T> {
     //     const options:RequestInit = {
@@ -92,6 +93,7 @@ export function server_api(url:string):API {
         // body.append('password',password)
         const options:RequestInit = {
             method: 'POST',
+            cache: 'no-cache',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },            
@@ -129,6 +131,6 @@ export function server_api(url:string):API {
         me,
         on,
         menu,
-        page
+        // page
     }
 }
