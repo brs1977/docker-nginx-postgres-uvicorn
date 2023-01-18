@@ -10,7 +10,8 @@ def get_menu_page(config_doc, kod):
     if kod==1:
         return {'action':{'type':'alert','title':'Ошибка структуры','text':f'Не задана рабочая область kod:{kod}'}} 
     else:
-        return get_template(config_doc, kod)
+        return get_template(config_doc, kod)        
+        
     # if id == 1:  # Главная
     #     return {'action':{'type':'alert','title':'Ошибка структуры','text':'Не задана рабочая область'}} 
     # elif id == 201:  # Администрирование
@@ -32,7 +33,9 @@ def get_template(config_doc, kod):
     template = Template(''.join(lines))
     dct = config_doc['page-main']
     logger.debug(dct)
-    return template.substitute(dct)
+    template_str = template.substitute(dct)
+    logger.debug(template_str)
+    return template_str
 
 def read_template(filename):
     with open(filename) as f:

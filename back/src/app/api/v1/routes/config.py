@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, HTTPException, Path, Response
 from app.api.v1.config.utils import read_config, get_menu, get_bp_niz, get_menu_page
 from loguru import logger
 
@@ -26,4 +26,14 @@ async def bp_niz():
 
 @router.get("/menu/{kod}/", status_code=201)
 async def page(kod: int = Path(..., gt=0)):
-    return get_menu_page(config, kod)
+    
+    if kod == 1:
+        media_type="application/json"
+        content=str(get_menu_page(config, kod))
+        return Response(content=content, media_type=media_type)
+    else:
+        media_type="text/html"
+        content=get_menu_page(config, kod)
+        return Response(content=content, media_type=media_type)
+
+
