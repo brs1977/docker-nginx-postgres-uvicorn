@@ -321,15 +321,12 @@ body {
     width: 100%;
     margin-left: 1rem
 }
-div {
-    /* border: 1px solid blue; */
-}
 .div-gran0 {
     border: 1px solid blue; 
 }
-.div-gran {
-     /* border: 1px solid blue; */
-}
+/* .div-gran {
+     border: 1px solid blue;
+} */
 .div-end-zag {
     margin-right: 6.5rem;
     margin-top: 0.5rem;

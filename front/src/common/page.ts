@@ -18,7 +18,7 @@ export type PageProps = {
 
 function sort_menu (a:MenuItem,b:MenuItem) { return a.kod - b.kod }
 
-function setup_actions(api:API,el:HTMLLinkElement,item:MenuItem) {
+function setup_actions(el:HTMLLinkElement,item:MenuItem) {
     if (is_alert_action(item.action)) {
         const {title,text} = item.action
         on(el,'click',(e) => {
@@ -59,14 +59,14 @@ export function page({api}:PageProps) {
                         <a class="dropdown-link" href="#">${child.name}</a>
                     </li>
                 `)
-                setup_actions(api,el.querySelector<HTMLLinkElement>('.dropdown-link')!,child)
+                setup_actions(el.querySelector<HTMLLinkElement>('.dropdown-link')!,child)
                 return el
             })
             if (!children.length) {
                 el = make_element(/*html*/`
                     <a href="#" class="caption-menu-item">${item.name}</a>
                 `)
-                setup_actions(api,el as HTMLLinkElement,item)
+                setup_actions(el as HTMLLinkElement,item)
             }
             else {
                 el = make_element(/*html*/`
@@ -210,7 +210,7 @@ export function page({api}:PageProps) {
     const $caption_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=caption]')!
     const $footer_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=footer]')!
     const $sidebar_close = $page.querySelector<HTMLElement>('.sidebar-close')!
-    const $workspace = $page.querySelector<HTMLElement>('.page-workspace')!
+    // const $workspace = $page.querySelector<HTMLElement>('.page-workspace')!
     const $footer = $page.querySelector<HTMLElement>('.page-footer')!
     $hamburger.addEventListener('click', () => {
         $sidebar.classList.add('page-sidebar-show')
