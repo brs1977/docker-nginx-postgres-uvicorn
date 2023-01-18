@@ -47,4 +47,5 @@ export interface API {
     me():Promise<User>
     on(event:string,callback:Function):Function
     menu(): Promise<Menu>
+    page(kod:number):Promise<string>
 }

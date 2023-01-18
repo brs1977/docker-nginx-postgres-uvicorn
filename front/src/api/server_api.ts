@@ -45,6 +45,21 @@ export function server_api(url:string):API {
         return json
     }
 
+    async function page(kod:number) {
+        const $url = new URL(`${url}/config/menu/${kod}/`)
+        const options:RequestInit = {
+            method: 'GET',
+            headers: {
+              ...(access_token ? {'Authorization': `Bearer ${access_token}`} : {})
+            },            
+        }
+        const res = await fetch($url,options)
+        if (!res.ok) {
+            fail(`${res.status} ${res.statusText}`)
+        }
+        const text = await res.text()
+        return text
+    }
 
     // async function post<T>(action:string,props?:FetchProps):Promise<T> {
     //     const options:RequestInit = {
@@ -113,6 +128,7 @@ export function server_api(url:string):API {
         logout,
         me,
         on,
-        menu
+        menu,
+        page
     }
 }

@@ -12,27 +12,35 @@ import { API, is_alert_action, is_page_action, MenuItem } from '../api/api'
 import { on } from '../core/dom'
 
 export type PageProps = {
-    api: API,
-    sidebar?: Node,
-    workspace?: Node,
+    api: API
+}
+
+function sort_menu (a:MenuItem,b:MenuItem) { return a.kod - b.kod }
+
+function setup_actions(api:API,el:HTMLLinkElement,item:MenuItem) {
+    if (is_alert_action(item.action)) {
+        const {title,text} = item.action
+        on(el,'click',(e) => {
+            e.preventDefault()
+            show_alert({
+                title,
+                text
+            })
+        })
+    } else if (is_page_action(item.action)) {
+        console.log('page',item.kod)
+        on(el,'click',async (e) => {
+            e.preventDefault()
+            const html = await api.page(item.kod)
+            console.log(html)
+            const workspace = make_fragment(html)
+            el.closest('.page')?.querySelector<HTMLElement>('.page-workspace')?.replaceChildren(workspace)
+        })
+        //page({api,root,workspace,is_caption:$caption_checkbox.checked,is_footer:$footer_checkbox.checked})
+    }
 }
 
 export function page({api}:PageProps) {
-    const sort_menu = (a:MenuItem,b:MenuItem) => a.kod - b.kod
-    const setup_actions = (el:HTMLLinkElement,item:MenuItem) =>  {
-        if (is_alert_action(item.action)) {
-            const {title,text} = item.action
-            on(el,'click',(e) => {
-                e.preventDefault()
-                show_alert({
-                    title,
-                    text
-                })
-            })
-        } else if (is_page_action(item.action)) {
-            el.href = `/${item.kod}`
-        }
-    }
     async function load() {
         const menu = await api.menu()
         const nodes = menu
@@ -48,14 +56,14 @@ export function page({api}:PageProps) {
                         <a class="dropdown-link" href="#">${child.name}</a>
                     </li>
                 `)
-                setup_actions(el.querySelector<HTMLLinkElement>('.dropdown-link')!,child)
+                setup_actions(api,el.querySelector<HTMLLinkElement>('.dropdown-link')!,child)
                 return el
             })
             if (!children.length) {
                 el = make_element(/*html*/`
                     <a href="#" class="caption-menu-item caption-menu-active">${item.name}</a>
                 `)
-                setup_actions(el as HTMLLinkElement,item)
+                setup_actions(api,el as HTMLLinkElement,item)
             }
             else {
                 el = make_element(/*html*/`
@@ -70,7 +78,7 @@ export function page({api}:PageProps) {
             el.classList.toggle('caption-menu-active',index === 0)
             return el
         })
-        caption.querySelector('.caption-menu')!.replaceChildren(...nodes)
+        $caption.querySelector('.caption-menu')!.replaceChildren(...nodes)
     }
     const f = make_fragment(
         /*html*/
@@ -164,10 +172,12 @@ export function page({api}:PageProps) {
                 </div>
             </div>
             <div class="page-workspace">
+                <!-- 
                 <div class="div-work">
                 </div>
                 <div class="workspace">
                 </div>
+                -->
             </div>
         </div>            
         <div class="page-footer page-footer-show">
@@ -193,32 +203,33 @@ export function page({api}:PageProps) {
         </div>
     </div>`
     )
-    const page = f.querySelector<HTMLElement>('.page')!
-    const hamburger = page.querySelector<HTMLElement>('.header-hamburger')!
-    const caption = page.querySelector<HTMLElement>('.page-caption')!
-    const sidebar = page.querySelector<HTMLElement>('.page-sidebar')!
-    const caption_checkbox = page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=caption]')!
-    const footer_checkbox = page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=footer]')!
-    const sidebar_close = page.querySelector<HTMLElement>('.sidebar-close')!
-    const footer = page.querySelector<HTMLElement>('.page-footer')!
-    hamburger.addEventListener('click', () => {
-        sidebar.classList.add('page-sidebar-show')
+    const $page = f.querySelector<HTMLElement>('.page')!
+    const $hamburger = $page.querySelector<HTMLElement>('.header-hamburger')!
+    const $caption = $page.querySelector<HTMLElement>('.page-caption')!
+    const $sidebar = $page.querySelector<HTMLElement>('.page-sidebar')!
+    const $caption_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=caption]')!
+    const $footer_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=footer]')!
+    const $sidebar_close = $page.querySelector<HTMLElement>('.sidebar-close')!
+    const $workspace = $page.querySelector<HTMLElement>('.page-workspace')!
+    const $footer = $page.querySelector<HTMLElement>('.page-footer')!
+    $hamburger.addEventListener('click', () => {
+        $sidebar.classList.add('page-sidebar-show')
     })
-    caption_checkbox.addEventListener('change', () => {
-        caption.classList.toggle('page-caption-show',caption_checkbox.checked)
+    $caption_checkbox.addEventListener('change', () => {
+        $caption.classList.toggle('page-caption-show',$caption_checkbox.checked)
     })
-    footer_checkbox.addEventListener('change', () => {
-        footer.classList.toggle('page-footer-show',footer_checkbox.checked)
+    $footer_checkbox.addEventListener('change', () => {
+        $footer.classList.toggle('page-footer-show',$footer_checkbox.checked)
     })
-    sidebar_close.addEventListener('click', () => {
-        sidebar.classList.remove('page-sidebar-show')
+    $sidebar_close.addEventListener('click', () => {
+        $sidebar.classList.remove('page-sidebar-show')
     })
-    caption_checkbox.checked = true
-    footer_checkbox.checked = true
+    $caption_checkbox.checked = false
+    $footer_checkbox.checked = false
     
     load()
 
-    return page
+    return $page
 
 }
 
