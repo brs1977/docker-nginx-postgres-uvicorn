@@ -60,6 +60,8 @@ def get_menu(config_doc):
     for menu in menus:
         if menu['has_child'] == 0:
             menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
+        elif menu['kod'] == 10:
+            menu['action'] = {'type': 'page'}
         # elif menu['has_child'] == 1:
         #     menu['action'] = {'type': 'page'}
         # del menu['has_child']
