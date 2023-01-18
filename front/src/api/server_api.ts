@@ -3,7 +3,7 @@ import { fail } from "../core/utils";
 import { API, Users, User, Menu } from "./api";
 
 export function get_url(pathname:string,port:number,server_url?:string) {
-    const url = new URL(server_url ?? location.toString())
+    const url = new URL(server_url ?? location.origin)
     url.pathname = pathname
     url.port = '' + port
     return url.toString()

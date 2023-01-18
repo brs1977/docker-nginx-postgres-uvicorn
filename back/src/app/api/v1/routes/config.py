@@ -26,14 +26,12 @@ async def bp_niz():
 
 @router.get("/menu/{kod}/", status_code=201)
 async def page(kod: int = Path(..., gt=0)):
-    
+
     if kod == 1:
-        media_type="application/json"
-        content=str(get_menu_page(config, kod))
+        media_type = "application/json"
+        content = str(get_menu_page(config, kod))
         return Response(content=content, media_type=media_type)
     else:
-        media_type="text/html"
-        content=get_menu_page(config, kod)
+        media_type = "text/html"
+        content = get_menu_page(config, kod)
         return Response(content=content, media_type=media_type)
-
-
