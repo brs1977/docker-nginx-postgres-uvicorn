@@ -160,7 +160,8 @@ export function page(_?:PageProps) {
     page.querySelector<HTMLElement>('#alert-btn')!.addEventListener('click',() => {
         show_alert({
             title: 'Заголовок сообщения',
-            message: 'Текст сообщения, второй вариант сообщения (требующий реакции) - низу кнопки "Да" и "Нет"'
+            message: 'Текст сообщения, второй вариант сообщения (требующий реакции) - низу кнопки "Да" и "Нет"',
+            buttons: true
         })
     })
     return page

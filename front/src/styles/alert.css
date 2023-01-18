@@ -37,3 +37,20 @@
     align-self: flex-start;
     cursor: pointer;
 }
+.alert-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-around;
+    visibility: collapse;
+}
+
+.alert-buttons-show {
+    visibility: visible;
+}
+
+.alert-button {
+    border: 1px solid #ccc;
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+}
