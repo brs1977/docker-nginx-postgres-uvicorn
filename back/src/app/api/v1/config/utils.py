@@ -44,7 +44,7 @@ def get_menu(config_doc):
             menu['action'] = {'type': 'alert', 'title':'Ошибка структуры','text':f"Не задана рабочая область kod:{menu['kod']}"}
         elif menu['has_child'] == 1:
             menu['action'] = {'type': 'page'}
-        del menu['has_child']
+        # del menu['has_child']
 
     return menus
     # return df_graph[df_graph.typ.isin([1,2,3,4])]. \
