@@ -17,11 +17,11 @@ export function events(): Events {
         }
     }
 
-    function emit(event:string) {
+    function emit(event:string,...args:Array<any>) {
         const _callbacks = callbacks.get(event)
         if (_callbacks === undefined)
             return
-        _callbacks.forEach(callback => callback())
+        _callbacks.forEach(callback => callback(...args))
     }
 
     return {

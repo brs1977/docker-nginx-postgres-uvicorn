@@ -1,0 +1,38 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1rem; */
+}
+
+.login-header {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.login-forgot {
+    flex-shrink: 0;
+}
+
+.login-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.login-button {
+    align-self: flex-end;
+    padding: 0.25rem 1rem;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+}
+
+.login-title {
+    text-transform: uppercase;
+}
+
+.login-hide {
+    display: none;
+}

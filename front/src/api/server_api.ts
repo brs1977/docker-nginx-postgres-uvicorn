@@ -1,6 +1,6 @@
 import { events } from "../core/events";
 import { fail } from "../core/utils";
-import { API, Users, User, Menu } from "./api";
+import { API, Users, User, Menu, Settings } from "./api";
 
 export function get_url(pathname:string,port:number,server_url?:string) {
     const url = new URL(server_url ?? location.origin)
@@ -110,6 +110,18 @@ export function server_api(url:string):API {
         emit('login')
     }
 
+    async function settings():Promise<Settings> {
+        const s = localStorage.getItem('SETTINGS')
+        const obj = s ? JSON.parse(s)  : {}
+        return typeof(obj) === 'object' ? obj : {}
+    }
+
+    async function settings_change(partial:Partial<Settings>) {
+        const old_settings = await settings()
+        const new_settings = {...old_settings,...partial}
+        localStorage.setItem('SETTINGS',JSON.stringify(new_settings))
+    }
+
     async function me(): Promise<User> {
         return get<User>('users/me')
     }
@@ -131,6 +143,8 @@ export function server_api(url:string):API {
         me,
         on,
         menu,
+        settings,
+        settings_change
         // page
     }
 }

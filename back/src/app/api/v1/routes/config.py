@@ -32,6 +32,6 @@ async def page(kod: int = Path(..., gt=0)):
         content = str(get_menu_page(config, kod))
         return Response(content=content, media_type=media_type)
     else:
-        media_type = "text/html"
+        media_type = "plain/text"
         content = get_menu_page(config, kod)
         return Response(content=content, media_type=media_type)

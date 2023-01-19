@@ -8,7 +8,7 @@ import shild from '../img/shild.png'
 import close from '../img/close.svg'
 import { make_element, make_fragment } from '../core/html'
 import { show_alert } from '../core/alert'
-import { API, is_alert_action, is_page_action, MenuItem } from '../api/api'
+import { API, is_alert_action, is_page_action, MenuItem, Settings } from '../api/api'
 import { on } from '../core/dom'
 import { make_page } from './pages'
 
@@ -29,7 +29,7 @@ function setup_actions(el:HTMLLinkElement,item:MenuItem) {
             })
         })
     } else if (is_page_action(item.action)) {
-        console.log('page',item.kod)
+        //console.log('page',item.kod)
         on(el,'click',async (e) => {
             e.preventDefault()
             const workspace = make_page(item.kod)
@@ -43,7 +43,65 @@ function setup_actions(el:HTMLLinkElement,item:MenuItem) {
     }
 }
 
+type LoginProps = {
+    api: API,
+}
+
+function login({api}:LoginProps) {
+    const el = make_element(/*html*/`
+        <form class="login">
+            <div class="login-header">
+                <a href="#">регистрация</a>
+                <span>|</span>
+                <a href="#" class="login-forgot">забыли пароль?</a>
+            </div>
+            <div class="login-data">
+                <div class="login-title">Вход</div>
+                <input class="login-input" name="username">
+                <input class="login-input" type="password" name="password">
+                <button class="login-button">ОК</button>
+            </div>
+        </form>
+    `)
+    on(el,'submit',async e => {
+        e.preventDefault()
+        const username = el.querySelector<HTMLInputElement>('input[name=username]')!.value
+        const password = el.querySelector<HTMLInputElement>('input[name=password]')!.value
+        await api.login(username,password)
+    })
+    api.on('login',() => {
+        el.classList.add('login-hide')
+    })
+    api.on('logout',() => {
+        el.classList.remove('login-hide')
+    })
+    return el
+}
+
+type LogonParams = {
+    api: API
+}
+
+function logon({api}:LogonParams) {
+
+    const el = make_element(/*html*/`
+        <div class="logon">
+        <div class="div-gran0 block" style="height:95px">юзер</div>
+        <div class="div-gran0 block" style="height:72px">помошь</div>
+            <div class="div-gran0 block" style="height:284px">панели</div>
+        </div>
+    `)
+    api.on('login',() => {
+        el.classList.add('logon-show')
+    })
+    api.on('logout',() => {
+        el.classList.remove('logon-show')
+    })
+    return el
+}
+
 export function page({api}:PageProps) {
+
     async function load() {
         const menu = await api.menu()
         const nodes = menu
@@ -166,11 +224,7 @@ export function page({api}:PageProps) {
                         <img class="sidebar-close" src="${close}">
                     </div>
                     <div class="sidebar-items">
-                        <div class="div-gran0 block" style="height:96px">логин</div>
-                        <div class="div-gran0 block" style="height:72px">помошь</div>
-                        <div class="div-gran0 block" style="height:284px">панели</div>
                     </div>
-                    
                 </div>
             </div>
             <div class="page-workspace">
@@ -210,23 +264,37 @@ export function page({api}:PageProps) {
     const $caption_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=caption]')!
     const $footer_checkbox = $page.querySelector<HTMLInputElement>('.sidebar-checkbox input[name=footer]')!
     const $sidebar_close = $page.querySelector<HTMLElement>('.sidebar-close')!
+    const $sidebar_items = $page.querySelector<HTMLElement>('.sidebar-items')!
     // const $workspace = $page.querySelector<HTMLElement>('.page-workspace')!
     const $footer = $page.querySelector<HTMLElement>('.page-footer')!
     $hamburger.addEventListener('click', () => {
         $sidebar.classList.add('page-sidebar-show')
+        api.settings_change({sidebar: true})
     })
     $caption_checkbox.addEventListener('change', () => {
         $caption.classList.toggle('page-caption-show',$caption_checkbox.checked)
+        api.settings_change({caption: $caption_checkbox.checked})
     })
     $footer_checkbox.addEventListener('change', () => {
         $footer.classList.toggle('page-footer-show',$footer_checkbox.checked)
+        api.settings_change({footer: $footer_checkbox.checked})
     })
     $sidebar_close.addEventListener('click', () => {
         $sidebar.classList.remove('page-sidebar-show')
+        api.settings_change({sidebar:false})
     })
-    $caption_checkbox.checked = false
-    $footer_checkbox.checked = false
-    
+    $sidebar_items.appendChild(login({api}))
+    $sidebar_items.appendChild(logon({api}))
+    $caption_checkbox.checked = true
+    $footer_checkbox.checked = true
+
+    api.on('login',async () => {
+        const settings = await api.settings()
+        $caption_checkbox.checked = settings.caption !== false
+        $footer_checkbox.checked = settings.footer !== false
+        $sidebar.classList.toggle('page-sidebar-show',settings.sidebar !== false) 
+    })
+
     load()
 
     return $page

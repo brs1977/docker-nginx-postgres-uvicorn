@@ -40,6 +40,12 @@ export function is_page_action(arg?: Action): arg is PageAction {
 
 export type Menu = Array<MenuItem>
 
+export type Settings = {
+    caption: boolean
+    sidebar: boolean
+    footer: boolean
+}
+
 export interface API {
     users():Promise<Users>
     login(username:string,password:string):Promise<void>
@@ -47,5 +53,7 @@ export interface API {
     me():Promise<User>
     on(event:string,callback:Function):Function
     menu(): Promise<Menu>
+    settings(): Promise<Settings>
+    settings_change(settings:Partial<Settings>):Promise<void>
     // page(kod:number):Promise<string>
 }
