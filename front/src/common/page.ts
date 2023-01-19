@@ -102,6 +102,14 @@ function logon({api}:LogonParams) {
 
 export function page({api}:PageProps) {
 
+    function update_settings(settings: Settings) {
+        $caption_checkbox.checked = settings.caption !== false
+        $caption.classList.toggle('page-caption-show',$caption_checkbox.checked)
+        $footer_checkbox.checked = settings.footer !== false
+        $footer.classList.toggle('page-footer-show',$footer_checkbox.checked)
+        $sidebar.classList.toggle('page-sidebar-show',settings.sidebar !== false) 
+    }
+
     async function load() {
         const menu = await api.menu()
         const nodes = menu
@@ -272,16 +280,17 @@ export function page({api}:PageProps) {
         api.settings_change({sidebar: true})
     })
     $caption_checkbox.addEventListener('change', () => {
+        console.log('change','caption',$caption_checkbox.checked)
         $caption.classList.toggle('page-caption-show',$caption_checkbox.checked)
-        api.settings_change({caption: $caption_checkbox.checked})
+        api.settings_change({caption: $caption_checkbox.checked}).then(update_settings)
     })
     $footer_checkbox.addEventListener('change', () => {
         $footer.classList.toggle('page-footer-show',$footer_checkbox.checked)
-        api.settings_change({footer: $footer_checkbox.checked})
+        api.settings_change({footer: $footer_checkbox.checked}).then(update_settings)
     })
     $sidebar_close.addEventListener('click', () => {
         $sidebar.classList.remove('page-sidebar-show')
-        api.settings_change({sidebar:false})
+        api.settings_change({sidebar:false}).then(update_settings)
     })
     $sidebar_items.appendChild(login({api}))
     $sidebar_items.appendChild(logon({api}))
@@ -289,10 +298,7 @@ export function page({api}:PageProps) {
     $footer_checkbox.checked = true
 
     api.on('login',async () => {
-        const settings = await api.settings()
-        $caption_checkbox.checked = settings.caption !== false
-        $footer_checkbox.checked = settings.footer !== false
-        $sidebar.classList.toggle('page-sidebar-show',settings.sidebar !== false) 
+        api.settings().then(update_settings)
     })
 
     load()

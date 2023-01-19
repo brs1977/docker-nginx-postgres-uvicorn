@@ -120,6 +120,7 @@ export function server_api(url:string):API {
         const old_settings = await settings()
         const new_settings = {...old_settings,...partial}
         localStorage.setItem('SETTINGS',JSON.stringify(new_settings))
+        return new_settings
     }
 
     async function me(): Promise<User> {

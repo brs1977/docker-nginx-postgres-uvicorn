@@ -54,6 +54,6 @@ export interface API {
     on(event:string,callback:Function):Function
     menu(): Promise<Menu>
     settings(): Promise<Settings>
-    settings_change(settings:Partial<Settings>):Promise<void>
+    settings_change(settings:Partial<Settings>):Promise<Settings>
     // page(kod:number):Promise<string>
 }
