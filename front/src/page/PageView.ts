@@ -4,6 +4,23 @@ import { PageViewModel } from "./PageViewModel";
 import { View } from "./View";
 import { PageSidebarView } from "./PageSidebarView";
 import { PageFooterView } from "./PageFooterView";
+import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel";
+import { WorkspaceMainFragment } from "./workspaces/WorkspaceMainFragment";
+import { WorkspaceProps } from "./PageTypes";
+import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel";
+
+interface CustomEventMap {
+    "pushpage": CustomEvent<number>;
+}
+
+declare global {
+    interface Window { //adds definition to Document, but you can do the same with HTMLElement
+        addEventListener<K extends keyof CustomEventMap>(type: K,
+           listener: (this: Window, ev: CustomEventMap[K]) => void): void;
+        dispatchEvent<K extends keyof CustomEventMap>(ev: CustomEventMap[K]): void;
+    }
+}
+
 
 export class PageView extends View<HTMLDivElement> {
 
@@ -37,11 +54,45 @@ export class PageView extends View<HTMLDivElement> {
 
         viewModel.on('change:settings',() => {
             const {settings} = viewModel
-            console.log('change:settings',settings)
             caption.classList.toggle('page-caption-show',settings.caption)
             sidebar.classList.toggle('page-sidebar-show',settings.sidebar)
             footer.classList.toggle('page-footer-show',settings.footer)
         })
+
+        
+        window.addEventListener('pushpage', e => {
+            viewModel.loadPage(e.detail)
+            history.pushState(null,'',`/${e.detail}`)
+        })
+
+        window.addEventListener('popstate', () => {
+            if (!viewModel.user) return
+            const m = location.pathname.match(/\/(\d+)/)
+            if (!m) return
+            const kod = parseInt(m[1])
+            if (isNaN(kod)) return 
+             viewModel.loadPage(kod)
+        })
+
+        viewModel.on('change:workspace',() => {
+            const {workspace} = viewModel
+            const view = this.getWorkspaceView(workspace)
+            if (view)
+                this.root.querySelector('.workspace')!.replaceChildren(view.root)
+            else
+                this.root.querySelector('.workspace')!.replaceChildren()
+        })
+
     }
+
+
+    getWorkspaceView(viewModel?:WorkspaceViewModel<WorkspaceProps>) {
+        if (viewModel instanceof WorkspaceMainViewModel) {
+            return new WorkspaceMainFragment(viewModel)
+        } else {
+            return undefined
+        }
+    }
+
 
 }

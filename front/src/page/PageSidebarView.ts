@@ -55,7 +55,6 @@ export class PageSidebarView extends View<HTMLDivElement> {
         const help = new PageHelpView()
 
         viewModel.on('change:user',() => {
-            console.log('user',viewModel.user)
             if (viewModel.user)
                 sidebar.replaceChildren(logon.root,help.root)
             else

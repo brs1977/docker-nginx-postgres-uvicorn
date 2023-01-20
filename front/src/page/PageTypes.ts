@@ -1,3 +1,5 @@
+export type Props = {}
+
 export type User = {
     id: number,
     fio: string,
@@ -50,6 +52,20 @@ export type Settings = {
     footer: boolean
 }
 
+export type WorkspaceCustomProps = Props & {
+    page: number
+}
+
+export type WorkspaceMainProps = WorkspaceCustomProps & {
+    type: 1
+}
+
+export type WorkspaceInputProps = WorkspaceCustomProps & {
+    type: 2
+}
+
+export type WorkspaceProps = WorkspaceMainProps | WorkspaceInputProps
+
 export interface PageModel {
     loadMenu(): Promise<Menu>
     loadSettings(): Promise<Settings>
@@ -57,6 +73,7 @@ export interface PageModel {
     saveSettings(settings:Settings):Promise<Settings>
     login(username:string,password:string):Promise<void>
     logout(): Promise<void>
+    loadWorkspace(kod:number):Promise<WorkspaceProps>
 }
 
 

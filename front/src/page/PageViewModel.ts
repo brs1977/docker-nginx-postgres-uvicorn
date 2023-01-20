@@ -1,14 +1,17 @@
-import { Menu, PageModel, Settings, User } from "./PageTypes"
-import { Props, ViewModel } from "./ViewModel"
+import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel"
+import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel"
+import { Menu, PageModel, Props, Settings, User, WorkspaceProps } from "./PageTypes"
+import { ViewModel } from "./ViewModel"
 
 type PageProps = Props & {  
     settings: Settings,
     menu: Menu,
-    user?: User 
+    user?: User,
+    workspace?: WorkspaceViewModel<WorkspaceProps> 
 }
+
 export class PageViewModel extends ViewModel<PageProps>{
 
-    
     constructor(readonly model:PageModel) {
         super()
     }
@@ -33,6 +36,19 @@ export class PageViewModel extends ViewModel<PageProps>{
         })
     }
 
+    getWorkspace(props:WorkspaceProps) {
+        switch(props.type) {
+            case 1: return new WorkspaceMainViewModel(props)
+            default: return undefined
+        }
+    }
+
+    async loadPage(kod:number) {
+        const props = await this.model.loadWorkspace(kod)
+        const workspace = this.getWorkspace(props)
+        this.setProps({workspace})
+    }
+
     async logout() {
         await this.model.logout()
         const settings = await this.model.loadSettings()
@@ -50,5 +66,7 @@ export class PageViewModel extends ViewModel<PageProps>{
     get menu() { return this.getProp('menu') || [] }
 
     get user() { return this.getProp('user') }
+
+    get workspace() { return this.getProp('workspace') }
 
 }

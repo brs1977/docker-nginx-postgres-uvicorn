@@ -44,7 +44,7 @@ export class PageCaptionView extends View<HTMLDivElement> {
             .map(child => {
                 const el = createElement(/*html*/`
                     <li class="dropdown-item">
-                        <a class="dropdown-link" href="#">${child.name}</a>
+                        <a class="dropdown-link" href="/${child.kod}">${child.name}</a>
                     </li>
                 `)
                 this.setupItem(child,el.querySelector<HTMLLinkElement>('.dropdown-link')!)
@@ -62,7 +62,7 @@ export class PageCaptionView extends View<HTMLDivElement> {
     }
 
     renderItem(item:MenuItem) {
-        const el = createElement<HTMLLinkElement>(/*html*/`<a href="#" class="caption-menu-item">${item.name}</a>`)
+        const el = createElement<HTMLLinkElement>(/*html*/`<a href="/${item.kod}" class="caption-menu-item">${item.name}</a>`)
         this.setupItem(item,el)
         return el
     }
@@ -78,7 +78,15 @@ export class PageCaptionView extends View<HTMLDivElement> {
                 })
             })
         } else if (isPageAction(item.action)) {
-            history.pushState(null,'',`/${item.kod}`)
+            el.addEventListener('click', e => {
+                e.preventDefault()
+                window.dispatchEvent(new CustomEvent<number>('pushpage',{detail: item.kod}))
+            })
+        } else {
+            el.addEventListener('click', e => {
+                e.preventDefault()
+                showAlert({title: 'Ошибка', text:`Не задано действие для kod:${item.kod}`})
+            })
         }
     
     }

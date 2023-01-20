@@ -1,8 +1,4 @@
-import { createSettings, Menu, PageModel, API, Settings, User } from "./PageTypes";
-
-type LoginResponse = {
-    access_token: string
-}
+import { createSettings, Menu, PageModel, API, Settings, User, WorkspaceProps, WorkspaceMainProps } from "./PageTypes";
 
 export class PageModelAPI implements PageModel {
 
@@ -52,6 +48,12 @@ export class PageModelAPI implements PageModel {
 
     async logout() { 
         await this.api.logout()
+    }
+
+    async loadWorkspace(kod: number) {
+        //return await this.api.get<WorkspaceProps>(`config/menu/${kod}/`)
+        const props: WorkspaceMainProps = {page: 1, type: 1}
+        return props
     }
 
     

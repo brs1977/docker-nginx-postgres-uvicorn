@@ -401,7 +401,8 @@ ul {
 }
 .gs-pic {
     width: 6rem;
-    height: auto; 
+    /* height: auto;  */
+    height: min-content;
 }
 .gs-txt {
     font-size: 1.25rem;

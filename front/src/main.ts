@@ -3,6 +3,7 @@ import { PageViewModel } from './page/PageViewModel'
 import { getURL, ServerAPI } from './page/ServerAPI'
 import { PageModelAPI } from './page/PageModelAPI'
 import './style.css'
+
 // import { get_url, server_api } from './api/server_api'
 // import { app } from './common/app'
 //import { toast } from './ctrls/toast'
@@ -19,4 +20,5 @@ const api = new ServerAPI(getURL('api/v1',8020))
 const model = new PageModelAPI(api)
 const viewModel = new PageViewModel(model)
 const view = new PageView(viewModel)
-root.append(view.root)
+root.appendChild(view.root)
+

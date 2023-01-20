@@ -1,4 +1,4 @@
-export type Props = {}
+import { Props } from "./PageTypes";
 
 export class ViewModel<T extends Props> {
 

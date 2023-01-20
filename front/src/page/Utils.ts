@@ -21,3 +21,9 @@ export function createElement<T extends HTMLElement>(html:string) {
     return f.querySelector<T>('*:first-child')!
 }
 
+export function createFragment(html:string) {
+    const r = document.createRange()
+    return r.createContextualFragment(html)
+}
+
+
