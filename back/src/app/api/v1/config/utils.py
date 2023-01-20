@@ -49,7 +49,7 @@ def read_template(filename):
         return f.readlines()
 
 
-def get_menu(config_doc):
+def get_menu_old(config_doc):
     ndn_map = extract_map(config_doc, "dzgl")
     gag = get_gag_dzg(config_doc)
 
@@ -208,3 +208,41 @@ def breadcrumbs(kod, df_graph):
         kod = int(row.parent)
         res.append(row.name.iloc[0])
     return " / ".join(res[::-1])
+
+def get_menu(config_doc):
+    # kod	kod-parent	name	typ-page	dostup	long-zag	typ-rz	tabs-rz
+    df_graph = [item['page'] for item in config_doc['graph']]
+    df_graph = pd.DataFrame(df_graph)
+    ndn_map = extract_map(config_doc, "dzgl")
+    gag = get_gag_dzg(config_doc)
+
+    # df_graph["dn"] = df_graph['long-zag'].map(ndn_map).fillna(gag)
+    df_graph["parent"] = df_graph.kod // 100
+
+    # df_graph = df_graph.loc[:, ["kod", "parent", "name", "typ", "dost"]]
+    df_graph["has_child"] = df_graph.kod.apply(lambda x: int(df_graph.parent.isin([x]).any()))
+
+    menus = (
+        df_graph[df_graph['typ-page'].isin([1, 2])]
+        .loc[:, ["kod", "parent", "name", "has_child"]]
+        .to_dict("records")
+    )
+
+    for menu in menus:
+        if menu["has_child"] == 0:
+            menu["action"] = {
+                "type": "alert",
+                "title": "Ошибка структуры",
+                "text": f"Не задана рабочая область kod:{menu['kod']}",
+            }
+        if menu["kod"] == 1:
+            menu["action"] = {"type": "page"}
+        if menu["kod"] == 10:
+            menu["action"] = {
+                "type": "alert",
+                "title": "Ошибка структуры",
+                "text": f"Не задана рабочая область kod:{menu['kod']}",
+            }
+
+
+    return menus
