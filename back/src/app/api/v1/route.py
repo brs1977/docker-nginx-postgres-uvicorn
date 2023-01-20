@@ -1,8 +1,9 @@
 from fastapi import APIRouter
-from app.api.v1.routes import users, config, structure_formations
+from app.api.v1.routes import users, config, menu, structure_formations
 
 api_router = APIRouter()
 
+api_router.include_router(menu.router, prefix="/menu", tags=["menu"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(config.router, prefix="/config", tags=["config"])
 api_router.include_router(

@@ -20,6 +20,7 @@ class TokenBase(AppModel):
 class Token(AppModel):
     access_token: str
     token_type: str
+    username: str
 
 
 class TokenData(AppModel):
@@ -47,6 +48,11 @@ class UserSchema(AppModel):
     password: str
     fio: str
     is_active: bool
+
+class UserLogin(AppModel):
+    """Validate request data"""
+    username: str
+    password: str
 
 
 class UserDB(UserSchema):
