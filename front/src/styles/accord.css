@@ -1,0 +1,86 @@
+.accord-input {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+/* Accordion styles */
+.accord-tabs {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 4px - 2px rgba(0, 0, 0, 0.5);
+}
+
+.accord-tab {
+  width: 100%;
+  /* color: white; */
+  overflow: hidden;
+}
+
+.accord-label {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 1em; */
+  /* background: #2c3e50; */
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+
+/* .accord-label:hover {
+background: #1a252f;
+} */
+
+.accord-label::after {
+  /* content: "\276F"; */
+  content: "";
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  transition: all 0.35s;
+  position: absolute;
+  right: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='16px' height='16px' viewBox='0 0 1024 1024' class='icon' version='1.1' xmlns='http://www.w3.org/2000/svg' fill='%23000000' transform='rotate(90)'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M106.666667 659.2L172.8 725.333333 512 386.133333 851.2 725.333333l66.133333-66.133333L512 256z' fill='%23000000'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");  
+}
+
+.accord-data {
+  max-height: 0;
+  /* padding: 0 1em; */
+  /* color: #2c3e50; */
+  /* background: white; */
+  transition: all 0.35s;
+}
+
+
+/* .accord-input:checked+.accord-label {
+background: #1a252f;
+} */
+
+.accord-input:checked+.accord-label::after {
+  transform: rotate(90deg);
+}
+
+.accord-input:checked~.accord-data {
+  max-height: 100vh;
+  /* padding: 1em; */
+}
+
+.accord-icon {
+  max-width: 16px;
+  max-height: 16px;
+}
+
+.accord-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+
+.accord-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+}
