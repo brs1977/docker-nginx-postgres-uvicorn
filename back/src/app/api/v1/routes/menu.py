@@ -8,7 +8,9 @@ router = APIRouter()
 def get_menu(kod, config_doc):
     for page in config_doc['stream-rz']['typ-1']:
         if page['page']['kod'] == kod:
-            return page['page']    
+            item = page['page']
+            item['type'] =  1
+            return item
     
 
 @router.get("/{kod}")
