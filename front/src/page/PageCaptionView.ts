@@ -80,6 +80,10 @@ export class PageCaptionView extends View<HTMLDivElement> {
         } else if (isPageAction(item.action)) {
             el.addEventListener('click', e => {
                 e.preventDefault()
+                const cur = el.closest('.caption-menu-item')
+                el.closest('.page')?.querySelectorAll<HTMLElement>('.caption-menu-item').forEach(it => {
+                    it.classList.toggle('caption-menu-active',it == cur)
+                })
                 window.dispatchEvent(new CustomEvent<number>('pushpage',{detail: item.kod}))
             })
         } else {
