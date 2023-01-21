@@ -67,8 +67,8 @@ def get_menu(kod, config_doc):
 async def all_menu():
     return get_all_menu(config)
 
-@router.get("/ins")
-def ins():
+@router.get("/{kod}/ins")
+def ins(kod: int = Path(..., gt=0)):
     return config["ins"]
 
 
