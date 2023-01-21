@@ -21,14 +21,15 @@ export type AlertAction = {
 }
 
 export type PageAction = {
-    type: 'page'
+    type: 'page',
+    page: number,
 }
 
 export type Action = AlertAction | PageAction
 
 export type MenuItem = {
     kod:number,
-    parent:number,
+    kod_parent:number,
     name:string,
     action?: Action
 }
@@ -51,11 +52,11 @@ function sortMenu(a:MenuItem,b:MenuItem) {
 }
 
 export function getMenuTop(menu:Menu) {
-    return menu.filter(it => it.parent === 0).sort(sortMenu)
+    return menu.filter(it => it.kod_parent === 0).sort(sortMenu)
 }
 
 export function getMenuChildren(menu:Menu,parent:number) {
-    return menu.filter(it => it.parent == parent).sort(sortMenu)
+    return menu.filter(it => it.kod_parent == parent).sort(sortMenu)
 }
 
 

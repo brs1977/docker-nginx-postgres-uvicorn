@@ -1,6 +1,6 @@
 import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel"
 import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel"
-import { getMenuTop, Menu, PageModel, Props, Settings, Tools, User, WorkspaceProps } from "./PageTypes"
+import { getMenuTop, isPageAction, Menu, PageModel, Props, Settings, Tools, User, WorkspaceProps } from "./PageTypes"
 import { ViewModel } from "./ViewModel"
 
 type PageProps = Props & {  
@@ -37,8 +37,8 @@ export class PageViewModel extends ViewModel<PageProps>{
             user
         })
         const item = getMenuTop(menu)[0]
-        if (item)
-            this.loadPage(item.kod)
+        if (isPageAction(item.action))
+            this.loadPage(item.action.page)
     }
 
     getWorkspace(props:WorkspaceProps) {

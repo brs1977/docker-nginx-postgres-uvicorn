@@ -9,17 +9,17 @@ import { WorkspaceMainFragment } from "./workspaces/WorkspaceMainFragment";
 import { WorkspaceProps } from "./PageTypes";
 import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel";
 
-interface CustomEventMap {
-    "pushpage": CustomEvent<number>;
-}
+// interface CustomEventMap {
+//     "pushpage": CustomEvent<number>;
+// }
 
-declare global {
-    interface Window { //adds definition to Document, but you can do the same with HTMLElement
-        addEventListener<K extends keyof CustomEventMap>(type: K,
-           listener: (this: Window, ev: CustomEventMap[K]) => void): void;
-        dispatchEvent<K extends keyof CustomEventMap>(ev: CustomEventMap[K]): void;
-    }
-}
+// declare global {
+//     interface Window { //adds definition to Document, but you can do the same with HTMLElement
+//         addEventListener<K extends keyof CustomEventMap>(type: K,
+//            listener: (this: Window, ev: CustomEventMap[K]) => void): void;
+//         dispatchEvent<K extends keyof CustomEventMap>(ev: CustomEventMap[K]): void;
+//     }
+// }
 
 
 export class PageView extends View<HTMLDivElement> {
@@ -59,9 +59,9 @@ export class PageView extends View<HTMLDivElement> {
             footer.classList.toggle('page-footer-show',settings.footer)
         })
 
-        window.addEventListener('pushpage', e => {
-            viewModel.loadPage(e.detail)
-        })
+        // window.addEventListener('pushpage', e => {
+        //     viewModel.loadPage(e.detail)
+        // })
 
         window.addEventListener('popstate', () => {
             if (!viewModel.user) return

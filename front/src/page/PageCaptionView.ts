@@ -31,8 +31,8 @@ export class PageCaptionView extends View<HTMLDivElement> {
         })
 
         viewModel.on('change:kod',() => {
-            this.root.querySelectorAll<HTMLElement>('.caption-menu-item[data-kod]').forEach(it => {
-                it.classList.toggle('caption-menu-active',it.dataset.kod == viewModel.kod)
+            this.root.querySelectorAll<HTMLElement>('.caption-menu-item[data-page]').forEach(it => {
+                it.classList.toggle('caption-menu-active',it.dataset.page == viewModel.kod)
             })
         })
     }
@@ -43,7 +43,7 @@ export class PageCaptionView extends View<HTMLDivElement> {
                 const children = getMenuChildren(menu,it.kod)
                 if (children.length)
                     return this.renderDropDownItem(it,children)
-                else
+                else (isPageAction(it.action))
                     return this.renderItem(it)
             })
         this.root.querySelector('.caption-menu')?.replaceChildren(...items)
@@ -71,7 +71,8 @@ export class PageCaptionView extends View<HTMLDivElement> {
     }
 
     renderItem(item:MenuItem) {
-        const el = createElement<HTMLLinkElement>(/*html*/`<a href="/${item.kod}" data-kod="${item.kod}" class="caption-menu-item">${item.name}</a>`)
+        const page = isPageAction(item.action) ? item.action.page : 0
+        const el = createElement<HTMLLinkElement>(/*html*/`<a href="/${item.kod}" data-page="${page}" class="caption-menu-item">${item.name}</a>`)
         this.setupItem(item,el)
         return el
     }
@@ -87,9 +88,10 @@ export class PageCaptionView extends View<HTMLDivElement> {
                 })
             })
         } else if (isPageAction(item.action)) {
+            const {page} = item.action
             el.addEventListener('click', e => {
                 e.preventDefault()
-                this.viewModel.loadPage(item.kod)
+                this.viewModel.loadPage(page)
                 // const cur = el.closest('.caption-menu-item')
                 // el.closest('.page')?.querySelectorAll<HTMLElement>('.caption-menu-item').forEach(it => {
                 //     it.classList.toggle('caption-menu-active',it == cur)
