@@ -46,6 +46,19 @@ export function createSettings(partial?:Partial<Settings>) {
 
 export type Menu = Array<MenuItem>
 
+function sortMenu(a:MenuItem,b:MenuItem) {
+    return a.kod - b.kod
+}
+
+export function getMenuTop(menu:Menu) {
+    return menu.filter(it => it.parent === 0).sort(sortMenu)
+}
+
+export function getMenuChildren(menu:Menu,parent:number) {
+    return menu.filter(it => it.parent == parent).sort(sortMenu)
+}
+
+
 export type Settings = {
     caption: boolean
     sidebar: boolean
