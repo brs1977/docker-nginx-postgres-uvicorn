@@ -103,6 +103,7 @@ async def login_for_access_token_json(user: UserLogin):
     logger.debug({"access_token": access_token, "token_type": "bearer"})
     return {"access_token": access_token, "token_type": "bearer", "username": user.username}
 
+
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await security.authenticate_user(form_data.username, form_data.password)

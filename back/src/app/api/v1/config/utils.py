@@ -209,9 +209,10 @@ def breadcrumbs(kod, df_graph):
         res.append(row.name.iloc[0])
     return " / ".join(res[::-1])
 
+
 def get_menu(config_doc):
     # kod	kod-parent	name	typ-page	dostup	long-zag	typ-rz	tabs-rz
-    df_graph = [item['page'] for item in config_doc['graph']]
+    df_graph = [item["page"] for item in config_doc["graph"]]
     df_graph = pd.DataFrame(df_graph)
     ndn_map = extract_map(config_doc, "dzgl")
     gag = get_gag_dzg(config_doc)
@@ -223,7 +224,7 @@ def get_menu(config_doc):
     df_graph["has_child"] = df_graph.kod.apply(lambda x: int(df_graph.parent.isin([x]).any()))
 
     menus = (
-        df_graph[df_graph['typ-page'].isin([1, 2])]
+        df_graph[df_graph["typ-page"].isin([1, 2])]
         .loc[:, ["kod", "parent", "name", "has_child"]]
         .to_dict("records")
     )
@@ -243,6 +244,5 @@ def get_menu(config_doc):
                 "title": "Ошибка структуры",
                 "text": f"Не задана рабочая область kod:{menu['kod']}",
             }
-
 
     return menus

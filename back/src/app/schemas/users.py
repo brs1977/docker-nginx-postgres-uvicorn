@@ -49,8 +49,10 @@ class UserSchema(AppModel):
     fio: str
     is_active: bool
 
+
 class UserLogin(AppModel):
     """Validate request data"""
+
     username: str
     password: str
 
