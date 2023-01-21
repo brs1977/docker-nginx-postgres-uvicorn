@@ -72,6 +72,11 @@ export type WorkspaceInputProps = WorkspaceCustomProps & {
     type: 2
 }
 
+export type Tools = {
+    ins1: string,
+    ins2: string
+}
+
 export type WorkspaceProps = WorkspaceMainProps | WorkspaceInputProps
 
 export interface PageModel {
@@ -82,6 +87,7 @@ export interface PageModel {
     login(username:string,password:string):Promise<void>
     logout(): Promise<void>
     loadWorkspace(kod:number):Promise<WorkspaceProps>
+    loadTools(): Promise<Tools>
 }
 
 

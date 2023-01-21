@@ -13,16 +13,22 @@ export class PageCaptionView extends View<HTMLDivElement> {
             <div class="caption-items">
                 <div class="caption-item caption-item-org">
                     <span class="caption-item-title">Локализация:</span>
-                    объект оргструктуры не выбран
+                    <span id="ins1"></span>
                 </div>
                 <div class="caption-item caption-item-nav">
                     <span class="caption-item-title">Страница:</span>
-                    Ввод / Администрирование / Настройка / Справочники 
+                    <span id="ins2"></span>
                 </div>
             </div>
         </div>
         `)
         viewModel.on('change:menu',() => this.renderMenu(viewModel.menu))
+        viewModel.on('change:tools',() => {
+            const {tools} = viewModel
+            this.root.querySelector('.caption-items')?.classList.toggle('caption-items-hide',!tools)
+            this.root.querySelector('#ins1')!.textContent = tools?.ins1 ?? ''
+            this.root.querySelector('#ins2')!.textContent = tools?.ins2 ?? ''
+        })
     }
 
     renderMenu(menu:Menu) {

@@ -141,6 +141,10 @@ body {
     background-color: rgb(230, 230, 230);
 }
 
+.caption-items-hide {
+    display: none;
+}
+
 .caption-item-title {
     text-decoration: underline;
     font-style: italic;

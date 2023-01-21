@@ -1,6 +1,6 @@
 import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel"
 import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel"
-import { Menu, PageModel, Props, Settings, User, WorkspaceProps } from "./PageTypes"
+import { Menu, PageModel, Props, Settings, Tools, User, WorkspaceProps } from "./PageTypes"
 import { ViewModel } from "./ViewModel"
 
 type PageProps = Props & {  
@@ -8,6 +8,7 @@ type PageProps = Props & {
     menu: Menu,
     user?: User,
     workspace?: WorkspaceViewModel<WorkspaceProps> 
+    tools?: Tools
 }
 
 export class PageViewModel extends ViewModel<PageProps>{
@@ -68,5 +69,7 @@ export class PageViewModel extends ViewModel<PageProps>{
     get user() { return this.getProp('user') }
 
     get workspace() { return this.getProp('workspace') }
+
+    get tools() { return this.getProp('tools') }
 
 }
