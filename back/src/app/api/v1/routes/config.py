@@ -6,6 +6,16 @@ router = APIRouter()
 
 config = read_config()
 
+def get_ins(config_doc):
+    return config_doc['ins']
+
+@router.get("/ins", status_code=201)
+async def menu():
+    try:
+        return get_ins(config)
+    except Exception as e:
+        logger.exception(e)
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.get("/menu", status_code=201)
 async def menu():
