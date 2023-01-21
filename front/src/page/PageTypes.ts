@@ -53,11 +53,19 @@ export type Settings = {
 }
 
 export type WorkspaceCustomProps = Props & {
-    page: number
+    kod: number,
+    pic?: string,
 }
 
 export type WorkspaceMainProps = WorkspaceCustomProps & {
-    type: 1
+    type: 1,
+    title: string,
+    picpic: 0 | string,
+    n_par: Array<number>,
+    m_par: Array<{
+        pic:string,
+        txt:string
+    }>
 }
 
 export type WorkspaceInputProps = WorkspaceCustomProps & {

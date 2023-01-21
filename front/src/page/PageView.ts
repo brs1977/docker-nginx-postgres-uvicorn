@@ -77,14 +77,23 @@ export class PageView extends View<HTMLDivElement> {
         viewModel.on('change:workspace',() => {
             const {workspace} = viewModel
             const view = this.getWorkspaceView(workspace)
+            if (workspace) {
+                workspace.on('change:pic',() => {
+                    const {pic} = workspace
+                    const url = (pic) ? new URL(`../img/${pic}`,import.meta.url) : ''
+                    const backgroundImage = (url) ? `url(${url})` : ''
+                    this.root.querySelector<HTMLElement>('.pic-m1')!.style.backgroundImage = backgroundImage
+                })
+            }
             if (view)
                 this.root.querySelector('.workspace')!.replaceChildren(view.root)
             else
                 this.root.querySelector('.workspace')!.replaceChildren()
         })
 
-    }
+        //viewModel.login('adm','adm').then(() => viewModel.loadPage(1))
 
+    }
 
     getWorkspaceView(viewModel?:WorkspaceViewModel<WorkspaceProps>) {
         if (viewModel instanceof WorkspaceMainViewModel) {
