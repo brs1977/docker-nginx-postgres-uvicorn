@@ -59,10 +59,8 @@ export class PageView extends View<HTMLDivElement> {
             footer.classList.toggle('page-footer-show',settings.footer)
         })
 
-        
         window.addEventListener('pushpage', e => {
             viewModel.loadPage(e.detail)
-            history.pushState(null,'',`/${e.detail}`)
         })
 
         window.addEventListener('popstate', () => {
@@ -72,6 +70,12 @@ export class PageView extends View<HTMLDivElement> {
             const kod = parseInt(m[1])
             if (isNaN(kod)) return 
              viewModel.loadPage(kod)
+        })
+
+        viewModel.on('change:kod',() => {
+            const {kod} = viewModel
+            const url = kod !== undefined ? `/${kod}` : ''
+            history.pushState(null,'',url)
         })
 
         viewModel.on('change:workspace',() => {

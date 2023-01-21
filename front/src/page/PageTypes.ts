@@ -87,7 +87,7 @@ export interface PageModel {
     login(username:string,password:string):Promise<void>
     logout(): Promise<void>
     loadWorkspace(kod:number):Promise<WorkspaceProps>
-    loadTools(): Promise<Tools>
+    loadTools(kod:number): Promise<Tools>
 }
 
 

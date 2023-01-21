@@ -22,10 +22,15 @@ export class PageCaptionView extends View<HTMLDivElement> {
             </div>
         </div>
         `)
-        viewModel.on('change:menu',() => this.renderMenu(viewModel.menu))
+        viewModel.on('change:menu',() => {
+            const {menu} = viewModel
+            this.renderMenu(menu)
+            const first = this.root.querySelector<HTMLLinkElement>('.caption-menu-item')
+            if (first)
+                first.click()
+        })
         viewModel.on('change:tools',() => {
             const {tools} = viewModel
-            this.root.querySelector('.caption-items')?.classList.toggle('caption-items-hide',!tools)
             this.root.querySelector('#ins1')!.textContent = tools?.ins1 ?? ''
             this.root.querySelector('#ins2')!.textContent = tools?.ins2 ?? ''
         })

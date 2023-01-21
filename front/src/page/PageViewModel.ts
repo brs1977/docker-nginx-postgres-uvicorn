@@ -7,6 +7,7 @@ type PageProps = Props & {
     settings: Settings,
     menu: Menu,
     user?: User,
+    kod?: number,
     workspace?: WorkspaceViewModel<WorkspaceProps> 
     tools?: Tools
 }
@@ -28,7 +29,7 @@ export class PageViewModel extends ViewModel<PageProps>{
         const [settings,menu,user] = await Promise.all([
             this.model.loadSettings(),
             this.model.loadMenu(),
-            this.model.loadUser()
+            this.model.loadUser(),
         ])
         this.setProps({
             settings,
@@ -45,9 +46,13 @@ export class PageViewModel extends ViewModel<PageProps>{
     }
 
     async loadPage(kod:number) {
-        const props = await this.model.loadWorkspace(kod)
+        this.setProps({kod})
+        const [props,tools] = await Promise.all([
+            this.model.loadWorkspace(kod),
+            this.model.loadTools(kod)
+        ])
         const workspace = this.getWorkspace(props)
-        this.setProps({workspace})
+        this.setProps({workspace,tools})
     }
 
     async logout() {
@@ -71,5 +76,7 @@ export class PageViewModel extends ViewModel<PageProps>{
     get workspace() { return this.getProp('workspace') }
 
     get tools() { return this.getProp('tools') }
+
+    get kod() { return this.getProp('kod') }
 
 }

@@ -9,7 +9,7 @@ export class PageModelAPI implements PageModel {
     constructor(readonly api: API) { }
 
     async loadMenu(): Promise<Menu> {
-        return this.api.get<Menu>('config/menu');
+        return this.api.get<Menu>('menu');
     }
 
     async loadSettings(): Promise<Settings> {
@@ -51,7 +51,7 @@ export class PageModelAPI implements PageModel {
     }
 
     async loadWorkspace<T extends WorkspaceProps>(kod: number) {
-        return await this.api.get<T>(`/menu/${kod}`)
+        return await this.api.get<T>(`menu/${kod}`)
         // const props: WorkspaceMainProps = { 
         //     kod, 
         //     type: 1, 
@@ -64,8 +64,8 @@ export class PageModelAPI implements PageModel {
         //return props
     }
 
-    async loadTools() {
-        return await this.api.get<Tools>('config/ins')
+    async loadTools(kod:number) {
+        return await this.api.get<Tools>(`menu/${kod}/ins`)
     }
 
 
