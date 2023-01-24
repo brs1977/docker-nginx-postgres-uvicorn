@@ -7,16 +7,17 @@ config = read_config()
 
 router = APIRouter()
 
+
 def extract_map(config_doc, name):
     return {int(k): str.strip(v) for k, v in [el.split(";") for el in config_doc[name]]}
 
-  
+
 def get_all_menu(config_doc):
     # kod	kod_parent	name	typ_page	dostup	long-zag	typ-rz	tabs-rz
     df_graph = [item["page"] for item in config_doc["graph"]]
     df_graph = pd.DataFrame(df_graph)
     # types = {col:'int32' for col in df_graph.select_dtypes('int').columns}
-    # df_graph = df_graph.astype(types)    
+    # df_graph = df_graph.astype(types)
 
     # df_graph["parent"] = df_graph.kod // 100
     # df_graph = df_graph.loc[:, ["kod", "parent", "name", "typ", "dost"]]
@@ -29,24 +30,26 @@ def get_all_menu(config_doc):
     )
 
     for menu in menus:
-        rows = df_graph[df_graph['kod_parent']==menu['kod']]
+        rows = df_graph[df_graph["kod_parent"] == menu["kod"]]
         if rows.empty:
             menu["action"] = {
                 "type": "alert",
-                "title": "Ошибка структуры",
-                "text": f"Не задана рабочая область kod:{menu['kod']}",
+                "alert": 1,
+                "title": "НЕ найден компонент",
+                "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
             }
         else:
-            if rows.iloc[0]['typ_page'] == 2:
+            if rows.iloc[0]["typ_page"] == 2:
                 continue
-            elif rows.typ_page.iloc[0]==4:
+            elif rows.typ_page.iloc[0] == 4:
                 if len(rows) == 1:
-                    menu['action'] = {'type':'page', 'page':int(rows.kod.iloc[0])}
+                    menu["action"] = {"type": "page", "page": int(rows.kod.iloc[0])}
                 else:
                     menu["action"] = {
                         "type": "alert",
-                        "title": "Ошибка структуры",
-                        "text": f"Уровень kod:{menu['kod']} содержит несколько потомков",
+                        "alert": 1,
+                        "title": "НЕ найден компонент",
+                        "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
                     }
     return menus
 
@@ -72,6 +75,7 @@ def get_menu(kod, config_doc):
 async def all_menu():
     return get_all_menu(config)
     # return {}
+
 
 @router.get("/{kod}/ins")
 def ins(kod: int = Path(..., gt=0)):

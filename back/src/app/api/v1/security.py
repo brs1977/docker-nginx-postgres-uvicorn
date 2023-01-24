@@ -22,8 +22,19 @@ JWT_REFRESH_SECRET_KEY = os.environ["JWT_REFRESH_SECRET_KEY"]  # should be kept 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.PROJECT_API_VERSION}/users/login", scheme_name="JWT"
+    tokenUrl=f"{settings.PROJECT_API_VERSION}/users/login", scheme_name="JWT", auto_error=False
 )
+
+
+async def get_page_user(token: str = Depends(oauth2_scheme)):
+    if not token:
+        return None
+    payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+    username = payload.get("sub")
+    if username is None:
+        return None
+    token_data = TokenData(username=username)
+    return await get_by_username(username=token_data.username)
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
