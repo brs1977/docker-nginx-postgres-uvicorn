@@ -1,3 +1,76 @@
+
+# Общая структура (составные части)
+page:
+  design:
+    font: 15
+    css: [nain-0.css,page-0.css, ..] # список динамических стилей
+  user: null | 	{username,status,datetime} #текущий пользователь
+  verh: #заголовок
+  head: #шапка
+  sidebar: #боковик
+  work_zona: #рабочая
+  footer: #подвал
+
+# заголовок
+verh: 
+    title: Наименование
+    icons: [1.jpg, ...] # Список картинок, ЛЕВЫЙ и правый верхний угол
+
+#шапка
+head:
+  active_menu: # текущий активный п меню 
+  menu: [{},] # список элементов Главное меню и подМеню
+  ins:
+    orgstr: # структура
+    brod: # крошки
+  
+# элемент меню
+menu:
+  kod: 1 
+  kod_parent: 0 
+  name: "Главная"
+  typ_menu:  ref|sub|alert (ссылка|подменю|сообщение)
+  # от typ_menu тут будет лежать ref|sub|alert
+
+sub: {kod:}
+ref: {page:kod}
+alert:
+    title: ЗНАЧЕНИЕ Заголовка, который в alert
+    text: ЗНАЧЕНИЕ текста, который в alert
+
+#рабочая
+work_zona: 
+  title: заголовок
+  background: pic # фон
+  icon: pic|null # иконка справа в шапке
+  end_title: ЗНАЧЕНИЕ или NULL
+  typ_content: tabs|list
+
+tabs: null | # или массив пЕРЕМЕННОЙ длины
+  active-tab: ЗНАЧЕНИЕ
+  data: массив вкладок
+
+# структура элемента tabs
+ tab:
+   kod: 1
+   name: Режим
+   typ_tab: data | alert
+   # от typ_tab тут будет лежать data|alert
+
+data: содержимое вкладки
+alert: 
+     title: ЗНАЧЕНИЕ Заголовка, который в alert
+     text: ЗНАЧЕНИЕ текста, который в alert name: Настройки 
+
+
+
+
+
+
+
+#___________________________________________________________________________________
+
+
 # Общая структура
 page:
   design:

@@ -53,8 +53,11 @@ class UserSchema(AppModel):
 class UserLogin(AppModel):
     """Validate request data"""
 
+    role_id: int
+    email: EmailStr
     username: str
-    password: str
+    fio: str
+    is_active: bool
 
 
 class UserDB(UserSchema):

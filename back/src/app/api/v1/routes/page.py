@@ -2,6 +2,7 @@ from fastapi import Path, APIRouter, status, HTTPException, Depends
 from app.api.v1.config.utils import read_config
 from app.api.v1 import security
 from app.schemas.users import UserDB
+from abc import abstractmethod
 import pandas as pd
 from loguru import logger
 from enum import Enum
@@ -19,7 +20,9 @@ class Names(Enum):
     WORK_ZONA = "work_zona"
     FOOTER = "footer"
     TITLE = "title"
-    PIC = "pic"
+    BACKGROUND = "background"
+    ICONS = 'icons'
+    ICON = 'icon'
     ORGSTR = "orgstr"
     BROD = "brod"
     INS = "ins"
@@ -39,12 +42,39 @@ class Alert:
         "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
     }
 
-
-class Menu:
+class Element:
     def __init__(self, config: any):
         self.config = config
-        self._df_graph = None
+    @abstractmethod
+    def get():
+        pass
+    def __call__(self):
+        return self.get()
+
+class WorkZona(Element):
+    
+    def type_main():
+    # if kod == 101:
+    #     for page in config_doc["stream-rz"]["typ-1"]:
+    #         if page["page"]["kod"] == kod:
+    #             item = page["page"]
+    #             item["type"] = 1
+    #             return item
+        return {}
+
+    def get(self):
+        #   title: заголовок
+        #   background: pic # фон
+        #   icon: pic|null # иконка справа в шапке
+        #   end_title: ЗНАЧЕНИЕ или NULL
+        #   typ_content: tabs|list
+        pass
+
+class Menu(Element):
+    def __init__(self, config: any):
+        super().__init__(config)
         self._menus = None
+        self._df_graph = None
 
     @property
     def graph(self) -> pd.DataFrame:
@@ -111,8 +141,9 @@ class Menu:
         return [self._item(menu) for menu in self._raw_menu()]
 
 
-class Page:
+class Page(Element):
     def __init__(self, kod: int, config: any, user: UserDB):
+        super().__init__(config)
         self.kod = kod
         self.config = config
         self.user = user
@@ -128,8 +159,8 @@ class Page:
 
     def _verh(self):
         title = "Наименование"
-        pic = ["1.jpg"]
-        self.data[Names.VERH] = {Names.TITLE: title, Names.PIC: pic}
+        icons = ["1.jpg"]
+        self.data[Names.VERH] = {Names.TITLE: title, Names.ICONS: icons}
 
     def _head(self):
         active_menu = 1
@@ -139,7 +170,7 @@ class Page:
         self.data[Names.HEAD] = {
             Names.ACTIVE_MENU: active_menu,
             Names.INS: ins,
-            Names.MENU: menu.get(),
+            Names.MENU: menu(),
         }
 
     def _sidebar(self):
@@ -178,4 +209,4 @@ class Page:
 @router.get("/{kod}")
 async def page(kod: int = Path(..., gt=0), user: UserDB = Depends(security.get_page_user)):
     page = Page(kod, config, user)
-    return page.get()
+    return page()
