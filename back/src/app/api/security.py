@@ -7,12 +7,13 @@ from datetime import timedelta
 from app.db.repository import users
 # from app.db.repository.users import get_by_username
 
-ACCESS_TOKEN_EXPIRE_HOURS = 12
+ACCESS_TOKEN_EXPIRE_HOURS = 1
 SECRET_KEY = os.environ["SECRET_KEY"]
 manager = LoginManager(
     SECRET_KEY, 
     '/login',
-    default_expiry=timedelta(minutes=15),
+    # default_expiry=timedelta(minutes=15),
+    default_expiry=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),    
     use_cookie=True,
     use_header=False
 )
@@ -39,5 +40,6 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
     return user
 
 def create_access_token(username: str):
-    return manager.create_access_token(data={'sub': username}, expires=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS))
+    return manager.create_access_token(data={'sub': username})
+    # return manager.create_access_token(data={'sub': username}, expires=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS))
     
