@@ -85,6 +85,7 @@ export class ServerAPI implements API {
     }
 
     async logout() {
+        await this.get('auth/logout')
         this.token = undefined
     }
 
