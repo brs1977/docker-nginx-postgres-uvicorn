@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 # from app.api.security import manager, authenticate_user
 from app.api import security
 from fastapi.security import OAuth2PasswordRequestForm
@@ -7,12 +7,12 @@ from app.schemas.users import Token, UserLogin
 router = APIRouter()
 
 @router.post('/login', status_code=201)
-async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends())-> dict:
+async def login(response: Response, request: Request, form_data: OAuth2PasswordRequestForm = Depends())-> dict:
     user = await security.authenticate_user(form_data.username, form_data.password)
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
-    security.set_access_token(user.username, response)
+    security.set_access_token(user.username, request.client.host, response)
     return {'status': 'Success'}
 
 @router.get("/me", response_model=UserLogin)

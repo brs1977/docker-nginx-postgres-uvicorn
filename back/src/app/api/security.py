@@ -7,6 +7,15 @@ from app.schemas.users import UserLogin
 from datetime import timedelta
 from app.db.repository import users
 
+# access-control-allow-credentials: true
+# access-control-allow-origin: *
+# Connection: keep-alive
+# Content-Length: 20
+# Content-Type: application/json
+# Date: Wed, 25 Jan 2023 07:14:59 GMT
+# Server: nginx/1.21.6
+# set-cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG0iLCJleHAiOjE2NzQ2MzQ0OTl9.br6oNFRtiosiOEPNg3Xrs7mM_M_1KwZL0mAJc3UNwiQ; HttpOnly; Path=/; SameSite=lax
+
 ACCESS_TOKEN_EXPIRE_HOURS = 1
 SECRET_KEY = os.environ["SECRET_KEY"]
 manager = LoginManager(
@@ -15,7 +24,7 @@ manager = LoginManager(
     # default_expiry=timedelta(minutes=15),
     default_expiry=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),    
     use_cookie=True,
-    use_header=False
+    use_header=True
 )
 
 @manager.user_loader()
@@ -39,8 +48,9 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
         raise InvalidCredentialsException
     return user
 
-def set_access_token(username: str, response: Response):
+def set_access_token(username: str, domain: str, response: Response):
     token = manager.create_access_token(data={'sub': username})
-    manager.set_cookie(response, token)
+    response.set_cookie(key="access-token", value=token, secure=True, domain="129.200.0.116")
+    # manager.set_cookie(response, token)
 
     
