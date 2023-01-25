@@ -70,74 +70,90 @@ class WorkZona(Element):
         pass
 
 class Menu(Element):
-    def __init__(self, config: any):
-        super().__init__(config)
-        self._menus = None
-        self._df_graph = None
-
-    @property
-    def graph(self) -> pd.DataFrame:
-        # kod	kod_parent	name	typ_page	dostup	long-zag	typ-rz	tabs-rz
-        if not self._df_graph is None:
-            return self._df_graph
-
-        df = [item["page"] for item in self.config["graph"]]
-        self._df_graph = pd.DataFrame(df)
-        self._df_graph["has_child"] = self._df_graph.kod.apply(
-            lambda x: int(self._df_graph.kod_parent.isin([x]).any())
-        )
-        return self._df_graph
-
-    def _raw_menu(self):
-        return (
-            self.graph[self.graph["typ_page"].isin([1, 2])]
-            .loc[:, ["kod", "kod_parent", "name", "has_child", "typ_page"]]
-            .to_dict("records")
-        )
-
-    def _alert(self, type: int, item: any):
-        if type == 1:
-            item[Names.MENU_TYPE] = Names.ALERT
-            item[Names.ALERT] = Alert.COMPONENT_NOT_FOUND
-            return item
-
-    def _ref(self, kod: int, item: any):
-        item[Names.MENU_TYPE] = Names.REF
-        item[Names.REF] = {Names.PAGE: kod}
-        # return item
-
-    def _sub(self, item: any):
-        item[Names.MENU_TYPE] = Names.SUB
-        item[Names.SUB] = {Names.KOD: item["kod"]}
-        return item
-
-    def _item(self, item):
-        # # элемент меню
-        # menu:
-        #   kod: 1
-        #   kod_parent: 0
-        #   name: "Главная"
-        #   typ_menu:  ref|sub|alert (ссылка|подменю|сообщение)
-
-        rows = self.graph[self.graph["kod_parent"] == item["kod"]]
-        if rows.empty:
-            self._alert(1, item)
-        else:
-            # print(item['kod'], rows.iloc[0]['typ_page'], rows.typ_page.iloc[0])
-            if rows.typ_page.iloc[0] == 4:
-                if len(rows) == 1:
-                    self._ref(int(rows.kod.iloc[0]), item)
-                else:
-                    self._alert(1, item)
-            else:
-                self._sub(item)
-
-        del item["has_child"]
-        del item["typ_page"]
-        return item
-
     def get(self):
-        return [self._item(menu) for menu in self._raw_menu()]
+        gag = 'Пункт не найден'
+        graph = self.config["graph"]
+        titles = self.config["mas_titles"]
+
+        graph = [ menu['page'] for menu in graph]
+        menu_1_level = [menu for menu in graph if menu['kod_parent']==0]
+        kod_1_level = [menu['kod'] for menu in menu_1_level ]
+        menu_2_level = [menu for menu in graph if menu['kod_parent'] in kod_1_level]
+        menu = menu_1_level + menu_2_level
+        for item in menu:
+            item['title'] = titles.get(str(item['kod']), gag)
+        return menu
+
+
+# class Menu(Element):
+#     def __init__(self, config: any):
+#         super().__init__(config)
+#         self._menus = None
+#         self._df_graph = None
+
+#     @property
+#     def graph(self) -> pd.DataFrame:
+#         # kod	kod_parent	name	typ_page	dostup	long-zag	typ-rz	tabs-rz
+#         if not self._df_graph is None:
+#             return self._df_graph
+
+#         df = [item["page"] for item in self.config["graph"]]
+#         self._df_graph = pd.DataFrame(df)
+#         self._df_graph["has_child"] = self._df_graph.kod.apply(
+#             lambda x: int(self._df_graph.kod_parent.isin([x]).any())
+#         )
+#         return self._df_graph
+
+#     def _raw_menu(self):
+#         return (
+#             self.graph[self.graph["typ_page"].isin([1, 2])]
+#             .loc[:, ["kod", "kod_parent", "name", "has_child", "typ_page"]]
+#             .to_dict("records")
+#         )
+
+#     def _alert(self, type: int, item: any):
+#         if type == 1:
+#             item[Names.MENU_TYPE] = Names.ALERT
+#             item[Names.ALERT] = Alert.COMPONENT_NOT_FOUND
+#             return item
+
+#     def _ref(self, kod: int, item: any):
+#         item[Names.MENU_TYPE] = Names.REF
+#         item[Names.REF] = {Names.PAGE: kod}
+#         # return item
+
+#     def _sub(self, item: any):
+#         item[Names.MENU_TYPE] = Names.SUB
+#         item[Names.SUB] = {Names.KOD: item["kod"]}
+#         return item
+
+#     def _item(self, item):
+#         # # элемент меню
+#         # menu:
+#         #   kod: 1
+#         #   kod_parent: 0
+#         #   name: "Главная"
+#         #   typ_menu:  ref|sub|alert (ссылка|подменю|сообщение)
+
+#         rows = self.graph[self.graph["kod_parent"] == item["kod"]]
+#         if rows.empty:
+#             self._alert(1, item)
+#         else:
+#             # print(item['kod'], rows.iloc[0]['typ_page'], rows.typ_page.iloc[0])
+#             if rows.typ_page.iloc[0] == 4:
+#                 if len(rows) == 1:
+#                     self._ref(int(rows.kod.iloc[0]), item)
+#                 else:
+#                     self._alert(1, item)
+#             else:
+#                 self._sub(item)
+
+#         del item["has_child"]
+#         del item["typ_page"]
+#         return item
+
+#     def get(self):
+#         return [self._item(menu) for menu in self._raw_menu()]
 
 
 class Page(Element):
