@@ -23,7 +23,7 @@ export class ServerAPI implements API {
             method: 'GET',
             //mode: 'same-origin',
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            // credentials: 'omit', // include, *same-origin, omit
+            credentials: 'omit', // include, *same-origin, omit
             headers: {
                'Content-Type': 'application/json',
             //    "Sec-Fetch-Dest": "empty",
@@ -47,7 +47,7 @@ export class ServerAPI implements API {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            //credentials: 'omit', // include, *same-origin, omit
+            credentials: 'omit', // include, *same-origin, omit
             headers: {
                'Content-Type': 'application/json',
               // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -67,6 +67,7 @@ export class ServerAPI implements API {
         const options:RequestInit = {
             method: 'POST',
             cache: 'no-cache',
+            credentials: 'omit',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },            
