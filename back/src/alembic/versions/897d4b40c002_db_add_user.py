@@ -8,7 +8,7 @@ Create Date: 2023-01-20 10:28:23.165540
 from alembic import op
 import sqlalchemy as sa
 from app.db.models import roles_table, users_table
-from app.api.v1 import security
+from app.api import security
 
 
 # revision identifiers, used by Alembic.
@@ -33,7 +33,7 @@ def upgrade() -> None:
         [
             {"username": "adm",
             "role_id": 4,
-            "password": security.get_hashed_password('adm'),
+            "password": security.hash_password('adm'),
             "email": "email@email.com",
             "fio": "fio",
             "is_active": True}    
