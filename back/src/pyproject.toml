@@ -4,3 +4,8 @@ line-length = 100
 [flake8]
 # ignore = E211, E999, F401, F821, W503
 max-line-length = 100
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]

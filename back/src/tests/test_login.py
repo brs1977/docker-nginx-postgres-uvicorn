@@ -82,9 +82,10 @@ def test_user_detail_forbidden_with_expired_token(test_app, api_url, freezer, mo
     freezer.move_to("'2023-01-26'")
     token = response.cookies['access-token']
 
+    test_app.set_access_token(token)
     response = test_app.get(
         api_url("auth/me"),
-        headers = {"Cookie": f"access-token={token}"}
+        # headers = {"Cookie": f"access-token={token}"}
     )
     assert response.status_code == 401
 
