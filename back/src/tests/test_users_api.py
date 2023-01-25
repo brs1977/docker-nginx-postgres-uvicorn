@@ -1,16 +1,15 @@
 import json
 import pytest
-from app.api.v1 import security 
-from app.api.v1.security import get_hashed_password
+from app.api import security 
 from app.db.repository import users
 
 def test_create_user(test_app, api_url, monkeypatch):
     test_request_payload = {'role_id': 4, 'username': 'username', 'password': 'adm', 'email': 'email@email.com', 'fio': 'fio', 'is_active': True }
     test_response_payload = {'id': 1, 'role_id': 4, 'username': 'username', 'password': 'adm', 'email': 'email@email.com', 'fio': 'fio', 'is_active': True }
 
-    def mock_get_hashed_password(password):
+    def mock_hash_password(password):
         return password
-    monkeypatch.setattr(security, 'get_hashed_password', mock_get_hashed_password)
+    monkeypatch.setattr(security, 'hash_password', mock_hash_password)
 
     async def mock_post(payload):
         return 1

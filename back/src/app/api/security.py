@@ -48,9 +48,9 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
         raise InvalidCredentialsException
     return user
 
-def set_access_token(username: str, domain: str, response: Response):
+def set_access_token(username: str, response: Response):
     token = manager.create_access_token(data={'sub': username})
-    response.set_cookie(key="access-token", value=token, secure=True, domain="129.200.0.116")
-    # manager.set_cookie(response, token)
+    # response.set_cookie(key="access-token", value=token, secure=True, domain="129.200.0.116")
+    manager.set_cookie(response, token)
 
     
