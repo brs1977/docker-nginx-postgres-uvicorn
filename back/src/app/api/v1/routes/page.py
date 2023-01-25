@@ -71,17 +71,12 @@ class WorkZona(Element):
 
 class Menu(Element):
     def get(self):
-        gag = 'Пункт не найден'
         graph = self.config["graph"]
-        titles = self.config["mas_titles"]
-
         graph = [ menu['page'] for menu in graph]
         menu_1_level = [menu for menu in graph if menu['kod_parent']==0]
         kod_1_level = [menu['kod'] for menu in menu_1_level ]
         menu_2_level = [menu for menu in graph if menu['kod_parent'] in kod_1_level]
-        menu = menu_1_level + menu_2_level
-        for item in menu:
-            item['title'] = titles.get(str(item['kod']), gag)
+        menu = menu_1_level + menu_2_level        
         return menu
 
 
@@ -166,15 +161,23 @@ class Page(Element):
 
     def _design(self):
         font = 15
-        css = ["main-0.css", "page-0.css"]  # список динамических стилей
+        css =  self.config['kit-css'] # ["main-0.css", "page-0.css"]  # список динамических стилей
         self.data[Names.DESIGN] = {"font": font, "css": css}
 
     def _user(self):
         self.data[Names.USER] = self.user
 
     def _verh(self):
-        title = "Наименование"
-        icons = ["1.jpg"]
+        def icons():
+            verh = self.config["verh"]
+            if verh:
+                return verh['icons']
+            return []
+        gag_title = 'Заголовок не найден'
+        titles = self.config["mas_titles"]
+        title = titles.get(str(self.kod), gag_title)
+        
+        icons = icons()
         self.data[Names.VERH] = {Names.TITLE: title, Names.ICONS: icons}
 
     def _head(self):
