@@ -35,7 +35,7 @@ export class PageModelAPI implements PageModel {
     }
 
     async loadUser(): Promise<User> {
-        return this.api.get<User>('users/me')
+        return this.api.get<User>('auth/me')
     }
 
     async saveSettings(settings: Settings): Promise<Settings> {
