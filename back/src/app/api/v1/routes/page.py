@@ -5,10 +5,10 @@ from abc import abstractmethod
 import pandas as pd
 from loguru import logger
 from enum import Enum
+import os
 
 config = read_config()
 router = APIRouter()
-
 
 class Names(Enum):
     DESIGN = "design"
@@ -24,7 +24,7 @@ class Names(Enum):
     ICON = 'icon'
     ORGSTR = "orgstr"
     BROD = "brod"
-    INS = "ins"
+    INS = "ins"    
     ACTIVE_MENU = "active_menu"
     MENU = "menu"
     MENU_TYPE = 'menu_typ'
@@ -33,13 +33,36 @@ class Names(Enum):
     SUB = 'sub'
     PAGE = 'page'
     KOD = 'kod'
+    PATH_IMAGES = 'path_images'
+    MAS_TITLES = 'mas_titles'
+    MAS_ALERT = 'mas_alert'
+
+    @classmethod
+    def is_names(cls, names):
+        if isinstance(color, cls):
+            names=names.value
+        if not names in cls.__members__:
+            return False
+        else:
+            return True    
+
+class NamesDict(dict):    
+    def __setitem__(self, k, v):
+        if isinstance(k, Enum):
+            k = k.value
+        super().__setitem__(k.value, v)
+
+    def __getitem__(self, k):
+        if isinstance(k, Enum):
+            k = k.value
+        return super().__getitem__(k)            
 
 
-class Alert:
-    COMPONENT_NOT_FOUND = {
-        "title": "НЕ найден компонент",
-        "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
-    }
+# class Alert:
+#     COMPONENT_NOT_FOUND = {
+#         "title": "НЕ найден компонент",
+#         "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
+#     }
 
 class Element:
     def __init__(self, config: any):
@@ -73,10 +96,10 @@ class Menu(Element):
     def get(self):
         graph = self.config["graph"]
         graph = [ menu['page'] for menu in graph]
-        menu_1_level = [menu for menu in graph if menu['kod_parent']==0]
-        kod_1_level = [menu['kod'] for menu in menu_1_level ]
-        menu_2_level = [menu for menu in graph if menu['kod_parent'] in kod_1_level]
-        menu = menu_1_level + menu_2_level        
+        menu_level1 = [menu for menu in graph if menu['kod_parent']==0]
+        kod_level1 = [menu['kod'] for menu in menu_level1 ]
+        menu_level2 = [menu for menu in graph if menu['kod_parent'] in kod_level1]
+        menu = menu_level1 + menu_level2
         return menu
 
 
@@ -155,28 +178,38 @@ class Page(Element):
     def __init__(self, kod: int, config: any, user: UserDB):
         super().__init__(config)
         self.kod = kod
-        self.config = config
+        self.config = NamesDict(config)
         self.user = user
+        self.PATH_IMAGES = self.config[Names.PATH_IMAGES]
         self.data = {}
+
+        self.TITLES = self.config[Names.MAS_TITLES]
+        self.ALERTS = self.config[Names.MAS_ALERT]
+        self.GAG_TITLE = 'Заголовок не найден'
+
+    def _image_path(self,image):
+        return os.path.normpath('/'.join([self.PATH_IMAGES,image]))
 
     def _design(self):
         font = 15
         css =  self.config['kit-css'] # ["main-0.css", "page-0.css"]  # список динамических стилей
-        self.data[Names.DESIGN] = {"font": font, "css": css}
+        face = self._image_path(self.config['face'])
+        self.data[Names.DESIGN] = {'font': font, 'face': face, 'css': css}
 
     def _user(self):
         self.data[Names.USER] = self.user
 
+    def _title_z1(self):
+        return self.TITLES.get(str(self.kod), self.GAG_TITLE)
+
     def _verh(self):
         def icons():
-            verh = self.config["verh"]
-            if verh:
-                return verh['icons']
+            verh = NamesDict(self.config[Names.VERH])
+            if verh:                
+                return [self._image_path(icon) for icon in verh[Names.ICONS]]
             return []
-        gag_title = 'Заголовок не найден'
-        titles = self.config["mas_titles"]
-        title = titles.get(str(self.kod), gag_title)
         
+        title = self._title_z1()
         icons = icons()
         self.data[Names.VERH] = {Names.TITLE: title, Names.ICONS: icons}
 

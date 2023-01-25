@@ -2,7 +2,9 @@
 page:
   design:
     font: 15
-    css: [nain-0.css,page-0.css, ..] # список динамических стилей
+    css: [nain-0.css,page-0.css, ..] # список динамических стилей    
+    face: nebo.jpg # Фоновая картинка Главной страницы
+
   user: null | 	{username,status,datetime} #текущий пользователь
   verh: #заголовок
   head: #шапка
