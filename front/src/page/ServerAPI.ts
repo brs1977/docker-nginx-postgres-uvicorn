@@ -72,14 +72,15 @@ export class ServerAPI implements API {
             },            
             body: new URLSearchParams({username,password})
         }
-        const res = await fetch(`${this.url}/users/login`,options)
+        const res = await fetch(`${this.url}/auth/login`,options)
         if (!res.ok) {
             fail(`${res.status} ${res.statusText}`)
         }
-        const json = await res.json()
-        if (typeof(json) !== 'object' && json.access_token === undefined)
-            fail('invalid response')
-        this.token = json.access_token    
+        // const json = await res.json()
+        // if (typeof(json) !== 'object' && json.access_token === undefined)
+        //     fail('invalid response')
+        // this.token = json.access_token    
+        this.token = new Date().toISOString()
     }
 
     async logout() {
