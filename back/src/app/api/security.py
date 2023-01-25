@@ -1,11 +1,11 @@
 import os
+from fastapi import Response
 from fastapi_login import LoginManager
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_login.exceptions import InvalidCredentialsException
 from app.schemas.users import UserLogin
 from datetime import timedelta
 from app.db.repository import users
-# from app.db.repository.users import get_by_username
 
 ACCESS_TOKEN_EXPIRE_HOURS = 1
 SECRET_KEY = os.environ["SECRET_KEY"]
@@ -39,7 +39,8 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
         raise InvalidCredentialsException
     return user
 
-def create_access_token(username: str):
-    return manager.create_access_token(data={'sub': username})
-    # return manager.create_access_token(data={'sub': username}, expires=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS))
+def set_access_token(username: str, response: Response):
+    token = manager.create_access_token(data={'sub': username})
+    manager.set_cookie(response, token)
+
     

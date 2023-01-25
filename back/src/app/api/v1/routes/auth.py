@@ -12,8 +12,7 @@ async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depen
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
-    token = security.create_access_token(user.username)
-    security.manager.set_cookie(response, token)
+    security.set_access_token(user.username, response)
     return {'status': 'Success'}
 
 @router.get("/me", response_model=UserLogin)
