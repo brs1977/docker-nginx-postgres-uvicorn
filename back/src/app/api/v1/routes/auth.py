@@ -9,7 +9,10 @@ router = APIRouter()
 @router.post('/login', status_code=201)
 async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends())-> dict:
     user = await security.authenticate_user(form_data.username, form_data.password)
-    token = security.manager.create_access_token(data={'sub': user.username})
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    token = security.create_access_token(user.username)
     security.manager.set_cookie(response, token)
     return {'status': 'Success'}
 

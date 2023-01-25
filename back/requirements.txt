@@ -26,6 +26,7 @@ black==22.10.0
 alembic==1.8.1
 # dev 
 pytest==7.2.0
-trio==0.19.0
+pytest-freezegun==0.4.2
+# trio==0.19.0
 requests==2.25.1
 httpx==0.23.1

@@ -7,6 +7,7 @@ from datetime import timedelta
 from app.db.repository import users
 # from app.db.repository.users import get_by_username
 
+ACCESS_TOKEN_EXPIRE_HOURS = 12
 SECRET_KEY = os.environ["SECRET_KEY"]
 manager = LoginManager(
     SECRET_KEY, 
@@ -33,8 +34,10 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
     user = await users.get_by_username(username)
     if not user:
         raise InvalidCredentialsException
-    if not user.is_active:
-        raise InvalidCredentialsException
     if not verify_password(password, user.password):
         raise InvalidCredentialsException
     return user
+
+def create_access_token(username: str):
+    return manager.create_access_token(data={'sub': username}, expires=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS))
+    

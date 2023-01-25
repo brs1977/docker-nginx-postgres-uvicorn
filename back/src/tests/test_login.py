@@ -34,28 +34,25 @@ user_data = UserSchema(
 )
 
 
-def test_login(test_app, api_url, monkeypatch):
+def login(request_data, test_app, api_url, monkeypatch):
     async def mock_get_by_username(username):
         return user_data
     monkeypatch.setattr(users, 'get_by_username', mock_get_by_username)
+    
+    response = test_app.post(api_url("auth/login"), data=request_data)    
+    return response
 
-    # async def mock_authenticate_user(username, password):
-    #     return user_data
-    # monkeypatch.setattr(security, 'authenticate_user', mock_authenticate_user)
-
+def test_login(test_app, api_url, monkeypatch):
     request_data = {"username": "adm", "password": "adm"}
-    response = test_app.post(api_url("auth/login"), data=request_data)
+    response = login(request_data, test_app, api_url, monkeypatch)
     assert response.status_code == 201
     assert "access-token" in response.cookies
     assert response.cookies["access-token"]
 
 def test_login_with_invalid_password(test_app, api_url, monkeypatch):
-    async def mock_get_by_username(username):
-        return user_data
-    monkeypatch.setattr(users, 'get_by_username', mock_get_by_username)
-
     request_data = {"username": "adm", "password": "ad"}
-    response = test_app.post(api_url("auth/login"), data=request_data)
+    response = login(request_data, test_app, api_url, monkeypatch)
+
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
 
@@ -64,12 +61,9 @@ def test_user_detail_forbidden_without_token(test_app, api_url):
     assert response.status_code == 401
 
 def test_login_me(test_app, api_url, monkeypatch):
-    async def mock_get_by_username(username):
-        return user_data
-    monkeypatch.setattr(users, 'get_by_username', mock_get_by_username)
-
     request_data = {"username": "adm", "password": "adm"}
-    response = test_app.post(api_url("auth/login"), data=request_data)
+    response = login(request_data, test_app, api_url, monkeypatch)
+
     assert response.status_code == 201
     token = response.cookies['access-token']
 
@@ -80,22 +74,19 @@ def test_login_me(test_app, api_url, monkeypatch):
     assert response.status_code == 200
     assert response.json()["username"] == "adm"
 
-# @pytest.mark.freeze_time("2015-10-21")
-# def test_user_detail_forbidden_with_expired_token(test_app, freezer):
-#     user = UserCreate(
-#         email="sidious@deathstar.com",
-#         name="Palpatine",
-#         password="unicorn"
-#     )
-#     # Create user and use expired token
-#     loop = asyncio.get_event_loop()
-#     user_db = loop.run_until_complete(create_user(user))
-#     freezer.move_to("'2015-11-10'")
-#     response = test_app.get(
-#         "/users/me",
-#         headers={"Authorization": f"Bearer {user_db['token']['token']}"}
-#     )
-#     assert response.status_code == 401
+@pytest.mark.freeze_time("2023-01-25")
+def test_user_detail_forbidden_with_expired_token(test_app, api_url, freezer, monkeypatch):
+    request_data = {"username": "adm", "password": "adm"}
+    response = login(request_data, test_app, api_url, monkeypatch)
+        
+    freezer.move_to("'2023-01-26'")
+    token = response.cookies['access-token']
+
+    response = test_app.get(
+        api_url("auth/me"),
+        headers = {"Cookie": f"access-token={token}"}
+    )
+    assert response.status_code == 401
 
 
 # from loguru import logger
