@@ -78,5 +78,3 @@ async def delete_user(id: int = Path(..., gt=0)):
     await users.delete(id)
 
     return user
-
-

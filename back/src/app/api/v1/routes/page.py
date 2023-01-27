@@ -1,16 +1,34 @@
 from fastapi import Path, APIRouter, status, HTTPException, Depends
 from app.api.v1.config.utils import read_config
 from app.schemas.users import UserDB
+from app.api import security
+from datetime import datetime
 from abc import abstractmethod
 import pandas as pd
 from loguru import logger
-from enum import Enum
+from enum import Enum, EnumMeta
 import os
 
 config = read_config()
 router = APIRouter()
 
-class Names(Enum):
+ROLE_STATUS_MAP = {
+    1: "Гость",
+    2: "Оператор",
+    3: "Функционер",
+    4: "Администратор",
+}
+
+
+class EnumMetaValue(EnumMeta):
+    def __getattribute__(cls, name):
+        value = super().__getattribute__(name)
+        if isinstance(value, cls):
+            value = value.value
+        return value
+
+
+class Names(Enum, metaclass=EnumMetaValue):
     DESIGN = "design"
     USER = "user"
     VERH = "verh"
@@ -20,42 +38,47 @@ class Names(Enum):
     FOOTER = "footer"
     TITLE = "title"
     BACKGROUND = "background"
-    ICONS = 'icons'
-    ICON = 'icon'
+    ICONS = "icons"
+    ICON = "icon"
     ORGSTR = "orgstr"
     BROD = "brod"
-    INS = "ins"    
+    INS = "ins"
     ACTIVE_MENU = "active_menu"
     MENU = "menu"
-    MENU_TYPE = 'menu_typ'
-    ALERT = 'alert'
-    REF = 'ref'
-    SUB = 'sub'
-    PAGE = 'page'
-    KOD = 'kod'
-    PATH_IMAGES = 'path_images'
-    MAS_TITLES = 'mas_titles'
-    MAS_ALERT = 'mas_alert'
+    MENU_TYPE = "menu_typ"
+    ALERT = "alert"
+    REF = "ref"
+    SUB = "sub"
+    PAGE = "page"
+    KOD = "kod"
+    PATH_IMAGES = "path_images"
+    MAS_TITLES = "mas_titles"
+    MAS_ALERT = "mas_alert"
+    ROLE_ID = "role_id"
+    USERNAME = "username"
+    DATETIME = "datetime"
+    STATUS = "status"
 
-    @classmethod
-    def is_names(cls, names):
-        if isinstance(color, cls):
-            names=names.value
-        if not names in cls.__members__:
-            return False
-        else:
-            return True    
 
-class NamesDict(dict):    
-    def __setitem__(self, k, v):
-        if isinstance(k, Enum):
-            k = k.value
-        super().__setitem__(k.value, v)
+#     @classmethod
+#     def is_names(cls, names):
+#         if isinstance(color, cls):
+#             names=names.value
+#         if not names in cls.__members__:
+#             return False
+#         else:
+#             return True
 
-    def __getitem__(self, k):
-        if isinstance(k, Enum):
-            k = k.value
-        return super().__getitem__(k)            
+# class NamesDict(dict):
+#     def __setitem__(self, k, v):
+#         if isinstance(k, Enum):
+#             k = k.value
+#         super().__setitem__(k.value, v)
+
+#     def __getitem__(self, k):
+#         if isinstance(k, Enum):
+#             k = k.value
+#         return super().__getitem__(k)
 
 
 # class Alert:
@@ -64,24 +87,27 @@ class NamesDict(dict):
 #         "text": "Вызываемая страница не найдена или находится в состоянии доработки и временно отключена от Системы. Обращайтесь к администратору Системы",
 #     }
 
+
 class Element:
     def __init__(self, config: any):
         self.config = config
+
     @abstractmethod
     def get():
         pass
+
     def __call__(self):
         return self.get()
 
+
 class WorkZona(Element):
-    
     def type_main():
-    # if kod == 101:
-    #     for page in config_doc["stream-rz"]["typ-1"]:
-    #         if page["page"]["kod"] == kod:
-    #             item = page["page"]
-    #             item["type"] = 1
-    #             return item
+        # if kod == 101:
+        #     for page in config_doc["stream-rz"]["typ-1"]:
+        #         if page["page"]["kod"] == kod:
+        #             item = page["page"]
+        #             item["type"] = 1
+        #             return item
         return {}
 
     def get(self):
@@ -92,13 +118,14 @@ class WorkZona(Element):
         #   typ_content: tabs|list
         pass
 
+
 class Menu(Element):
     def get(self):
         graph = self.config["graph"]
-        graph = [ menu['page'] for menu in graph]
-        menu_level1 = [menu for menu in graph if menu['kod_parent']==0]
-        kod_level1 = [menu['kod'] for menu in menu_level1 ]
-        menu_level2 = [menu for menu in graph if menu['kod_parent'] in kod_level1]
+        graph = [menu["page"] for menu in graph]
+        menu_level1 = [menu for menu in graph if menu["kod_parent"] == 0]
+        kod_level1 = [menu["kod"] for menu in menu_level1]
+        menu_level2 = [menu for menu in graph if menu["kod_parent"] in kod_level1]
         menu = menu_level1 + menu_level2
         return menu
 
@@ -178,37 +205,48 @@ class Page(Element):
     def __init__(self, kod: int, config: any, user: UserDB):
         super().__init__(config)
         self.kod = kod
-        self.config = NamesDict(config)
+        self.config = config
         self.user = user
         self.PATH_IMAGES = self.config[Names.PATH_IMAGES]
         self.data = {}
 
         self.TITLES = self.config[Names.MAS_TITLES]
         self.ALERTS = self.config[Names.MAS_ALERT]
-        self.GAG_TITLE = 'Заголовок не найден'
+        self.GAG_TITLE = "Заголовок не найден"
 
-    def _image_path(self,image):
-        return os.path.normpath('/'.join([self.PATH_IMAGES,image]))
+    def _image_path(self, image):
+        return os.path.normpath("/".join([self.PATH_IMAGES, image]))
 
     def _design(self):
         font = 15
-        css =  self.config['kit-css'] # ["main-0.css", "page-0.css"]  # список динамических стилей
-        face = self._image_path(self.config['face'])
-        self.data[Names.DESIGN] = {'font': font, 'face': face, 'css': css}
+        css = self.config["kit-css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
+        face = self._image_path(self.config["face"])
+        self.data[Names.DESIGN] = {"font": font, "face": face, "css": css}
 
     def _user(self):
-        self.data[Names.USER] = self.user
+        # user: # текущий пользователь (NULL при отсутствии ввода логина и пароля)
+        # username: admin # а также - funct  и  operator
+        # status: администратор # а также - соответственно - функционер и оператор
+        # datetime: 01:56:13 # время работы зарегистрированного пользователя (от момента ввода параоля и до загрузки текущей формы)
+        username = self.user[Names.USERNAME]
+        status = ROLE_STATUS_MAP.get(self.user[Names.ROLE_ID], None)
+        datetime_value = datetime.now()
+        self.data[Names.USER] = {
+            Names.USERNAME: username,
+            Names.STATUS: status,
+            Names.DATETIME: datetime_value,
+        }
 
     def _title_z1(self):
         return self.TITLES.get(str(self.kod), self.GAG_TITLE)
 
     def _verh(self):
         def icons():
-            verh = NamesDict(self.config[Names.VERH])
-            if verh:                
+            verh = self.config[Names.VERH]
+            if verh:
                 return [self._image_path(icon) for icon in verh[Names.ICONS]]
             return []
-        
+
         title = self._title_z1()
         icons = icons()
         self.data[Names.VERH] = {Names.TITLE: title, Names.ICONS: icons}
@@ -258,6 +296,6 @@ class Page(Element):
 
 
 @router.get("/{kod}")
-async def page(kod: int = Path(..., gt=0), user: UserDB = None): #Depends(security.get_page_user)):
+async def page(kod: int = Path(..., gt=0), user: UserDB = Depends(security.manager)):
     page = Page(kod, config, user)
     return page()

@@ -19,13 +19,14 @@ from app.db.repository import users
 ACCESS_TOKEN_EXPIRE_HOURS = 1
 SECRET_KEY = os.environ["SECRET_KEY"]
 manager = LoginManager(
-    SECRET_KEY, 
-    '/login',
+    SECRET_KEY,
+    "/login",
     # default_expiry=timedelta(minutes=15),
-    default_expiry=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),    
+    default_expiry=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),
     use_cookie=True,
-    use_header=True
+    use_header=True,
 )
+
 
 @manager.user_loader()
 async def get_user_by_name(username: str) -> UserLogin:
@@ -48,9 +49,8 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
         raise InvalidCredentialsException
     return user
 
+
 def set_access_token(username: str, response: Response):
-    token = manager.create_access_token(data={'sub': username})
+    token = manager.create_access_token(data={"sub": username})
     # response.set_cookie(key="access-token", value=token, secure=True, domain="129.200.0.116")
     manager.set_cookie(response, token)
-
-    
