@@ -34,10 +34,8 @@ export class PageViewModel extends ViewModel<PageProps>{
     }
 
     async loadPage(kod:number) {
-        console.log('loadPage','kod',kod)
         this.setProps({kod})
         const page = await this.model.loadPage(kod)
-        console.log('loadPage','page',page)
         this.setProps({page})
     }
 

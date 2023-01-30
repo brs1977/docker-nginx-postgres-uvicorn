@@ -5,7 +5,7 @@ import i32_1_1_4 from '../img/32_1_1_4.png'
 import i33_6_1_1 from '../img/33_6_1_1.png'
 import i33_8_1_2 from '../img/33_8_1_2.png'
 import i33_4_1_3 from '../img/33_4_1_3.png'
-import { make_fragment } from '../core/html'
+import { make_fragment } from '../_old/core/html'
 
 export function login() {
     return make_fragment(/*html*/`

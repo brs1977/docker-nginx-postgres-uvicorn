@@ -1,4 +1,4 @@
-import { fail } from "../../core/utils";
+import { fail } from "../../_old/core/utils";
 import { page_main } from "./page_main";
 import { page_test } from "./page_test";
 

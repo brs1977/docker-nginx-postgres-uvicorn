@@ -1,4 +1,4 @@
-import { make_fragment } from "../../core/html";
+import { make_fragment } from "../../_old/core/html";
 
 export function page_test() {
     return make_fragment(/*html*/`

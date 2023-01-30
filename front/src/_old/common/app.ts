@@ -1,4 +1,4 @@
-import { API } from "../api/api"
+import { API } from "../_old/api/api"
 // import { emit } from "../core/dom"
 // import { input } from "../core/html"
 // import { FailError } from "../core/utils"

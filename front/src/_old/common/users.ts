@@ -1,6 +1,6 @@
-import { API } from "../api/api"
-import { h } from "../core/dom"
-import { button, td } from "../core/html"
+import { API } from "../_old/api/api"
+import { h } from "../_old/core/dom"
+import { button, td } from "../_old/core/html"
 
 type UsersParams = {
     api: API

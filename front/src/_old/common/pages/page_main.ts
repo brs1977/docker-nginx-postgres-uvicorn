@@ -1,4 +1,4 @@
-import { make_fragment } from "../../core/html"
+import { make_fragment } from "../../_old/core/html"
 import i_11_1_1_1 from '../../img/11_1_1_1.png'
 import i_11_1_1_2 from '../../img/11_1_1_2.png'
 import i_32_1_1_4 from '../../img/32_1_1_4.png'

@@ -60,6 +60,7 @@ export class PageModelAPI implements PageModel {
 
     async loadPage(kod:number):Promise<Page> {
         const obj = await this.api.get<unknown>(`page/${kod}`)
+        console.log('loadPage',obj,isPage(obj))
         if (isPage(obj))
             return obj
         else {

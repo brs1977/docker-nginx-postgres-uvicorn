@@ -1,5 +1,5 @@
-import { h, on } from "../core/dom"
-import { button, input, textarea } from "../core/html"
+import { h, on } from "../_old/core/dom"
+import { button, input, textarea } from "../_old/core/html"
 
 export type Column = {
     name: string,

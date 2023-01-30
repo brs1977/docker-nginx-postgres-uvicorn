@@ -1,5 +1,5 @@
-import { fragment, h, on } from "../core/dom"
-import { button, field_id, form, input, label, modal, textarea } from "../core/html"
+import { fragment, h, on } from "../_old/core/dom"
+import { button, field_id, form, input, label, modal, textarea } from "../_old/core/html"
 
 export type Column = {
     name: string,
