@@ -125,13 +125,6 @@ class PageWorkZona(Element):
         # rows:
         stream_rz = self.config[Names.STREAM_RZ]
         stream_rz = [rz['mas_type'] for rz in stream_rz]
-  - mas_typ:
-      typ: rows
-      data_typ:
-]
-  - mas_typ:
-      typ: rows
-      data_typ:
 
     def get(self):
         title = self.page_info[Names.TITLES][1]

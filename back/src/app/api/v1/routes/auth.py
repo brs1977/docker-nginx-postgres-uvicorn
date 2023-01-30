@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request
+from loguru import logger
 
 # from app.api.security import manager, authenticate_user
 from app.api import security
