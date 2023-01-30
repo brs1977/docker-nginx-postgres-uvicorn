@@ -43,8 +43,8 @@ class MenuItem(AppModel):
     alert: Optional[Alert] = None
 
 
-class Head(BaseModel):
-    active_menu: int
+class Head(AppModel):
+    active_menu: Optional[int]
     ins: Ins
     menu: list[MenuItem] = []
 

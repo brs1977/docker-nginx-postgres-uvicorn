@@ -265,9 +265,38 @@ class BasePage(Element):
     def _menu(self):
         return PageMenu(self.config, self.user)()
 
+
+
+    def _brod(self):
+        name = self.GAG_TITLE
+        items = [item for item in self.GRAPH_PAGE if item['kod']==self.kod]
+        if len(items) == 1:
+            name = items[0]['name']
+
+        graph = self.config["graph"]
+        graph = [menu["page_mas"] for menu in graph]
+        menu_level1 = [menu for menu in graph if menu["kod_parent"] == 0]
+        kod_level1 = [menu["kod"] for menu in menu_level1]
+        menu_level2 = [menu for menu in graph if menu["kod_parent"] in kod_level1]
+        menu = menu_level1 + menu_level2
+
+        items = [item for item in menu if item.get('ref',0)==self.kod]
+        if len(items)==0:
+            return name
+        kod = items[0]['kod']
+        kod_menu = {item['kod']:item for item in menu }
+        res = [name]
+        while True:
+            item = kod_menu.get(kod,None)
+            if not item:
+                break
+            kod = item['kod_parent']
+            res.append(item['name'])
+        return " / ".join(res[::-1])
+
     def _head(self):
         active_menu = 1
-        ins = {Names.ORGSTR: "структура", Names.BROD: "крошки"}
+        ins = {Names.ORGSTR: "структура", Names.BROD: self._brod()}
         return {
             Names.ACTIVE_MENU: active_menu,
             Names.INS: ins,
@@ -315,6 +344,13 @@ class Page0(BasePage):
         return PageSidebar(self.config, self._user(), False)() 
     def _menu(self):
         return []
+    def _head(self):
+        ins = {Names.ORGSTR: "структура", Names.BROD: ''}
+        return {
+            # Names.ACTIVE_MENU: 1,
+            Names.INS: ins,
+            Names.MENU: [],
+        }
     def _work_zona(self):
         return {Names.BACKGROUND: self._image_path(self.config['start_background_rz'])}
 
@@ -325,7 +361,8 @@ class Page(BasePage):
 @router.get("/{kod}", response_model=page.Page)
 async def page(request: Request, kod: int = Path(..., gt=-1)) -> page.Page:
     user: UserDB = await security.get_current_user(request)
-    page = Page0(kod, config, user) if not user else Page(kod, config, user)
+
+    page = Page0(0, config, user) if not user else Page(kod, config, user)
     # page = PageModel.parse_obj(page())
     # return page.json()
     return page()
