@@ -1,7 +1,7 @@
 from fastapi import Request, Path, APIRouter, status, HTTPException, Depends
 from app.api.v1.config.utils import read_config
 from app.schemas.users import UserDB
-from app.schemas.page import *
+from app.schemas import page
 from app.api import security
 from datetime import datetime
 from abc import abstractmethod
@@ -314,7 +314,7 @@ class Page0(BasePage):
     def _sidebar(self):
         return PageSidebar(self.config, self._user(), False)() 
     def _menu(self):
-        return None
+        return []
     def _work_zona(self):
         return {Names.BACKGROUND: self._image_path(self.config['start_background_rz'])}
 
@@ -322,8 +322,8 @@ class Page(BasePage):
     pass
 
 
-@router.get("/{kod}", response_model=PageModel)
-async def page(request: Request, kod: int = Path(..., gt=-1)) -> PageModel:
+@router.get("/{kod}", response_model=page.Page)
+async def page(request: Request, kod: int = Path(..., gt=-1)) -> page.Page:
     user: UserDB = await security.get_current_user(request)
     page = Page0(kod, config, user) if not user else Page(kod, config, user)
     # page = PageModel.parse_obj(page())

@@ -46,7 +46,7 @@ class MenuItem(AppModel):
 class Head(BaseModel):
     active_menu: int
     ins: Ins
-    menu: list[MenuItem] = None
+    menu: list[MenuItem] = []
 
 
 class User(BaseModel):
@@ -67,7 +67,7 @@ class WorkZona(BaseModel):
     end_title: Any
 
 
-class PageModel(BaseModel):
+class Page(BaseModel):
     design: Design
     verh: Verh
     head: Head
