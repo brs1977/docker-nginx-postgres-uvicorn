@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, Extra
 
 
 class AppModel(BaseModel):
@@ -37,7 +37,7 @@ class MenuItem(AppModel):
     kod: int
     kod_parent: int
     name: str
-    typ_menu: Optional[str] = None
+    typ_menu: str
     ref: Optional[int] = None
     sub: Optional[int] = None
     alert: Optional[Alert] = None
@@ -48,7 +48,6 @@ class Head(BaseModel):
     ins: Ins
     menu: list[MenuItem] = []
 
-
 class User(BaseModel):
     username: str
     status: str
@@ -56,15 +55,14 @@ class User(BaseModel):
 
 
 class Sidebar(BaseModel):
-    # user: Optional[User] = None
+    user: Optional[User] = Field(..., nullable=True)
     checkbox: bool
 
-
 class WorkZona(BaseModel):
-    background: str = None
-    icon: list[str] = None
-    title: str = None
-    end_title: str = None
+    background: str = Field(..., nullable=True)
+    icon: list[str] = Field(..., nullable=True)
+    title: str = Field(..., nullable=True)
+    end_title: str = Field(..., nullable=True)
 
 
 class Page(BaseModel):
@@ -73,4 +71,4 @@ class Page(BaseModel):
     head: Head
     sidebar: Sidebar
     work_zona: WorkZona
-    footer: Any
+    footer: Any = Field(..., nullable=True)
