@@ -33,7 +33,7 @@
 
 .dropdown-menu {
     position: fixed;
-    top: 3rem;
+    top: var(--top-menu);
 }
 
 .dropdown-link {

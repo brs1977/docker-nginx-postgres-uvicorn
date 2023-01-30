@@ -22,5 +22,6 @@ const api = new ServerAPI(url)
 const model = new PageModelAPI(api)
 const viewModel = new PageViewModel(model)
 const view = new PageView(viewModel)
+viewModel.loadPage(0)
 root.appendChild(view.root)
 

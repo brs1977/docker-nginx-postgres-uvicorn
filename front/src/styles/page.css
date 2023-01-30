@@ -7,6 +7,7 @@
     
   :root {
     --font-size: 15px;
+    --top-menu: 3rem;
   }
   
   html {
@@ -209,7 +210,9 @@
     flex-direction: row;
     flex-wrap: nowrap;
     font-size: 1rem;
-
+}
+.sidebar-checkbox-hide {
+    display: none;
 }
 
 .sidebar-checkbox-footer {
@@ -227,6 +230,13 @@
 }
 
 .sidebar-close {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.sidebar-close-img {
     flex-shrink: 0;
     width: 16px;
     height: 16px;

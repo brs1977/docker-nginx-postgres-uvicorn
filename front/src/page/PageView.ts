@@ -8,6 +8,7 @@ import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel";
 import { WorkspaceMainFragment } from "./workspaces/WorkspaceMainFragment";
 import { WorkspaceProps } from "./PageTypes";
 import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel";
+import { createElement } from "./Utils";
 
 // interface CustomEventMap {
 //     "pushpage": CustomEvent<number>;
@@ -42,8 +43,8 @@ export class PageView extends View<HTMLDivElement> {
             </div>
         `)
 
-        const header = this.root.querySelector('.page-header')!
-        const caption = this.root.querySelector('.page-caption')!
+        const header = this.root.querySelector<HTMLElement>('.page-header')!
+        const caption = this.root.querySelector<HTMLElement>('.page-caption')!
         const sidebar = this.root.querySelector('.page-sidebar')!
         const footer = this.root.querySelector('.page-footer')!
         
@@ -59,12 +60,7 @@ export class PageView extends View<HTMLDivElement> {
             footer.classList.toggle('page-footer-show',settings.footer)
         })
 
-        // window.addEventListener('pushpage', e => {
-        //     viewModel.loadPage(e.detail)
-        // })
-
         window.addEventListener('popstate', () => {
-            if (!viewModel.user) return
             const m = location.pathname.match(/\/(\d+)/)
             if (!m) return
             const kod = parseInt(m[1])
@@ -74,28 +70,41 @@ export class PageView extends View<HTMLDivElement> {
 
         viewModel.on('change:kod',() => {
             const {kod} = viewModel
-            const url = kod !== undefined ? `/${kod}` : ''
+            const url = kod ? `/${kod}` : ''
             history.pushState(null,'',url)
         })
 
-        viewModel.on('change:workspace',() => {
-            const {workspace} = viewModel
-            const view = this.getWorkspaceView(workspace)
-            if (workspace) {
-                workspace.on('change:pic',() => {
-                    const {pic} = workspace
-                    const url = (pic) ? new URL(`../img/${pic}`,import.meta.url) : ''
-                    const backgroundImage = (url) ? `url(${url})` : ''
-                    this.root.querySelector<HTMLElement>('.pic-m1')!.style.backgroundImage = backgroundImage
-                })
-            }
-            if (view)
-                this.root.querySelector('.workspace')!.replaceChildren(view.root)
-            else
-                this.root.querySelector('.workspace')!.replaceChildren()
-        })
+        // viewModel.on('change:workspace',() => {
+        //     const {workspace} = viewModel
+        //     const view = this.getWorkspaceView(workspace)
+        //     if (workspace) {
+        //         workspace.on('change:pic',() => {
+        //             const {pic} = workspace
+        //             const url = (pic) ? new URL(`../img/${pic}`,import.meta.url) : ''
+        //             const backgroundImage = (url) ? `url(${url})` : ''
+        //             this.root.querySelector<HTMLElement>('.pic-m1')!.style.backgroundImage = backgroundImage
+        //         })
+        //     }
+        //     if (view)
+        //         this.root.querySelector('.workspace')!.replaceChildren(view.root)
+        //     else
+        //         this.root.querySelector('.workspace')!.replaceChildren()
+        // })
 
         //viewModel.login('adm','adm').then(() => viewModel.loadPage(1))
+
+        viewModel.on('change:page',() => {
+            const {font=16,css=[],background} = viewModel.page?.design || {}
+            document.documentElement.style.setProperty('--font-size', `${font}px`);
+            const links = css.map(it => createElement(`<link data-css rel="stylesheet" type="text/css" href="/data/${it}">`))
+            document.head.querySelectorAll('link[data-css]').forEach(it => it.remove())
+            document.head.append(...links)
+            if (background)
+                document.body.style.backgroundImage = `url('/data/${background})`
+            else
+                document.body.style.removeProperty('background-image')
+            document.documentElement.style.setProperty('--top-menu',`${caption.offsetTop + 10}px`)
+        })
 
     }
 

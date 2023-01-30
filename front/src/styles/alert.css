@@ -5,7 +5,7 @@
     justify-content: flex-start;
     border: 2px solid #6e83a0;
     background-color: #fffee9;
-    max-width: 29rem;
+    /* max-width: 29rem; */
 }
 .alert-data {
     padding: 2rem;

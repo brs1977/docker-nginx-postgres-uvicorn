@@ -1,3 +1,6 @@
+import { MenuItem } from "./models/MenuItem"
+import { Page } from "./models/Page"
+
 export type Props = {}
 
 export type User = {
@@ -14,48 +17,46 @@ export type Token = {
     token_type: string
 }
 
-export type AlertAction = {
-    type:'alert',
-    title: string,
-    text: string
-}
+// export type AlertAction = {
+//     type:'alert',
+//     title: string,
+//     text: string
+// }
 
-export type PageAction = {
-    type: 'page',
-    page: number,
-}
+// export type PageAction = {
+//     type: 'page',
+//     page: number,
+// }
 
-export type Action = AlertAction | PageAction
+// export type Action = AlertAction | PageAction
 
-export type MenuItem = {
-    kod:number,
-    kod_parent:number,
-    name:string,
-    action?: Action
-}
-export function isAlertAction(arg?: Action): arg is AlertAction {
-    return arg !== undefined && arg.type == 'alert'
-}
+// // export type MenuItem = {
+// //     kod:number,
+// //     kod_parent:number,
+// //     name:string,
+// //     action?: Action
+// // }
+// export function isAlertAction(arg?: Action): arg is AlertAction {
+//     return arg !== undefined && arg.type == 'alert'
+// }
 
-export function isPageAction(arg?: Action): arg is PageAction {
-    return arg !== undefined && arg.type == 'page'
-}
+// export function isPageAction(arg?: Action): arg is PageAction {
+//     return arg !== undefined && arg.type == 'page'
+// }
 
 export function createSettings(partial?:Partial<Settings>) {
     return {caption:true,footer:true,sidebar:true,...partial ?? {}}
 }
 
-export type Menu = Array<MenuItem>
-
 function sortMenu(a:MenuItem,b:MenuItem) {
     return a.kod - b.kod
 }
 
-export function getMenuTop(menu:Menu) {
+export function getMenuTop(menu:Array<MenuItem>) {
     return menu.filter(it => it.kod_parent === 0).sort(sortMenu)
 }
 
-export function getMenuChildren(menu:Menu,parent:number) {
+export function getMenuChildren(menu:Array<MenuItem>,parent:number) {
     return menu.filter(it => it.kod_parent == parent).sort(sortMenu)
 }
 
@@ -94,14 +95,15 @@ export type Tools = {
 export type WorkspaceProps = WorkspaceMainProps | WorkspaceInputProps
 
 export interface PageModel {
-    loadMenu(): Promise<Menu>
+    // loadMenu(): Promise<Menu>
     loadSettings(): Promise<Settings>
-    loadUser(): Promise<User>
+    // loadUser(): Promise<User>
     saveSettings(settings:Settings):Promise<Settings>
     login(username:string,password:string):Promise<void>
     logout(): Promise<void>
-    loadWorkspace(kod:number):Promise<WorkspaceProps>
-    loadTools(kod:number): Promise<Tools>
+    // loadWorkspace(kod:number):Promise<WorkspaceProps>
+    // loadTools(kod:number): Promise<Tools>
+    loadPage(kod:number):Promise<Page>
 }
 
 

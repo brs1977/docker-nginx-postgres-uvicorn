@@ -18,7 +18,7 @@ export class PageSidebarView extends View<HTMLDivElement> {
                         <span class="sidebar-checkbox-label">Подвал</span>
                         <input class="sidebar-checkbox-input" name="footer" type="checkbox">
                     </label>
-                    <img class="sidebar-close" src="/data/close.svg">
+                    <div class="sidebar-close"><img class="sidebar-close-img" src="/data/close.svg"></div>
                 </div>
                 <div class="sidebar-items"></div>
         </div>
@@ -53,8 +53,11 @@ export class PageSidebarView extends View<HTMLDivElement> {
 
         const help = new PageHelpView()
 
-        viewModel.on('change:user',() => {
-            if (viewModel.user)
+        viewModel.on('change:page',() => {
+            this.root.querySelectorAll('.sidebar-checkbox').forEach(it => {
+                it.classList.toggle('sidebar-checkbox-hide',!viewModel.page?.sidebar.checkbox)
+            })
+            if (viewModel.page?.sidebar.user)
                 sidebar.replaceChildren(logon.root,help.root)
             else
                 sidebar.replaceChildren(login.root,help.root)

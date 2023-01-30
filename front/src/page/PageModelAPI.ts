@@ -1,4 +1,7 @@
-import { createSettings, Menu, PageModel, API, Settings, User, WorkspaceMainProps, WorkspaceProps, Tools } from "./PageTypes";
+import { Page } from "./models/Page";
+import { isPage } from "./models/Page.guard";
+import { createSettings, PageModel, API, Settings } from "./PageTypes";
+import { FailError } from "./Utils";
 
 export class PageModelAPI implements PageModel {
 
@@ -8,10 +11,10 @@ export class PageModelAPI implements PageModel {
 
     constructor(readonly api: API) { }
 
-    async loadMenu(): Promise<Menu> {
-        //return this.api.get<Menu>('menu');
-        return []
-    }
+    // async loadMenu(): Promise<Menu> {
+    //     return this.api.get<Menu>('menu');
+    //     return []
+    // }
 
     async loadSettings(): Promise<Settings> {
         if (!this.isLoggedIn)
@@ -35,9 +38,9 @@ export class PageModelAPI implements PageModel {
         this.isLoggedIn = true
     }
 
-    async loadUser(): Promise<User> {
-        return this.api.get<User>('auth/me')
-    }
+    // async loadUser(): Promise<User> {
+    //     return this.api.get<User>('auth/me')
+    // }
 
     async saveSettings(settings: Settings): Promise<Settings> {
         if (this.isLoggedIn)
@@ -51,23 +54,24 @@ export class PageModelAPI implements PageModel {
         await this.api.logout()
     }
 
-    async loadWorkspace<T extends WorkspaceProps>(kod: number) {
-        return await this.api.get<T>(`menu/${kod}`)
-        // const props: WorkspaceMainProps = { 
-        //     kod, 
-        //     type: 1, 
-        //     title: 'Система ситуационного анализа и прогнозирования состояния безопасности полетов воздушных судов авиации Вооруженных Сил Российской Федерации',
-        //     pic: "main.jpg", 
-        //     picpic: 0, 
-        //     n_par: [1, 2, 2, 2], 
-        //     m_par: [{ 
-        //         pic: "11_1_1_1.jpg", txt: "Главная страница Системы (перечень модулей, личный кабинет пользовыателя, настройки)" }, { pic: "111_1_1_4.jpg", txt: "Модуль приема информации и информационного обмена" }, { pic: "111_1_1_2.jpg", txt: "Модуль контроля и сопровождения базы данных Системы" }, { pic: "111_1_1_3.jpg", txt: "Модуль ситуационного анализа и прогнозирования" }, { pic: "133_6_1_1.jpg", txt: "Модуль надзорной деятельности (модуль 1-й инспекции)" }, { pic: "133_4_1_3.jpg", txt: "Документы (формирование отчетов, оперативных донесений, подготовка обзорных материалов по теме)" }, { pic: "133_8_1_2.jpg", txt: "Модуль ОФАС (модуль 2-й инспекции)" }] }
-        //return props
+    // async loadWorkspace<T extends WorkspaceProps>(kod: number) {
+    //     return await this.api.get<T>(`menu/${kod}`)
+    // }
+
+    async loadPage(kod:number):Promise<Page> {
+        const obj = await this.api.get<unknown>(`page/${kod}`)
+        if (isPage(obj))
+            return obj
+        else {
+            const s = `wrong page ${kod}`
+            console.log(s,obj)
+            throw new FailError(s)
+        }
     }
 
-    async loadTools(kod:number) {
-        return await this.api.get<Tools>(`menu/${kod}/ins`)
-    }
+    // async loadTools(kod:number) {
+    //     return await this.api.get<Tools>(`menu/${kod}/ins`)
+    // }
 
 
 } 
