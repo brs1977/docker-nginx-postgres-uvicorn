@@ -59,10 +59,12 @@ class Sidebar(BaseModel):
     checkbox: bool
 
 class WorkZona(BaseModel):
-    background: str = Field(..., nullable=True)
-    icon: list[str] = Field(..., nullable=True)
-    title: str = Field(..., nullable=True)
-    end_title: str = Field(..., nullable=True)
+    background: Optional[str] = Field(default=None, nullable=True)
+    icon: Optional[list[str]] = Field(default=None, nullable=True)
+    title: Optional[str] = Field(default=None, nullable=True)
+    end_title: Optional[str] = Field(default=None, nullable=True)
+    # class Config:
+    #     extra = Extra.allow
 
 
 class Page(BaseModel):
