@@ -45,8 +45,7 @@ export function isPage(obj: unknown): obj is Page {
                 typeof e["kod"] === "number" &&
                 typeof e["kod_parent"] === "number" &&
                 typeof e["name"] === "string" &&
-                (typeof e["typ_menu"] === "undefined" ||
-                    typeof e["typ_menu"] === "string") &&
+                typeof e["typ_menu"] === "string" &&
                 (typeof e["ref"] === "undefined" ||
                     typeof e["ref"] === "number") &&
                 (typeof e["sub"] === "undefined" ||
@@ -57,31 +56,35 @@ export function isPage(obj: unknown): obj is Page {
                         typeof e["alert"] === "function") &&
                     typeof e["alert"]["title"] === "string" &&
                     typeof e["alert"]["text"] === "string")
-            )) 
-        && (typedObj["sidebar"] !== null &&
+            )) &&
+        (typedObj["sidebar"] !== null &&
             typeof typedObj["sidebar"] === "object" ||
             typeof typedObj["sidebar"] === "function") &&
-        (typeof typedObj["sidebar"]["user"] === "undefined" ||
+        (typedObj["sidebar"]["user"] === null ||
             (typedObj["sidebar"]["user"] !== null &&
                 typeof typedObj["sidebar"]["user"] === "object" ||
                 typeof typedObj["sidebar"]["user"] === "function") &&
             typeof typedObj["sidebar"]["user"]["username"] === "string" &&
             typeof typedObj["sidebar"]["user"]["status"] === "string" &&
             typeof typedObj["sidebar"]["user"]["datetime"] === "string") &&
-        typeof typedObj["sidebar"]["checkbox"] === "boolean" 
-        /* &&
+        typeof typedObj["sidebar"]["checkbox"] === "boolean" &&
         (typedObj["work_zona"] !== null &&
             typeof typedObj["work_zona"] === "object" ||
             typeof typedObj["work_zona"] === "function") &&
         (typeof typedObj["work_zona"]["background"] === "undefined" ||
+            typedObj["work_zona"]["background"] === null ||
             typeof typedObj["work_zona"]["background"] === "string") &&
         (typeof typedObj["work_zona"]["icon"] === "undefined" ||
+            typedObj["work_zona"]["icon"] === null ||
             Array.isArray(typedObj["work_zona"]["icon"]) &&
             typedObj["work_zona"]["icon"].every((e: any) =>
                 typeof e === "string"
-            )) 
+            )) &&
         (typeof typedObj["work_zona"]["title"] === "undefined" ||
-            typeof typedObj["work_zona"]["title"] === "string")
-        */
+            typedObj["work_zona"]["title"] === null ||
+            typeof typedObj["work_zona"]["title"] === "string") &&
+        (typeof typedObj["work_zona"]["end_title"] === "undefined" ||
+            typedObj["work_zona"]["end_title"] === null ||
+            typeof typedObj["work_zona"]["end_title"] === "string")
     )
 }

@@ -3,8 +3,8 @@
 /* eslint-disable */
 
 export type WorkZona = {
-    background?: string;
-    icon?: Array<string>;
-    title?: string;
-    end_title?: any;
+    background?: string | null;
+    icon?: Array<string> | null;
+    title?: string | null;
+    end_title?: string | null;
 };

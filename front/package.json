@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "clean": "rimraf ./generated",
     "client": "openapi --input http://localhost:8020/openapi.json --output ./generated/ --client fetch --exportCore false --exportServices false --exportSchemas false",
+    "guard": "ts-auto-guard ./src/page/models/Page.ts",
     "gen": "yarn clean && yarn client"
   },
   "devDependencies": {

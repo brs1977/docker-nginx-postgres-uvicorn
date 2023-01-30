@@ -10,11 +10,11 @@ import type { WorkZona } from './WorkZona';
 
 /** @see {isPage} ts-auto-guard:type-guard */
 export type Page = {
-    design: Design,
-    verh: Verh,
-    head: Head,
-    sidebar: Sidebar,
-    work_zona: WorkZona,
-    footer?: any,
+    design: Design;
+    verh: Verh;
+    head: Head;
+    sidebar: Sidebar;
+    work_zona: WorkZona;
+    footer: any;
 };
 
