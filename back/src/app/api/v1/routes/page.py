@@ -9,7 +9,7 @@ from loguru import logger
 from enum import Enum, EnumMeta
 import os
 
-config = read_config()
+config_doc = read_config()
 router = APIRouter()
 
 ROLE_STATUS_MAP = {
@@ -66,18 +66,156 @@ class Names(Enum, metaclass=EnumMetaValue):
     END_TITLE = 'end_title'
     TYP_ZONA = 'typ_zona'
     STREAM_RZ = 'stream_rz'
+    BASE_FONT = 'base_font'
+    FONT = 'font'
+    CSS = 'css'
 
 
     # FACE = 'face'
 
-class Element:
-    def __init__(self, config: any):
-        self.config = config
+class Config():
+    def __init__(self, kod: int, user: UserDB, config: any):
+        self._user = user
+        self._config = config
+        self.GRAPH_PAGE = [page[Names.PAGE_MAS] for page in self._config[Names.GRAPH_PAGE]]
+        self.ALERTS = self._config[Names.MAS_ALERT]
+        self.TITLES = self._config['mas_titles']
+        self.GAG_TITLE = 'Заголовок не найден'
+        
+        self._checkbox = bool(user)
+        
+        kodes = [page['kod']  for page in self.GRAPH_PAGE] # все коды страниц
+        self._kod = 0 if not user else kod # юзер не залогинен kod = 0        
+        self._kod = 101 if self._kod != 0 and self._kod not in kodes else self._kod  # нет страницы вернем Главную kod = 101
+        self._page_info = self.page_info()
 
+    def kod(self)-> int:
+        return self._kod
+    def checkbox(self)-> bool:
+        return self._checkbox
+    def graph_page(self)->map:
+        return self.GRAPH_PAGE
+    def alerts(self)->map:
+        return self.ALERTS    
+    def alert(self, key: str)->map:
+        return self.ALERTS[key]
+    def menu(self)->list[map]:
+        graph = self._config["graph"]
+        graph = [menu["page_mas"] for menu in graph]
+        menu_level1 = [menu for menu in graph if menu["kod_parent"] == 0]
+        kod_level1 = [menu["kod"] for menu in menu_level1]
+        menu_level2 = [menu for menu in graph if menu["kod_parent"] in kod_level1]
+        return menu_level1 + menu_level2
+    def has_dostup(self, item: map)-> bool:
+        dostup = item.get('dostup',0)+1 # 1 - гость
+        role_id = 0 if not self._user else self._user.role_id
+        return role_id >= dostup
+    def title_z1(self)-> str:
+        return self._page_info[Names.TITLES][0]
+    def title_z2(self)-> str:
+        return self._page_info[Names.TITLES][1]
+    def title_z3(self)-> str:
+        return self._page_info[Names.TITLES][2]
+    def background(self)->str:
+        return self._page_info[Names.BACKGROUND]
+    def icon(self)->list[str]:
+        icons = self._page_info[Names.ICON]
+        return None if len(icons) == 0 else [icons[0]]
+    
+    def page_info(self)->map:
+        items = [item for item in self.graph_page() if item['kod']==self.kod]
+        if len(items) == 0:
+            return {Names.TITLES: [self.GAG_TITLE, self.GAG_TITLE, self.GAG_TITLE], Names.BACKGROUND: '', Names.ICON: [], Names.KOD: self._kod}            
+
+        item = items[0]
+
+        titles = item.get('titles', [])
+        titles = [self.TITLES.get(t, self.GAG_TITLE) for t in titles]
+        pic_rz = item.get('pic_rz',{})
+        mas_pic_rz = self._config['mas_pic_rz'][str(pic_rz)]
+        background = mas_pic_rz.get('background', None)
+        icon = mas_pic_rz.get('icon', None)
+        return {Names.TITLES: titles, Names.BACKGROUND: background, Names.ICON: icon, Names.KOD: self._kod}        
+    def _alert(self, item: map):
+        items = [page for page in self.graph_page() if page['kod']==item['ref']]
+        # items = [item for item in self.GRAPH_PAGE if item['kod']==int(kod)]
+        if len(items)!=1:
+            return self.alert('1')
+        if not self.has_dostup(item):
+            return self.alert('2')
+        return None
+
+    def set_alert(self, item: map):
+        typ_menu = item['typ_menu']
+        if typ_menu == 'ref':
+            alert = self._alert(item)
+            if alert:
+                # logger.debug(alert)                
+                del item[typ_menu]
+                item['typ_menu'] = 'alert'
+                item['alert'] = alert
+    def start_title(self):
+        return self._config.get(Names.START_TITLE, self.GAG_TITLE)    
+    def image_path(self, image):
+        return image
+        # return os.path.normpath("/".join([self.PATH_IMAGES, image]))
+
+    def user(self):
+        if not self._user:
+            return None
+        # user: # текущий пользователь (NULL при отсутствии ввода логина и пароля)
+        # username: admin # а также - funct  и  operator
+        # status: администратор # а также - соответственно - функционер и оператор
+        # datetime: 01:56:13 # время работы зарегистрированного пользователя (от момента ввода параоля и до загрузки текущей формы)
+        username = self._user[Names.USERNAME]
+        status = ROLE_STATUS_MAP.get(self._user[Names.ROLE_ID], None)
+        datetime_value = str(datetime.now())
+        return {
+            Names.USERNAME: username,
+            Names.STATUS: status,
+            Names.DATETIME: datetime_value,
+        }
+    def design(self):
+        font = self._config[Names.BASE_FONT]
+        css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
+        background = self.image_path(self._config["face"])
+        return {Names.FONT: font, Names.BACKGROUND: background, Names.CSS: css}
+    def verh_icons(self):
+        verh = self._config[Names.VERH]
+        if verh:
+            return [self.image_path(icon) for icon in verh[Names.ICONS]]
+        return []
+    def background_rz0(self)-> str:
+        return self.image_path(self._config['start_background_rz'])        
+    def brod(self):
+        name = self.GAG_TITLE
+        items = [item for item in self.GRAPH_PAGE if item['kod']==self._kod]
+        if len(items) == 1:
+            name = items[0]['name']
+
+        menu = self.menu()
+
+        items = [item for item in menu if item.get('ref',0)==self._kod]
+        if len(items)==0:
+            return name
+        kod = items[0]['kod']
+        kod_menu = {item['kod']:item for item in menu }
+        res = [name]
+        while True:
+            item = kod_menu.get(kod,None)
+            if not item:
+                break
+            kod = item['kod_parent']
+            res.append(item['name'])
+        return " / ".join(res[::-1])
+
+
+class Element:
+    def __init__(self, config: Config):
+        self.config = config
     @abstractmethod
     def get():
         pass
-
     def __call__(self):
         return self.get()
 
@@ -96,12 +234,8 @@ class PageSidebar(Element):
 #         filtr: [] # массив пЕРЕМЕННОЙ длины или NULL
 #         key: []  массив пЕРЕМЕННОЙ длины или NULL
 
-    def __init__(self, config: any, user: map, checkbox: bool = True):
-        self.user = user
-        self.checkbox = checkbox
-        super().__init__(config)        
     def get(self):
-        return {Names.USER: self.user, Names.CHECKBOX: self.checkbox}
+        return {Names.USER: self.config.user(), Names.CHECKBOX: self.config.checkbox()}
 
 class PageWorkZona(Element):
     # title: заголовок
@@ -112,25 +246,20 @@ class PageWorkZona(Element):
     # data : # данные страницы
     # typ_rz: rows|list|table|org|vvod|data ... # Схема ТА ЖЕ, что и для элемента меню - в переменной лежит ИМЯ МАССИВА     
 
-    def __init__(self, config: any, page_info: map):
-        self.page_info = page_info
-        super().__init__(config)        
-
-    def _icon(self, icons: list[str]):
-        return None if len(icons) == 0 else [icons[0]]
     def _rz(self):
-        kod = page_info['kod']
-        # data : # Данные страницы ****
-        # typ_rz: rows|list|table|org|vvod|data ... # Схема ТА ЖЕ, что и для элемента меню - в переменной лежит ИМЯ МАССИВА     
-        # rows:
-        stream_rz = self.config[Names.STREAM_RZ]
-        stream_rz = [rz['mas_type'] for rz in stream_rz]
+        pass
+        # kod = page_info['kod']
+        # # data : # Данные страницы ****
+        # # typ_rz: rows|list|table|org|vvod|data ... # Схема ТА ЖЕ, что и для элемента меню - в переменной лежит ИМЯ МАССИВА     
+        # # rows:
+        # stream_rz = self.config[Names.STREAM_RZ]
+        # stream_rz = [rz['mas_type'] for rz in stream_rz]
 
     def get(self):
-        title = self.page_info[Names.TITLES][1]
-        end_title = self.page_info[Names.TITLES][2]
-        background = self.page_info[Names.BACKGROUND]
-        icon = self._icon(self.page_info[Names.ICON])
+        title = self.config.title_z2()
+        end_title = self.config.title_z3()
+        background = self.config.background()
+        icon =  self.config.icon()
         # typ_zona = self.page_info['typ_zona']
         return {
             Names.BACKGROUND: background,
@@ -140,163 +269,23 @@ class PageWorkZona(Element):
             # Names.TYP_ZONA: typ_zona
         }
 
-class Alert1Exception(Exception):
-    pass
-class Alert2Exception(Exception):
-    pass    
-
-
 class PageMenu(Element):
-    def __init__(self, config: any, user: UserDB):
-        super().__init__(config)
-        self.user = user
-        self.GRAPH_PAGE = [page[Names.PAGE_MAS] for page in self.config[Names.GRAPH_PAGE]]
-        self.ALERTS = config[Names.MAS_ALERT]
-
-    def _alert(self, item: map):
-        items = [page for page in self.GRAPH_PAGE if page['kod']==item['ref']]
-        # items = [item for item in self.GRAPH_PAGE if item['kod']==int(kod)]
-        if len(items)!=1:
-            return self.ALERTS['1']
-        dostup = item.get('dostup',0)+1 # 1 - гость
-        role_id = 0 if not self.user else self.user.role_id
-        if dostup > role_id:
-            return self.ALERTS['2']
-        return None
-
     def get(self):
-        graph = self.config["graph"]
-        graph = [menu["page_mas"] for menu in graph]
-        menu_level1 = [menu for menu in graph if menu["kod_parent"] == 0]
-        kod_level1 = [menu["kod"] for menu in menu_level1]
-        menu_level2 = [menu for menu in graph if menu["kod_parent"] in kod_level1]
-        menu = menu_level1 + menu_level2
+        menu = self.config.menu()
         for item in menu:
-            typ_menu = item['typ_menu']
-            if typ_menu == 'ref':
-                alert = self._alert(item)
-                if alert:
-                    # logger.debug(alert)                
-                    del item[typ_menu]
-                    item['typ_menu'] = 'alert'
-                    item['alert'] = alert
+            self.config.set_alert(item)
         return menu
 
 class BasePage(Element):
-    def __init__(self, kod: int, config: any, user: UserDB):
-        super().__init__(config)
-        self.kod = kod
-        self.config = config
-        self.user = user
-        self.PATH_IMAGES = self.config[Names.PATH_IMAGES]        
-
-        self.TITLES = self.config[Names.MAS_TITLES]
-        self.ALERTS = self.config[Names.MAS_ALERT]
-        self.GRAPH_PAGE = [page[Names.PAGE_MAS] for page in self.config[Names.GRAPH_PAGE]]
-        self.GAG_TITLE = "Заголовок не найден"
-        
-        kodes = [page['kod']  for page in self.GRAPH_PAGE]
-        if self.kod not in kodes:
-            self.kod = 101
-
-
-
-        # self.page_info = self._page_info()
-
-    def _page_info(self):
-        items = [item for item in self.GRAPH_PAGE if item['kod']==self.kod]
-        if len(items)!=1:
-            raise Alert1Exception() 
-        item = items[0]
-
-        titles = item.get('titles', [])
-        TITLES = self.config['mas_titles']
-        titles = [TITLES.get(t, self.GAG_TITLE) for t in titles]
- 
-        dostup = item['dostup']+1 # 1 - гость
-        role_id = 0 if not self.user else self.user.role_id
-        if dostup > role_id:
-            raise Alert2Exception() 
-
-        pic_rz = item.get('pic_rz',{})
-        mas_pic_rz = self.config['mas_pic_rz'][str(pic_rz)]
-        background = mas_pic_rz.get('background', None)
-        icon = mas_pic_rz.get('icon', None)
-        return {Names.TITLES: titles, Names.BACKGROUND: background, Names.ICON: icon, 'kod': self.kod}
-
-
-    def _image_path(self, image):
-        return image
-        # return os.path.normpath("/".join([self.PATH_IMAGES, image]))
-    def _title_z1(self):
-        return self.config.get(Names.START_TITLE, self.GAG_TITLE)    
-    def _title_z2(self):
-        return self.TITLES.get(str(self.kod), self.GAG_TITLE)
-    def _design(self):
-        font = 15
-        css = self.config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
-        background = self._image_path(self.config["face"])
-        return {"font": font, Names.BACKGROUND: background, "css": css}
     def _verh(self):
-        def icons():
-            verh = self.config[Names.VERH]
-            if verh:
-                return [self._image_path(icon) for icon in verh[Names.ICONS]]
-            return []
-
-        title = self._title_z1()
-        icons = icons()
+        title = self.config.start_title()
+        icons = self.config.verh_icons()
         return {Names.TITLE: title, Names.ICONS: icons}
-
-    def _user(self):
-        # user: # текущий пользователь (NULL при отсутствии ввода логина и пароля)
-        # username: admin # а также - funct  и  operator
-        # status: администратор # а также - соответственно - функционер и оператор
-        # datetime: 01:56:13 # время работы зарегистрированного пользователя (от момента ввода параоля и до загрузки текущей формы)
-        username = self.user[Names.USERNAME]
-        status = ROLE_STATUS_MAP.get(self.user[Names.ROLE_ID], None)
-        datetime_value = str(datetime.now())
-        return {
-            Names.USERNAME: username,
-            Names.STATUS: status,
-            Names.DATETIME: datetime_value,
-        }
-
     def _menu(self):
-        return PageMenu(self.config, self.user)()
-
-
-
-    def _brod(self):
-        name = self.GAG_TITLE
-        items = [item for item in self.GRAPH_PAGE if item['kod']==self.kod]
-        if len(items) == 1:
-            name = items[0]['name']
-
-        graph = self.config["graph"]
-        graph = [menu["page_mas"] for menu in graph]
-        menu_level1 = [menu for menu in graph if menu["kod_parent"] == 0]
-        kod_level1 = [menu["kod"] for menu in menu_level1]
-        menu_level2 = [menu for menu in graph if menu["kod_parent"] in kod_level1]
-        menu = menu_level1 + menu_level2
-
-        items = [item for item in menu if item.get('ref',0)==self.kod]
-        if len(items)==0:
-            return name
-        kod = items[0]['kod']
-        kod_menu = {item['kod']:item for item in menu }
-        res = [name]
-        while True:
-            item = kod_menu.get(kod,None)
-            if not item:
-                break
-            kod = item['kod_parent']
-            res.append(item['name'])
-        return " / ".join(res[::-1])
-
+        return PageMenu(self.config)()
     def _head(self):
         active_menu = 1
-        ins = {Names.ORGSTR: "структура", Names.BROD: self._brod()}
+        ins = {Names.ORGSTR: "структура", Names.BROD: self.config.brod()}
         return {
             Names.ACTIVE_MENU: active_menu,
             Names.INS: ins,
@@ -304,17 +293,17 @@ class BasePage(Element):
         }
 
     def _sidebar(self):
-        return PageSidebar(self.config, self._user())() 
+        return PageSidebar(self.config)() 
 
     def _work_zona(self):
-        return PageWorkZona(self.config, self._page_info())()
+        return PageWorkZona(self.config)()
 
     def _footer(self):
         return None
 
     def get(self):
         return {
-            Names.DESIGN: self._design(), # свойства дизайна
+            Names.DESIGN: self.config.design(), # свойства дизайна
             Names.VERH: self._verh(),  # заголовок
             Names.HEAD: self._head(),  # шапка
             Names.SIDEBAR: self._sidebar(),  # боковик
@@ -341,7 +330,7 @@ class Page0(BasePage):
     def _user(self):
         return None
     def _sidebar(self):
-        return PageSidebar(self.config, self._user(), False)() 
+        return PageSidebar(self.config)() 
     def _menu(self):
         return []
     def _head(self):
@@ -352,7 +341,7 @@ class Page0(BasePage):
             Names.MENU: [],
         }
     def _work_zona(self):
-        return {Names.BACKGROUND: self._image_path(self.config['start_background_rz'])}
+        return {Names.BACKGROUND: self.config.background_rz0()}
 
 class Page(BasePage):
     pass
@@ -361,8 +350,8 @@ class Page(BasePage):
 @router.get("/{kod}", response_model=page.Page)
 async def page(request: Request, kod: int = Path(..., gt=-1)) -> page.Page:
     user: UserDB = await security.get_current_user(request)
-
-    page = Page0(0, config, user) if not user else Page(kod, config, user)
+    config = Config(kod, user, config_doc)
+    page = Page0(config) if not user else Page(config)
     # page = PageModel.parse_obj(page())
     # return page.json()
     return page()
