@@ -23,7 +23,7 @@ export class PageViewModel extends ViewModel<PageProps>{
 
     async login(username:string,password:string) {
         await this.model.login(username,password)
-        await this.model.loadPage(101)
+        await this.loadPage(101)
     }
 
     getWorkspace(props:WorkspaceProps) {

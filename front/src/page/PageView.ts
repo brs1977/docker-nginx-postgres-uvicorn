@@ -70,7 +70,7 @@ export class PageView extends View<HTMLDivElement> {
 
         viewModel.on('change:kod',() => {
             const {kod} = viewModel
-            const url = kod ? `/${kod}` : ''
+            const url = kod ? `/${kod}` : '/'
             history.pushState(null,'',url)
         })
 
