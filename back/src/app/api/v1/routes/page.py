@@ -323,7 +323,7 @@ class Page(BasePage):
 
 
 @router.get("/{kod}", response_model=PageModel)
-async def page(request: Request, kod: int = Path(..., gt=0)) -> PageModel:
+async def page(request: Request, kod: int = Path(..., gt=-1)) -> PageModel:
     user: UserDB = await security.get_current_user(request)
     page = Page0(kod, config, user) if not user else Page(kod, config, user)
     # page = PageModel.parse_obj(page())
