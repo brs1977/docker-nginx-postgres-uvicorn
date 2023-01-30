@@ -56,7 +56,7 @@ class User(BaseModel):
 
 
 class Sidebar(BaseModel):
-    user: Optional[User] = None
+    # user: Optional[User] = None
     checkbox: bool
 
 
@@ -64,7 +64,7 @@ class WorkZona(BaseModel):
     background: str = None
     icon: list[str] = None
     title: str = None
-    end_title: Any
+    end_title: str = None
 
 
 class Page(BaseModel):
