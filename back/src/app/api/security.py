@@ -6,6 +6,15 @@ from fastapi_login.exceptions import InvalidCredentialsException
 from app.schemas.users import UserLogin
 from datetime import timedelta
 from app.db.repository import users
+from fastapi import HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
+
+# InvalidCredentialsException = HTTPException(
+#     status_code=HTTP_401_UNAUTHORIZED,
+#     detail="Invalid credentials",
+#     headers={"WWW-Authenticate": "Bearer"}
+# )
+
 
 # access-control-allow-credentials: true
 # access-control-allow-origin: *
@@ -25,6 +34,7 @@ manager = LoginManager(
     default_expiry=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),
     use_cookie=True,
     use_header=True,
+    custom_exception = InvalidCredentialsException    
 )
 
 
@@ -49,6 +59,14 @@ async def authenticate_user(username: str, password: str) -> UserLogin:
         raise InvalidCredentialsException
     return user
 
+async def get_current_user(request):
+    cookie_name = manager.cookie_name
+    token = request.cookies.get(cookie_name)
+    try:
+        user = await manager.get_current_user(token)
+        return user
+    except HTTPException as e:
+        return None
 
 def set_access_token(username: str, response: Response):
     token = manager.create_access_token(data={"sub": username})
