@@ -7,9 +7,15 @@
     "dev": "vite --host",
     "dev.docker": "vite --config docker.dev.config.js",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rimraf ./generated",
+    "client": "openapi --input http://localhost:8020/openapi.json --output ./generated/ --client fetch --exportCore false --exportServices false --exportSchemas false",
+    "gen": "yarn clean && yarn client"
   },
   "devDependencies": {
+    "openapi-typescript-codegen": "^0.23.0",
+    "rimraf": "^4.1.2",
+    "ts-auto-guard": "^4.1.2",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
   }

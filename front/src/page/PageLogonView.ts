@@ -1,9 +1,5 @@
 import { PageViewModel } from "./PageViewModel";
 import { View } from "./View";
-import back from '../img/back.svg'
-import forward from '../img/forward.svg'
-import up from '../img/up.svg'
-import down from '../img/down.svg'
 
 /*
 <div class="logon-short">Тут краткое описание (1-2 предложения) текущей страницы</div>
@@ -45,10 +41,10 @@ export class PageLogonView extends View<HTMLDivElement> {
             <hr class="logon-line">
             <div class="logon-header">
                 <div class="logon-title">Навигация</div>
-                <a href="#"><img class="logon-icon" src="${back}"></a>
-                <a href="#"><img class="logon-icon" src="${forward}"></a>
-                <a href="#"><img class="logon-icon" src="${down}"></a>
-                <a href="#"><img class="logon-icon" src="${up}"></a>
+                <a href="#"><img class="logon-icon" src="/data/back.svg"></a>
+                <a href="#"><img class="logon-icon" src="/data/forward.svg"></a>
+                <a href="#"><img class="logon-icon" src="/data/down.svg"></a>
+                <a href="#"><img class="logon-icon" src="/data/up.svg"></a>
             </div>
             <hr class="logon-line">
             <div class="logon-data">

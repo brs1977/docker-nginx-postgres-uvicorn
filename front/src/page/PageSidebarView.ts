@@ -1,6 +1,5 @@
 import { PageViewModel } from "./PageViewModel"
 import { View } from "./View"
-import close from '../img/close.svg'
 import { PageLoginView } from "./PageLoginView"
 import { PageLogonView } from "./PageLogonView"
 import { PageHelpView } from "./PageHelpView"
@@ -19,7 +18,7 @@ export class PageSidebarView extends View<HTMLDivElement> {
                         <span class="sidebar-checkbox-label">Подвал</span>
                         <input class="sidebar-checkbox-input" name="footer" type="checkbox">
                     </label>
-                    <img class="sidebar-close" src="${close}">
+                    <img class="sidebar-close" src="/data/close.svg">
                 </div>
                 <div class="sidebar-items"></div>
         </div>

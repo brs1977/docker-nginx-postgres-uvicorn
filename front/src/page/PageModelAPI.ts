@@ -9,7 +9,8 @@ export class PageModelAPI implements PageModel {
     constructor(readonly api: API) { }
 
     async loadMenu(): Promise<Menu> {
-        return this.api.get<Menu>('menu');
+        //return this.api.get<Menu>('menu');
+        return []
     }
 
     async loadSettings(): Promise<Settings> {
