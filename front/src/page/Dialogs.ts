@@ -1,5 +1,3 @@
-import atten from '../img/atten.jpg'
-import close_img from '../img/close.svg'
 import { createElement } from "./Utils"
 
 export type AlertProps = {
@@ -11,7 +9,7 @@ export type AlertProps = {
 export async function showAlert(props:AlertProps) {
     const el = createElement(/*html*/`
         <div class="alert">
-            <img class="alert-icon" src="${atten}">
+            <img class="alert-icon" src="/data/atten.jpg">
             <div class="alert-data">
                 <div class="alert-title">${props.title}</div>
                 <div class="alert-message">${props.text}</div>
@@ -20,7 +18,7 @@ export async function showAlert(props:AlertProps) {
                     <button class="alert-button" name="no">Нет</button>
                 </div>
             </div>
-            <img class="alert-close" src="${close_img}">
+            <img class="alert-close" src="/data/close.svg">
         </div>
     `)
     const {close} = showModal(el)

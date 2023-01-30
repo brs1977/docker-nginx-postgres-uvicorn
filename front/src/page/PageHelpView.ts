@@ -1,5 +1,4 @@
 import { View } from "./View"
-import node from '../img/node.svg'
 
 export class PageHelpView extends View<HTMLDivElement> {
     constructor() {
@@ -22,9 +21,9 @@ export class PageHelpView extends View<HTMLDivElement> {
                         <label class="accord-label" for="tools-tab1">Входящие</label>
                         <div class="accord-data">
                             <ul class="accord-list">
-                                <li class="accord-item"><img class="accord-icon" src="${node}"><span>Исходящие</span></li>
-                                <li class="accord-item"><img class="accord-icon" src="${node}"><span>Избранное</span></li>
-                                <li class="accord-item"><img class="accord-icon" src="${node}"><span>Недавние документы</span></li>
+                                <li class="accord-item"><img class="accord-icon" src="/data/node.svg"><span>Исходящие</span></li>
+                                <li class="accord-item"><img class="accord-icon" src="/data/node.svg"><span>Избранное</span></li>
+                                <li class="accord-item"><img class="accord-icon" src="/data/node.svg"><span>Недавние документы</span></li>
                             </ul>
                         </div>
                     </div>
@@ -33,8 +32,8 @@ export class PageHelpView extends View<HTMLDivElement> {
                         <label class="accord-label" for="tools-tab2">Общие папки</label>
                         <div class="accord-data">
                             <ul class="accord-list">
-                                <li class="accord-item"><img class="accord-icon" src="${node}"><span>Договоры</span></li>
-                                <li class="accord-item"><img class="accord-icon" src="${node}"><span>Компания</span></li>
+                                <li class="accord-item"><img class="accord-icon" src="/data/node.svg"><span>Договоры</span></li>
+                                <li class="accord-item"><img class="accord-icon" src="/data/node.svg"><span>Компания</span></li>
                             </ul>
                         </div>
                     </div>
