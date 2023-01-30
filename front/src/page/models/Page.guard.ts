@@ -30,7 +30,8 @@ export function isPage(obj: unknown): obj is Page {
         (typedObj["head"] !== null &&
             typeof typedObj["head"] === "object" ||
             typeof typedObj["head"] === "function") &&
-        typeof typedObj["head"]["active_menu"] === "number" &&
+        (typeof typedObj["head"]["active_menu"] === "undefined" ||
+            typeof typedObj["head"]["active_menu"] === "number") &&
         (typedObj["head"]["ins"] !== null &&
             typeof typedObj["head"]["ins"] === "object" ||
             typeof typedObj["head"]["ins"] === "function") &&
