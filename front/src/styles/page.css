@@ -303,6 +303,9 @@ body {
     background-color: white;
     box-shadow: 0px 8px 16px rgb(0 0 0 / 20%);
 }
+.workspace-title-hide {
+    display: none;
+}
 
 .workspace-tabs {
     display: flex;
@@ -319,6 +322,10 @@ body {
     font-size: 1.1rem;
     /* margin-left: 1rem; */
     color: black;
+}
+
+.workspace-tabs-hide {
+    display: none;
 }
 
 .workspace-tab-active {
@@ -398,7 +405,10 @@ body {
     font-size: 1.1rem;
     text-align: right;
     font-weight: bold;
+}
 
+.div-end-zag-hide {
+    display: none;
 }
 
 ul {
@@ -526,7 +536,9 @@ ul {
     height: auto;
     margin: -0.25rem -0.5rem 0 0;
 }
-
+.rz-shildik-hide {
+    display: none;
+}
 .picpic-hide {
     display: none;
 }

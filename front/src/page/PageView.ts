@@ -4,11 +4,12 @@ import { PageViewModel } from "./PageViewModel";
 import { View } from "./View";
 import { PageSidebarView } from "./PageSidebarView";
 import { PageFooterView } from "./PageFooterView";
-import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel";
-import { WorkspaceMainFragment } from "./workspaces/WorkspaceMainFragment";
-import { WorkspaceProps } from "./PageTypes";
-import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel";
+// import { WorkspaceMainViewModel } from "./workspaces/WorkspaceMainViewModel";
+// import { WorkspaceMainFragment } from "./workspaces/WorkspaceMainFragment";
+// import { WorkspaceProps } from "./PageTypes";
+// import { WorkspaceViewModel } from "./workspaces/WorkspaceViewModel";
 import { createElement } from "./Utils";
+import { WorkzonaFragment } from "./workzona/WorkzonaFragment";
 
 // interface CustomEventMap {
 //     "pushpage": CustomEvent<number>;
@@ -32,12 +33,7 @@ export class PageView extends View<HTMLDivElement> {
                 <div class="page-caption"></div>
                 <div class="page-main">
                     <div class="page-sidebar"></div>
-                    <div class="page-workspace">
-                        <div class="div-work pic-m1">
-                        </div>
-                        <div class="workspace">
-                        </div>
-                    </div>
+                    <div class="page-workspace"></div>
                 </div>            
                 <div class="page-footer page-footer-show"></div>
             </div>
@@ -46,11 +42,13 @@ export class PageView extends View<HTMLDivElement> {
         const header = this.root.querySelector<HTMLElement>('.page-header')!
         const caption = this.root.querySelector<HTMLElement>('.page-caption')!
         const sidebar = this.root.querySelector('.page-sidebar')!
+        const workspace = this.root.querySelector('.page-workspace')!
         const footer = this.root.querySelector('.page-footer')!
         
         header.appendChild(new PageHeaderView(viewModel).root)
         caption.appendChild(new PageCaptionView(viewModel).root)
         sidebar.appendChild(new PageSidebarView(viewModel).root)
+        workspace.appendChild(new WorkzonaFragment(viewModel).root)
         footer.appendChild(new PageFooterView().root)
 
         viewModel.on('change:settings',() => {
@@ -108,13 +106,13 @@ export class PageView extends View<HTMLDivElement> {
 
     }
 
-    getWorkspaceView(viewModel?:WorkspaceViewModel<WorkspaceProps>) {
-        if (viewModel instanceof WorkspaceMainViewModel) {
-            return new WorkspaceMainFragment(viewModel)
-        } else {
-            return undefined
-        }
-    }
+    // getWorkspaceView(viewModel?:WorkspaceViewModel<WorkspaceProps>) {
+    //     if (viewModel instanceof WorkspaceMainViewModel) {
+    //         return new WorkspaceMainFragment(viewModel)
+    //     } else {
+    //         return undefined
+    //     }
+    // }
 
 
 }

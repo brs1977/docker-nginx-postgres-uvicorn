@@ -90,6 +90,21 @@ export function isPage(obj: unknown): obj is Page {
             typeof typedObj["work_zona"]["title"] === "string") &&
         (typeof typedObj["work_zona"]["end_title"] === "undefined" ||
             typedObj["work_zona"]["end_title"] === null ||
-            typeof typedObj["work_zona"]["end_title"] === "string")
+            typeof typedObj["work_zona"]["end_title"] === "string") &&
+        (typeof typedObj["work_zona"]["tabs"] === "undefined" ||
+            typedObj["work_zona"]["tabs"] === null ||
+            Array.isArray(typedObj["work_zona"]["tabs"]) &&
+            typedObj["work_zona"]["tabs"].every((e: any) =>
+                (e !== null &&
+                    typeof e === "object" ||
+                    typeof e === "function") &&
+                typeof e["name"] === "string" &&
+                typeof e["active"] === "number" &&
+                (typeof e["ref"] === "undefined" ||
+                    Array.isArray(e["ref"]) &&
+                    e["ref"].every((e: any) =>
+                        typeof e === "number"
+                    ))
+            ))
     )
 }
