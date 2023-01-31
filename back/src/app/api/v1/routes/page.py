@@ -182,7 +182,7 @@ class Config():
     def design(self):
         font = self._config[Names.BASE_FONT]
         css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
-        background = self.config.design_background()        
+        background = self.design_background()        
         
         footer = (self.kod() != 0)
         caption = (self.kod() != 0)
