@@ -78,14 +78,17 @@ export class PageLogonView extends View<HTMLDivElement> {
         let tm: number|undefined = undefined
 
         viewModel.on('login',() => {
-            const begin = new Date()
-            tm = setInterval(() => {
+            function update() {
                 const datetime = viewModel.page?.sidebar.user?.datetime ?? ''
                 const date = new Date(datetime)
                 const start = isNaN(+date) ? begin : date
                 const time = new Date(Date.now() - start.getTime()).toLocaleTimeString()
-                this.root.querySelector('#login-time')!.textContent = time
-            },1000)
+                el.textContent = time
+            }
+            const el = this.root.querySelector('#login-time')!
+            const begin = new Date()
+            update()
+            tm = setInterval(update,1000)
         })
 
         viewModel.on('logout',() => {

@@ -54,13 +54,12 @@ export class PageSidebarView extends View<HTMLDivElement> {
         const help = new PageHelpView()
 
         viewModel.on('change:page',() => {
-            this.root.querySelectorAll('.sidebar-checkbox').forEach(it => {
-                it.classList.toggle('sidebar-checkbox-hide',!viewModel.page?.sidebar.checkbox)
-            })
+            this.root.querySelector('.sidebar-header')!.classList.toggle('sidebar-header-hide',!viewModel.page?.sidebar.checkbox)
             if (viewModel.page?.sidebar.user)
                 sidebar.replaceChildren(logon.root,help.root)
             else
                 sidebar.replaceChildren(login.root,help.root)
         })
+
     }
 }

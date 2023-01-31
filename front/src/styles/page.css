@@ -205,14 +205,15 @@
     font-size: 1rem;
 }
 
+.sidebar-header-hide {
+    display: none;
+}
+
 .sidebar-checkbox {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     font-size: 1rem;
-}
-.sidebar-checkbox-hide {
-    display: none;
 }
 
 .sidebar-checkbox-footer {
