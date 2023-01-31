@@ -100,7 +100,7 @@ export class PageView extends View<HTMLDivElement> {
             document.head.querySelectorAll('link[data-css]').forEach(it => it.remove())
             document.head.append(...links)
             if (background)
-                document.body.style.backgroundImage = `url('/data/${background})`
+                document.body.style.backgroundImage = `url('/data/${background}')`
             else
                 document.body.style.removeProperty('background-image')
             document.documentElement.style.setProperty('--top-menu',`${caption.offsetTop + 10}px`)
