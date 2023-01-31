@@ -6,5 +6,4 @@ import type { User } from './User';
 
 export type Sidebar = {
     user: User | null;
-    checkbox: boolean;
 };

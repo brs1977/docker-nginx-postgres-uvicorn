@@ -15,6 +15,10 @@ export function isPage(obj: unknown): obj is Page {
             typeof typedObj["design"] === "function") &&
         typeof typedObj["design"]["font"] === "number" &&
         typeof typedObj["design"]["background"] === "string" &&
+        typeof typedObj["design"]["footer"] === "boolean" &&
+        typeof typedObj["design"]["caption"] === "boolean" &&
+        typeof typedObj["design"]["checkbox"] === "boolean" &&
+        typeof typedObj["design"]["sidebar"] === "boolean" &&
         Array.isArray(typedObj["design"]["css"]) &&
         typedObj["design"]["css"].every((e: any) =>
             typeof e === "string"
@@ -68,7 +72,6 @@ export function isPage(obj: unknown): obj is Page {
             typeof typedObj["sidebar"]["user"]["username"] === "string" &&
             typeof typedObj["sidebar"]["user"]["status"] === "string" &&
             typeof typedObj["sidebar"]["user"]["datetime"] === "string") &&
-        typeof typedObj["sidebar"]["checkbox"] === "boolean" &&
         (typedObj["work_zona"] !== null &&
             typeof typedObj["work_zona"] === "object" ||
             typeof typedObj["work_zona"] === "function") &&

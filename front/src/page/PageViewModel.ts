@@ -17,7 +17,7 @@ export class PageViewModel extends ViewModel<PageProps>{
 
     changeSettings(partial:Partial<Settings>) {
         const settings = {...this.settings,...partial}
-        this.model.saveSettings(settings)
+        //this.model.saveSettings(settings)
         this.setProps({settings})
     }
 
@@ -37,6 +37,8 @@ export class PageViewModel extends ViewModel<PageProps>{
     async loadPage(kod:number) {
         this.setProps({kod})
         const page = await this.model.loadPage(kod)
+        const {caption,footer,sidebar} = page.design
+        this.changeSettings({caption,footer,sidebar})
         this.setProps({page})
     }
 

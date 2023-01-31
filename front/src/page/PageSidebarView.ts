@@ -54,7 +54,7 @@ export class PageSidebarView extends View<HTMLDivElement> {
         const help = new PageHelpView()
 
         viewModel.on('change:page',() => {
-            this.root.querySelector('.sidebar-header')!.classList.toggle('sidebar-header-hide',!viewModel.page?.sidebar.checkbox)
+            this.root.querySelector('.sidebar-header')!.classList.toggle('sidebar-header-hide',!viewModel.page?.design.checkbox)
             if (viewModel.page?.sidebar.user)
                 sidebar.replaceChildren(logon.root,help.root)
             else
