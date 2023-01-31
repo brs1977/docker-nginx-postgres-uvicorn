@@ -120,6 +120,8 @@ class Config():
         return self._page_info[Names.TITLES][2]
     def background(self)->str:
         return self._page_info[Names.BACKGROUND]
+    def design_background(self)->str:
+        return self.image_path(self._config["face"])
     def icon(self)->list[str]:
         icons = self._page_info[Names.ICON]
         return None if len(icons) == 0 else [icons[0]]
@@ -180,7 +182,7 @@ class Config():
     def design(self):
         font = self._config[Names.BASE_FONT]
         css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
-        background = self.image_path(self._config["face"])
+        background = self.config.design_background()        
         
         footer = (self.kod() != 0)
         caption = (self.kod() != 0)
