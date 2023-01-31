@@ -71,6 +71,8 @@ class Names(Enum, metaclass=EnumMetaValue):
     CSS = 'css'
     CAPTION = 'caption'
     SIDEBAR_ICON = 'sidebar_icon'
+    TABS = 'tabs'
+    TAB = 'tab'
 
 
     # FACE = 'face'
@@ -205,7 +207,7 @@ class Config():
             return [self.image_path(icon) for icon in verh[Names.ICONS]]
         return []
     def background_rz0(self)-> str:
-        return self.image_path(self._config['start_background_rz'])        
+        return self.image_path(self._config['start_background_rz'])
     def brod(self):
         name = self.GAG_TITLE
         items = [item for item in self.GRAPH_PAGE if item['kod']==self._kod]
@@ -227,6 +229,10 @@ class Config():
             kod = item['kod_parent']
             res.append(item['name'])
         return " / ".join(res[::-1])
+    def workzona_tabs(self):
+        tabs = self._config['gen_work_zona'][Names.TABS]
+        tabs = [item[Names.TAB] for item in tabs]
+        return tabs
 
 
 class Element:
@@ -280,12 +286,15 @@ class PageWorkZona(Element):
         end_title = self.config.title_z3()
         background = self.config.background()
         icon =  self.config.icon()
+        tabs = self.config.workzona_tabs()
+        logger.debug(tabs)
         # typ_zona = self.page_info['typ_zona']
         return {
             Names.BACKGROUND: background,
             Names.ICON: icon,
             Names.TITLE: title,
             Names.END_TITLE: end_title,
+            Names.TABS: tabs
             # Names.TYP_ZONA: typ_zona
         }
 

@@ -63,11 +63,17 @@ class Sidebar(BaseModel):
     user: Optional[User] = Field(..., nullable=True)
     # checkbox: bool
 
+class Tab(BaseModel):
+    name: str
+    active: int
+    ref: list[int] = []
+
 class WorkZona(BaseModel):
     background: Optional[str] = Field(default=None, nullable=True)
     icon: Optional[list[str]] = Field(default=None, nullable=True)
     title: Optional[str] = Field(default=None, nullable=True)
     end_title: Optional[str] = Field(default=None, nullable=True)
+    tabs: list[Tab] = Field(default=None, nullable=True)
     # class Config:
     #     extra = Extra.allow
 
