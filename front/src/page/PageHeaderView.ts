@@ -20,10 +20,12 @@ export class PageHeaderView extends View<HTMLDivElement> {
             </div>
         `)
         viewModel.on('change:page',() => {
-            const {icons=[],title=''} = viewModel.page?.verh ?? {}
+            const {icons=[],title='',sidebar_icon} = viewModel.page?.verh ?? {}
+            if (sidebar_icon)
+                this.root.querySelector<HTMLImageElement>('.header-hamburger')!.src = `/data/${sidebar_icon}`
+            this.root.querySelector('.header-hamburger')?.classList.toggle('header-hamburger-hide',!sidebar_icon)
             this.root.querySelector('.header-title')!.textContent = title
             const children = icons.map(icon => createElement(`<img class="shildik-own" src="/data/${icon}">`))
-            this.root.querySelector('.header-icons')?.replaceChildren(...children)
             this.root.querySelectorAll('.shildik-own').forEach(it => it.remove())
             this.root.append(...children)
         })

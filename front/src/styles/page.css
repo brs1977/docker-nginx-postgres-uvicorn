@@ -57,6 +57,10 @@
     cursor: pointer;
 }
 
+.header-hamburger-hide {
+    display: none;
+}
+
 .header-title {
     flex-grow: 1;
     text-align: center;

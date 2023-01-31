@@ -27,6 +27,7 @@ export function isPage(obj: unknown): obj is Page {
             typeof typedObj["verh"] === "object" ||
             typeof typedObj["verh"] === "function") &&
         typeof typedObj["verh"]["title"] === "string" &&
+        typeof typedObj["verh"]["sidebar_icon"] === "string" &&
         Array.isArray(typedObj["verh"]["icons"]) &&
         typedObj["verh"]["icons"].every((e: any) =>
             typeof e === "string"
