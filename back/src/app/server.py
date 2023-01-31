@@ -7,7 +7,7 @@ from app.config import settings
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
-origins = ["http://129.200.0.116:8015", "http://129.200.0.116:8020", "http://localhost:8015", "http://localhost:8020"]
+origins = ["http://129.200.0.116:8015", "http://129.200.0.116:8020", "http://localhost:8015", "http://localhost:8020", "http://172.16.3.146:8015", "http://172.16.3.146:8020"]
 # origins = ["*"]
 
 app.add_middleware(
