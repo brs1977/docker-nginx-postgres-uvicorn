@@ -181,14 +181,11 @@ class Config():
         css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
         background = self.image_path(self._config["face"])
         
-        footer = True
-        caption = True
-        checkbox = True
+        footer = (self.kod() != 0)
+        caption = (self.kod() != 0)
+        checkbox = (self.kod() != 0)
         sidebar = True
-        if self.kod() == 0:
-            footer = False 
-            caption = False 
-            checkbox = False 
+
         return {
             Names.FONT: font, 
             Names.BACKGROUND: background, 
