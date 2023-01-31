@@ -231,8 +231,8 @@ class Config():
         return " / ".join(res[::-1])
     def workzona_tabs(self):
         return self._config['gen_work_zona'][Names.TABS]
-        # tabs = [item[Names.TAB] for item in tabs]
-        # return tabs
+    def workzona(self):
+        return self._config['gen_work_zona']
 
 
 class Element:
@@ -326,7 +326,8 @@ class BasePage(Element):
         return PageSidebar(self.config)() 
 
     def _work_zona(self):
-        return PageWorkZona(self.config)()
+        return self.config.workzona()
+        # return PageWorkZona(self.config)()
 
     def _footer(self):
         return None

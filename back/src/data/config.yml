@@ -32,7 +32,7 @@ start_background_rz: main.jpg
 gen_work_zona: 
   title:  Администрирование информационного пространства Системы
   background: sam3.jpg # фон
-  icon: 11_1_1_2.png # или null, если иконки нет
+  icon: ['11_1_1_2.png'] # или null, если иконки нет
   tabs:  # или или null, если вкладок нет
     - tab: Режим
       active: 1
