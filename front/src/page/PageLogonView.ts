@@ -51,9 +51,9 @@ export class PageLogonView extends View<HTMLDivElement> {
                 <div class="login-label">логин:</div>
                 <div class="login-value" id="login-fio">значение</div>
                 <div class="login-label">статус:</div>
-                <div class="login-value">значение</div>
+                <div class="login-value" id="login-status">значение</div>
                 <div class="login-label">в системе:</div>
-                <div class="login-value">ЧЧ:ММ:CC</div>
+                <div class="login-value" id="login-time">ЧЧ:ММ:CC</div>
             </div>
             <hr class="logon-line">
             <div class="logon-footer">
@@ -68,11 +68,29 @@ export class PageLogonView extends View<HTMLDivElement> {
             viewModel.logout()
         })
 
-        viewModel.on('change:user',() => {
-            const {user} = viewModel
-            if (!user)
-                return
-            this.root.querySelector('#login-fio')!.textContent = user.fio
+        viewModel.on('change:page',() => {
+            const user = viewModel.page?.sidebar.user
+            this.root.querySelector('#login-fio')!.textContent = user?.username ?? ''
+            this.root.querySelector('#login-status')!.textContent = user?.status ?? ''
+            
         })
+
+        let tm: number|undefined = undefined
+
+        viewModel.on('login',() => {
+            const begin = new Date()
+            tm = setInterval(() => {
+                const datetime = viewModel.page?.sidebar.user?.datetime ?? ''
+                const date = new Date(datetime)
+                const start = isNaN(+date) ? begin : date
+                const time = new Date(Date.now() - start.getTime()).toLocaleTimeString()
+                this.root.querySelector('#login-time')!.textContent = time
+            },1000)
+        })
+
+        viewModel.on('logout',() => {
+            clearInterval(tm)
+        })
+
     }
 }

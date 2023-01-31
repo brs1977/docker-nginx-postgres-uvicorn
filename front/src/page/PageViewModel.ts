@@ -23,6 +23,7 @@ export class PageViewModel extends ViewModel<PageProps>{
 
     async login(username:string,password:string) {
         await this.model.login(username,password)
+        this.emit('login')
         await this.loadPage(101)
     }
 
@@ -41,6 +42,7 @@ export class PageViewModel extends ViewModel<PageProps>{
 
     async logout() {
         await this.model.logout()
+        this.emit('logout')
         this.loadPage(0)
     }
 
