@@ -16,7 +16,7 @@ const root = document.querySelector<HTMLDivElement>('#app')!
 //const api = server_api(get_url('api/v1',8020))
 //app({api,root})
 
-const url = getURL('api/v1',8020)
+const url = getURL('api/v1',8015)
 //const url = 'http://129.200.0.116:8015/api/v1'
 const api = new ServerAPI(url)
 const model = new PageModelAPI(api)
