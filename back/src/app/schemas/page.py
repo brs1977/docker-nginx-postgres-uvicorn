@@ -15,6 +15,10 @@ class AppModel(BaseModel):
 class Design(BaseModel):
     font: int
     background: str
+    footer: bool
+    caption: bool
+    checkbox: bool 
+    sidebar: bool
     css: list[str]
 
 
@@ -56,7 +60,7 @@ class User(BaseModel):
 
 class Sidebar(BaseModel):
     user: Optional[User] = Field(..., nullable=True)
-    checkbox: bool
+    # checkbox: bool
 
 class WorkZona(BaseModel):
     background: Optional[str] = Field(default=None, nullable=True)

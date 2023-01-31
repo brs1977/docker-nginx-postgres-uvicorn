@@ -69,6 +69,7 @@ class Names(Enum, metaclass=EnumMetaValue):
     BASE_FONT = 'base_font'
     FONT = 'font'
     CSS = 'css'
+    CAPTION = 'caption'
 
 
     # FACE = 'face'
@@ -82,17 +83,17 @@ class Config():
         self.TITLES = self._config['mas_titles']
         self.GAG_TITLE = 'Заголовок не найден'
         
-        self._checkbox = bool(user)
-        
+        # self._checkbox = bool(user)        
         kodes = [page['kod']  for page in self.GRAPH_PAGE] # все коды страниц
         self._kod = 0 if not user else kod # юзер не залогинен kod = 0        
         self._kod = 101 if self._kod != 0 and self._kod not in kodes else self._kod  # нет страницы вернем Главную kod = 101
         self._page_info = self.page_info()
+        logger.debug(self._kod)
 
     def kod(self)-> int:
         return self._kod
-    def checkbox(self)-> bool:
-        return self._checkbox
+    # def checkbox(self)-> bool:
+    #     return self._checkbox
     def graph_page(self)->map:
         return self.GRAPH_PAGE
     def alerts(self)->map:
@@ -179,7 +180,23 @@ class Config():
         font = self._config[Names.BASE_FONT]
         css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
         background = self.image_path(self._config["face"])
-        return {Names.FONT: font, Names.BACKGROUND: background, Names.CSS: css}
+        
+        footer = True
+        caption = True
+        checkbox = True
+        sidebar = True
+        if self.kod() == 0:
+            footer = False 
+            caption = False 
+            checkbox = False 
+        return {
+            Names.FONT: font, 
+            Names.BACKGROUND: background, 
+            Names.CAPTION: caption,
+            Names.CHECKBOX: checkbox,
+            Names.SIDEBAR: sidebar,
+            Names.FOOTER: footer,
+            Names.CSS: css}
     def verh_icons(self):
         verh = self._config[Names.VERH]
         if verh:
@@ -235,7 +252,8 @@ class PageSidebar(Element):
 #         key: []  массив пЕРЕМЕННОЙ длины или NULL
 
     def get(self):
-        return {Names.USER: self.config.user(), Names.CHECKBOX: self.config.checkbox()}
+        return {Names.USER: self.config.user()}
+        # return {Names.USER: self.config.user(), Names.CHECKBOX: self.config.checkbox()}
 
 class PageWorkZona(Element):
     # title: заголовок
