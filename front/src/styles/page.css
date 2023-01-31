@@ -75,15 +75,13 @@
 .page-caption {
     flex-shrink: 0;
     max-height: 0;
-    transition: all 0.25s ease-out;
+    transition: max-height 0.25s ease-out;
     overflow: hidden;
-    opacity: 0;
     background-color: rgba(0, 51, 153, 0.27);
 }
 
 .page-caption-show {
     max-height: 100px;
-    opacity: 1;
 }
 
 .caption {
@@ -166,7 +164,7 @@
 .page-sidebar {
     max-width: 0;
     overflow: hidden;
-    transition: all 0.5s ease-out;
+    transition: all 0.25s ease-out;
     flex-shrink: 0;
     opacity: 0;
     /* border-right: 3px solid #000; */
@@ -259,7 +257,7 @@
 .page-sidebar-show {
     max-width: 320px;
     width: 320px;
-    transition: all 0.25s ease-in;
+    transition: max-width 0.25s ease-in;
     opacity: 1;
 }
 
@@ -348,14 +346,12 @@
 .page-footer {
     flex-shrink: 0;
     max-height: 0;
-    transition: all 0.25s ease-out;
+    transition: max-height 0.25s ease-out;
     overflow: hidden;
-    opacity: 0;
 }
 
 .page-footer-show {
     max-height: 100px;
-    opacity: 1;
 }
 
 .footer {
