@@ -67,6 +67,10 @@ class Tab(BaseModel):
     name: str
     active: int
     ref: list[int] = []
+    def __init__(self, **data):
+        if "tab" in data:
+            data["name"] = data.pop("tab")    
+        super().__init__(**data)
 
 class WorkZona(BaseModel):
     background: Optional[str] = Field(default=None, nullable=True)

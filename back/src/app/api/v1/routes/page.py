@@ -230,9 +230,9 @@ class Config():
             res.append(item['name'])
         return " / ".join(res[::-1])
     def workzona_tabs(self):
-        tabs = self._config['gen_work_zona'][Names.TABS]
-        tabs = [item[Names.TAB] for item in tabs]
-        return tabs
+        return self._config['gen_work_zona'][Names.TABS]
+        # tabs = [item[Names.TAB] for item in tabs]
+        # return tabs
 
 
 class Element:
