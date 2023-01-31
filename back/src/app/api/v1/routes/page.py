@@ -184,9 +184,9 @@ class Config():
         css = self._config["kit_css"]  # ["main-0.css", "page-0.css"]  # список динамических стилей
         background = self.design_background()        
         
-        footer = (self.kod() != 0)
-        caption = (self.kod() != 0)
-        checkbox = (self.kod() != 0)
+        footer = bool(self.user())
+        caption = bool(self.user())
+        checkbox = bool(self.user())
         sidebar = True
 
         return {
