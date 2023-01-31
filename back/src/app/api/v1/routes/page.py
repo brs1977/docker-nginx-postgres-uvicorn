@@ -70,6 +70,7 @@ class Names(Enum, metaclass=EnumMetaValue):
     FONT = 'font'
     CSS = 'css'
     CAPTION = 'caption'
+    SIDEBAR_ICON = 'sidebar_icon'
 
 
     # FACE = 'face'
@@ -194,6 +195,8 @@ class Config():
             Names.SIDEBAR: sidebar,
             Names.FOOTER: footer,
             Names.CSS: css}
+    def sidebar_icon(self):
+        return self._config[Names.VERH][Names.SIDEBAR_ICON]
     def verh_icons(self):
         verh = self._config[Names.VERH]
         if verh:
@@ -295,7 +298,8 @@ class BasePage(Element):
     def _verh(self):
         title = self.config.start_title()
         icons = self.config.verh_icons()
-        return {Names.TITLE: title, Names.ICONS: icons}
+        sidebar_icon = self.config.sidebar_icon()
+        return {Names.TITLE: title, Names.ICONS: icons, Names.SIDEBAR_ICON: sidebar_icon}
     def _menu(self):
         return PageMenu(self.config)()
     def _head(self):

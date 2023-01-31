@@ -24,6 +24,7 @@ class Design(BaseModel):
 
 class Verh(BaseModel):
     title: str
+    sidebar_icon: str
     icons: list[str]
 
 
