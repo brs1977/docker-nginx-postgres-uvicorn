@@ -38,7 +38,6 @@ export class PageLogonView extends View<HTMLDivElement> {
     constructor(viewModel:PageViewModel) {
         super(/*html*/`
         <div class="logon">
-            <hr class="logon-line">
             <div class="logon-header">
                 <div class="logon-title">Навигация</div>
                 <a href="#"><img class="logon-icon" src="/data/back.svg"></a>
@@ -46,7 +45,6 @@ export class PageLogonView extends View<HTMLDivElement> {
                 <a href="#"><img class="logon-icon" src="/data/down.svg"></a>
                 <a href="#"><img class="logon-icon" src="/data/up.svg"></a>
             </div>
-            <hr class="logon-line">
             <div class="logon-data">
                 <div class="login-label">логин:</div>
                 <div class="login-value" id="login-fio">значение</div>
@@ -55,7 +53,6 @@ export class PageLogonView extends View<HTMLDivElement> {
                 <div class="login-label">в системе:</div>
                 <div class="login-value" id="login-time">ЧЧ:ММ:CC</div>
             </div>
-            <hr class="logon-line">
             <div class="logon-footer">
                 <a href="#">Кабинет</a>
                 <a href="#" id="logon-logout">Выйти</a>

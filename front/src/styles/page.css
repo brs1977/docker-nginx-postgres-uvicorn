@@ -3,18 +3,18 @@
     /* padding: 0; */
     /* margin: 0; */
     box-sizing: border-box;
-  }
-    
-  :root {
+}
+
+:root {
     --font-size: 15px;
     --top-menu: 3rem;
-  }
-  
-  html {
+}
+
+html {
     font-size: var(--font-size);
-  }
-  
-  body {
+}
+
+body {
     margin: 0;
     padding: 0;
     background: #fff url(/data/nebo.jfif);
@@ -25,9 +25,10 @@
     /* Фон страницы фиксируется */
     background-size: 100%;
     /* Изображение растянуто на экран */
-  }
+}
+
 .page {
-    margin: 0 3rem;
+    margin: 0 5rem; /* ИЗМЕНА*********************************************************** */
     padding: 0;
     height: 100vh;
     display: flex;
@@ -178,6 +179,7 @@
 
 .sidebar {
     /* padding: 0 1rem 1rem 1rem; */
+    border-top: 2px solid silver; /* ИЗМЕНА**************************************************************** */
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -198,11 +200,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    /* gap: 0.25rem; */
+    gap: 0.25rem; /* IZMENA *************************************************** */
     flex-wrap: nowrap;
     align-items: flex-start;
     width: 100%;
-    padding: 0.35rem 0.35rem 0 0.35rem;
+    padding: 0.25rem 0.35rem 0 0.35rem; /* IZMENA *************************************************** */
     align-items: center;
     font-size: 1rem;
 }
@@ -250,7 +252,7 @@
 }
 
 .sidebar-items {
-    margin: 0.5rem 0.25rem 0 0.25rem;
+    margin: 0 0.5rem 0 0.5rem; /* IZMENA *************************************************** */
     display: flex;
     flex-direction: column;
     /* padding: 0.25rem;  */
@@ -268,8 +270,8 @@
 .page-workspace {
     flex-grow: 1;
     position: relative;
-    margin-left: 0.25rem;
-    margin-right: 0.5rem;
+/*    margin-left: 0.25rem;   IZMENA ************************************** */
+/*    margin-right: 0.5rem;   IZMENA ************************************** */
 }
 
 .workspace {
