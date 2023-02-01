@@ -27,7 +27,7 @@ services:
     env_file:
       - ./db/.env.dev
     ports:
-      - 5432:5432
+      - 15432:5432
     restart: unless-stopped
 
   front:
